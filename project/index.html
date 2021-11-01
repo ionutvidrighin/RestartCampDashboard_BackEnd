@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="lodash.js"></script>
+</head>
+<body>
+    <button>
+      Get Data
+    </button>
+    <script>
+
+        let btn = document.querySelector('button')
+
+        const getData = async () => {
+
+          try {
+            const request = await fetch('http://localhost:8000')
+            const response = await request.json()          
+            const testData = response.data.map(item => {
+              const newTest = {
+                id: item.ref['@ref'].id,
+                data: item.data
+              }
+              return newTest
+            })
+            console.log(testData)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+
+        btn.addEventListener('click', getData)
+
+class Test {
+  constructor(a, b){
+    this.a = a
+    this.b = b
+    this.show = function(){
+      console.log(a)
+    }
+  }
+}
+
+const testHere = new Test('abc', 'def')
+
+
+console.log(testHere)
+testHere.show()
+
+    </script>
+</body>
+</html>
