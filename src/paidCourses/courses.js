@@ -5,6 +5,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele GDPR & SECURITATEA INFORMAȚIEI',
     courseDate: '2021-11-03T18:30',
+    courseRecurrence: 'biweekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -15,6 +16,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele HR (Recrutare & Selecție)',
     courseDate: '2021-11-04T18:30',
+    courseRecurrence: 'biweekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -25,6 +27,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele SOCIAL MEDIA - Strategie de vanzare si Copywriting',
     courseDate: '2021-11-08T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: false
@@ -35,6 +38,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele EMPLOYER BRANDING (Imagine de Angajator)',
     courseDate: '2021-11-09T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -45,6 +49,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele VANZARILOR - vanzari fata in fata, la telefon si in scris',
     courseDate: '2021-11-18T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -55,6 +60,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele DESIGN GRAFIC - UX & UI',
     courseDate: '2021-11-16T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -65,6 +71,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele MARKETING-ului - Digital Marketing si Offline Marketing',
     courseDate: '2021-11-12T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true
@@ -75,6 +82,7 @@ module.exports = [
     courseLink: 'link here',
     courseTitle: 'Bazele ATRACTIVITĂȚII în fața angajatorilor și clienților',
     courseDate: '2021-11-15T18:30',
+    courseRecurrence: 'weekly',
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     courseActive: true

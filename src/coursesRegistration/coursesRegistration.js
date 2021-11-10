@@ -2,27 +2,52 @@ const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../faunaDB");
+const allUsersRegistered = require('./usersRegistered');
 
 const { Match, Map, Paginate, Get, Create, Collection, Lambda, Index, Var} = faunaDB.query;
 
-class AddUserToDB {
-  constructor(id, firstName, lastName, phoneNo, email, job, remarks, reference, is_career, is_business, domain, courses) {
-    this.id = id
-    this.firstName = firstName
-    this.lastName = lastName
-    this.phoneNo = phoneNo
-    this.email = email
-    this.job = job
-    this.remarks = remarks
-    this.reference = reference
-    this.is_career = is_career
-    this.is_business = is_business
-    this.domain = domain
-    this.courses = courses
+class RestartCampUser {
+  constructor(input) {
+    this.id = input.id
+    this.firstName = input.firstName
+    this.lastName = input.lastName
+    this.phoneNo = input.phoneNo
+    this.email = input.email
+    this.job = input.job
+    this.remarks = input.remarks
+    this.reference = input.reference
+    this.is_career = input.is_career
+    this.is_business = input.is_business
+    this.domain = input.domain
+    this.courses = input.courses
   }
 }
 
-router.route("/courses-registration")
+
+router.route('/register-user')
+  .get( (req, res) => {
+    res.status(200).json(allUsersRegistered)
+  })
+
+  .post( (req, res) => {
+    const user = req.body
+    const newUser = new RestartCampUser(user)
+
+    let newID = 0
+    let existingIDs = []
+    allUsersRegistered.forEach(user => existingIDs.push(user.id))
+
+    while(existingIDs.indexOf(newID) != -1) {
+      newID++
+    }
+
+    Object.assign(newUser, {id: newID})
+    
+    allUsersRegistered.push(newUser)
+    res.status(200).json({ data: 'adaugat cu success' })
+  })
+
+/*router.route("/courses-registration")
   .post( async(incomingData, response) => {
     const { 
       body: {
@@ -41,10 +66,7 @@ router.route("/courses-registration")
       } 
     } = incomingData
 
-    // console.log(courses.length)
-    // console.log(typeof courses)
-    console.log(incomingData.body)
-    response.send('helloooo')
+
     let newUser = new AddUserToDB(
       id, 
       firstName, 
@@ -72,7 +94,7 @@ router.route("/courses-registration")
       )
     )
 
-   /* if (typeof id === 'number' &&
+    if (typeof id === 'number' &&
         typeof firstName === 'string' &&
         typeof lastName === 'string' &&
         typeof email === 'string' &&
@@ -119,7 +141,7 @@ router.route("/courses-registration")
           course: `expect: String; Received: ${typeof course}`
         }
       })
-    }*/
-  })
+    }
+  })*/
 
 module.exports = router
