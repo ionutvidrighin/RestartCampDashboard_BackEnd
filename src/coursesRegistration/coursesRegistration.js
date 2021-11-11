@@ -20,9 +20,25 @@ class RestartCampUser {
     this.is_business = input.is_business
     this.domain = input.domain
     this.courses = input.courses
+    this.date = input.date,
+    this.year_month = input.year_month
   }
 }
 
+router.route('/get-by-date')
+  .get(async (req, res) => {
+   
+    const searchString = '2021-11'
+    const returnedSearchedData = await faunaClient.query(
+      Map(
+        Paginate(Match(Index("get_by_year_month"), searchString)),
+        Lambda("users", Get(Var("users")))
+      )
+    )
+
+    returnedSearchedData.data.forEach(item => console.log(item.data))
+    res.json(getUsersByDate)
+  })
 
 router.route('/register-user')
   .get( (req, res) => {
