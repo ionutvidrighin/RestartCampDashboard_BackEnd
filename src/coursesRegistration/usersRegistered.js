@@ -12,7 +12,8 @@ module.exports = [
     is_business: false,
     domain: "vanzari",
     courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
-    date: "2021-11-07T18:53:47+02:00"
+    date: "2021-11-07",
+    year_month: "2021-11"
   },
   {
     id: 2,
@@ -27,7 +28,8 @@ module.exports = [
     is_business: true,
     domain: "Resurse Umane",
     courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
-    date: "2021-11-09T18:53:47+02:00"
+    date: "2021-12-09",
+    year_month: "2021-12"
   },
   {
     id: 3,
@@ -41,8 +43,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-04T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-04",
+    year_month: "2021-11"
   },
   {
     id: 4,
@@ -56,8 +59,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-04T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-04",
+    year_month: "2021-11"
   },
   {
     id: 5,
@@ -71,8 +75,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-04T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-12-04",
+    year_month: "2021-12"
   },
   {
     id: 6,
@@ -86,8 +91,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-01T18:53:47+02:00"
+    courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
+    date: "2021-12-01",
+    year_month: "2021-12"
   },
   {
     id: 7,
@@ -101,8 +107,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-21T18:53:47+02:00"
+    courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
+    date: "2021-12-21",
+    year_month: "2021-12"
   },
   {
     id: 8,
@@ -116,8 +123,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-10T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-12-10",
+    year_month: "2021-12"
   },
   {
     id: 9,
@@ -131,8 +139,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-13T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-13",
+    year_month: "2021-11"
   },
   {
     id: 11,
@@ -146,8 +155,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-15T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-15",
+    year_month: "2021-11"
   },
   {
     id: 12,
@@ -161,8 +171,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-21T18:53:47+02:00"
+    courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
+    date: "2021-11-21",
+    year_month: "2021-11"
   },
   {
     id: 13,
@@ -176,8 +187,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-21T18:53:47+02:00"
+    courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
+    date: "2021-11-21",
+    year_month: "2021-11"
   },
   {
     id: 14,
@@ -191,8 +203,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-15T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-15",
+    year_month: "2021-11"
   },
   {
     id: 15,
@@ -206,8 +219,9 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-13T18:53:47+02:00"
+    courses: ['Introducere în Social Media (Strategie Social Media & Copywriting)'],
+    date: "2021-11-13",
+    year_month: "2021-11"
   },
   {
     id: 16,
@@ -221,7 +235,8 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface) '],
-    date: "2021-11-04T18:53:47+02:00"
+    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    date: "2021-11-04",
+    year_month: "2021-11"
   }
 ]
