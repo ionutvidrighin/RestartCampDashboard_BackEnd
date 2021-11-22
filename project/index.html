@@ -12,46 +12,7 @@
     </button>
     <script>
 
-      let arr = [
-        {
-          name: 'Hello',
-          courses: ['introducere in test', 'bazele test']
-        },
-        {
-          name: 'Test',
-          courses: ['introducere in test', 'bazele test']
-        },
-        {
-          name: 'Hello Test',
-          courses: ['curs avansat test']
-        },
-        {
-          name: 'Hello Test',
-          courses: ['curs avansat de testare']
-        },
-        {
-          name: 'Hello Test',
-          courses: ['introducere in test']
-        }
-      ]
 
-      const courses = arr.map(item => item.courses)
-      
-      function count (courses) {
-        return courses.reduce((acc, arr) => {
-        
-          for (const item of arr) {
-            acc[item] = acc[item] !== undefined ? acc[item] + 1 : 1
-          }
-
-          return acc
-        }, {})
-      }
-
-      const getLength = arr => arr.flat(Infinity).length;
-
-      var testArray = [1,2,[3,4,[5,6],7],8,9,[10,11],12];
-      console.log(getLength(testArray));
 
 
     </script>

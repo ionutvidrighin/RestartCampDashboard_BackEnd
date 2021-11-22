@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-let freeCourses = require('../freeCourses/courses');
-let paidCourses = require('../paidCourses/courses');
+let freeCourses = require('../LockedEndpoints/freeCourses/courses');
+let paidCourses = require('../LockedEndpoints/paidCourses/courses');
 
 router.route('/restart-camp-courses')
   .get( (req, res) => {
