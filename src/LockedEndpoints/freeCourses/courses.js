@@ -10,7 +10,8 @@ module.exports = [
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     trainerAvatar: 'https://static.wixstatic.com/media/9a56fd_563b3bd713104348b8c35a88a6501e92~mv2.png/v1/crop/x_0,y_8,w_591,h_574/fill/w_128,h_125,al_c,q_85,usm_0.66_1.00_0.01/dora%20brahaita.webp',
-    courseActive: true
+    courseActive: true,
+    courseDetails: "Tipurile de interfețe grafice ce pot fi create, de la logo-uri până la site-uri web. Înțelegerea așteptărilor clienților și cum poți fi relevant în discuțiile preliminare cu aceștia. Adaptarea elementelor grafice la capabilitățile și funcționalitatea produsului / serviciului vizat. Analiza proporțiilor și metoda de calcul a cantității de informație utilă ce poate fi afișată într-un spațiu grafic limitat. Care sunt pașii de urmat pentru a crea o interfață grafică de succes. Cele mai frecvente greșeli întâlnite în relația cu clienții. Crearea unui portofoliu grafic de succes"
   }, 
   {
     courseId: 1,
@@ -23,7 +24,8 @@ module.exports = [
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     trainerAvatar: 'https://static.wixstatic.com/media/9a56fd_563b3bd713104348b8c35a88a6501e92~mv2.png/v1/crop/x_0,y_8,w_591,h_574/fill/w_128,h_125,al_c,q_85,usm_0.66_1.00_0.01/dora%20brahaita.webp',
-    courseActive: true
+    courseActive: true,
+    courseDetails: "Articles are found in many Indo-European languages, Semitic languages (only the definite article), and Polynesian languages; however, they are formally absent from many of the world's major languages including: Chinese, Japanese, Korean, Mongolian, many Turkic languages (incl. Tatar, Bashkir, Tuvan and Chuvash), many Uralic languages (incl. Finnic[a] and Saami languages), Indonesian, Hindi-Urdu, Punjabi, Tamil, the Baltic languages, the majority of Slavic languages, the Bantu languages (incl. Swahili) and Yoruba. In some languages that do have articles, such as some North Caucasian languages, the use of articles is optional; however, in others like English and German it is mandatory in all cases"
   },
   {
     courseId: 2,
@@ -36,7 +38,8 @@ module.exports = [
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     trainerAvatar: 'https://static.wixstatic.com/media/9a56fd_563b3bd713104348b8c35a88a6501e92~mv2.png/v1/crop/x_0,y_8,w_591,h_574/fill/w_128,h_125,al_c,q_85,usm_0.66_1.00_0.01/dora%20brahaita.webp',
-    courseActive: false
+    courseActive: false,
+    courseDetails: "A partitive article is a type of article, sometimes viewed as a type of indefinite article, used with a mass noun such as water, to indicate a non-specific quantity of it. Partitive articles are a class of determiner; they are used in French and Italian in addition to definite and indefinite articles. (In Finnish and Estonian, the partitive is indicated by inflection)."
   },
   {
     courseId: 3,
@@ -49,7 +52,8 @@ module.exports = [
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     trainerAvatar: 'https://static.wixstatic.com/media/9a56fd_563b3bd713104348b8c35a88a6501e92~mv2.png/v1/crop/x_0,y_8,w_591,h_574/fill/w_128,h_125,al_c,q_85,usm_0.66_1.00_0.01/dora%20brahaita.webp',
-    courseActive: true
+    courseActive: true,
+    courseDetails: "An indefinite article is an article that marks an indefinite noun phrase. Indefinite articles are those such as English some or a, which do not refer to a specific identifiable entity. Indefinites are commonly used to introduce a new discourse referent which can be referred back to in subsequent discussion. Indefinites can also be used to generalize over entities who have some property in common."
   },
   {
     courseId: 4,
@@ -62,6 +66,7 @@ module.exports = [
     courseLocation: 'Online Zoom',
     courseTrainer: 'Dummy trainer',
     trainerAvatar: 'https://static.wixstatic.com/media/9a56fd_563b3bd713104348b8c35a88a6501e92~mv2.png/v1/crop/x_0,y_8,w_591,h_574/fill/w_128,h_125,al_c,q_85,usm_0.66_1.00_0.01/dora%20brahaita.webp',
-    courseActive: true
+    courseActive: true,
+    courseDetails: "A definite article is an article that marks a definite noun phrase. Definite articles such as English the are used to refer to a particular member of a group. It may be something that the speaker has already mentioned or it may be otherwise something uniquely specified."
   }
 ]
