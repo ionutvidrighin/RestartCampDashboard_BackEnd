@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
+const sendConfirmationEmail = require('../../Nodemailer/nodemailer')
 const faunaClient = require("../../faunaDB");
 const allUsersRegistered = require('./usersRegistered_JSON');
 
@@ -60,6 +61,8 @@ router.route('/register-user')
     Object.assign(newUser, {id: newID})
     
     allUsersRegistered.push(newUser)
+    console.log(user)
+    //sendConfirmationEmail('ionut.vidrighin@gmail.com')
     res.status(200).json({ message: 'adaugat cu success' })
   })
 
