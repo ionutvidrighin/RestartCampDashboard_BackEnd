@@ -41,12 +41,12 @@ router.route('/get-by-date')
     res.json(getUsersByDate)
   })
 
-router.route('/register-user')
+router.route('/enrolled-students')
   .get( (req, res) => {
     res.status(200).json(allUsersRegistered)
   })
 
-  .post( (req, res) => {
+  /*.post( (req, res) => {
     const user = req.body
 
     let newID = 0
@@ -64,7 +64,7 @@ router.route('/register-user')
     console.log(user)
     //sendConfirmationEmail('ionut.vidrighin@gmail.com')
     res.status(200).json({ message: 'adaugat cu success' })
-  })
+  })*/
 
 /*router.route("/courses-registration")
   .post( async(incomingData, response) => {
