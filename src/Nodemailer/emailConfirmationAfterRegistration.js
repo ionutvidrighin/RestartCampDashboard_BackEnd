@@ -1,6 +1,14 @@
 const nodemailer = require('nodemailer')
 
-const sendConfirmationEmail = (email) => {
+const sendConfirmationEmailAfterRegistration = (email, courseId) => {
+
+  const emailConfirmationTemplate = `
+  <h1>Hello , this is an H1 tag</h1>
+  <strong>this is strong</strong>
+  <p>this is the e-mail address: ${email}</p>
+  <img src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg"/>
+  <p>This is the course ID: ${courseId}</p>
+` 
 
   let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -14,11 +22,10 @@ const sendConfirmationEmail = (email) => {
   
   let options = {
     from: '"RestartCamp  💌" <ionut-test1@outlook.com>', // sender address
-    to: [email], // list of receivers
+    to: email, // list of receivers
     // bcc: addresses,
     subject: "Hello from Restart Camp - Test ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: `<b>Hello world?</b>`, // html body
+    html: emailConfirmationTemplate, // html body
   }
   
   transporter.sendMail(options, (error, info) => {
@@ -30,4 +37,4 @@ const sendConfirmationEmail = (email) => {
   })
 }
 
-module.exports = sendConfirmationEmail
+module.exports = sendConfirmationEmailAfterRegistration

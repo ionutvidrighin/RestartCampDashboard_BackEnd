@@ -1,82 +1,137 @@
 const express = require("express");
 const router = express.Router();
+const faunaDB = require("faunadb");
+const faunaClient = require("../../faunaDB");
 let courses = require('./courses')
+
+const {Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index, Var} = faunaDB.query
 
 const authToken = 'password'
 
-/*let newCourseId = 0;
-const coursesIds = courses.map(course => course.courseId)
-console.log(coursesIds)
-
-while(coursesIds.indexOf(newCourseId) != -1) {
-  newCourseId++
-}*/
-
 router.route('/free-courses')
-  .get((req, res) => {
-    const auth_token = req.headers.authorization
-
-    if(auth_token === authToken) {
-      res.status(200).json({courses})
-    } else {
-      res.status(401).json({error: 'Invalid Token'})
+  .get( async (req, res) => {
+    try {
+      const coursesFromDB = await faunaClient.query(
+        Map(
+          Paginate(Documents(Collection('freeCourses'))),
+          Lambda(x => Get(x))
+        )
+      )
+      let freeCourses = coursesFromDB.data
+      freeCourses = freeCourses.map(item => item.data)
+      freeCourses.sort((a, b) => {
+        return new Date(b.courseDate) - new Date(a.courseDate)
+      })
+      res.status(200).json(freeCourses)
+    } catch (error) {
+      res.status(401).json({message: "There was an error in retrieving the Free Courses from database"})
     }
   })
-  .post((req, res) => {
-    const received_course = req.body
+
+  .post( async (req, res) => {
+    const newCourse = req.body
     const auth_token = req.headers.authorization
 
-    if(auth_token === authToken) {
-      courses.unshift(received_course)
-
+    try {
+      await faunaClient.query(
+        Create(
+          Collection('freeCourses'),
+          { data: newCourse }
+        )
+      )
       res.status(201).json({message: 'Curs adaugat cu succes!'})
-    } else {
-      res.status(401).json({error: 'Invalid Token'})
+    } catch (error) {
+      res.status(401).json({message: 'Invalid Token', error})
     }
   })
-  .put((req, res) => {
+
+  .put( async (req, res) => {
     const courseToModify = req.body
     const auth_token = req.headers.authorization
 
-    if(auth_token === authToken) {
-      let index = courses.findIndex(course => course.courseId === courseToModify.courseId)
-      courses[index] = courseToModify
+    const searchCourseByID = await faunaClient.query(
+      Map(
+        Paginate(Match(Index('get_free_course_by_id'), courseToModify.courseId)),
+        Lambda(x => Get(x))
+      )
+    )
 
-      res.status(200).json({
-        message: 'Curs modificat cu succes !'
-      })
-    } else {
-      res.status(401).json({ error: 'Invalid Token'})
+    if (searchCourseByID.data.length === 0) {
+      res.status(404).json({ error: 'Course could not be found in data base'})
+      return
+    }
+
+    try {
+      const dataBaseEntryID = searchCourseByID.data[0].ref.id
+      await faunaClient.query(
+        Update(
+          Ref(Collection('freeCourses'), dataBaseEntryID),
+          { data: courseToModify }
+        )
+      )
+      res.status(200).json({message: 'Course has been successfully modified !'})
+    } catch (error) {
+      res.status(401).json({ message: 'There was an error in modifying the course', error})
     }
   })
-  .patch((req, res) => {
+
+  .patch( async (req, res) => {
+    // endpoint used for activating/deactivating a course
     const courseToModify = req.body
     const auth_token = req.headers.authorization
 
-    if(auth_token === authToken) {
-      let index = courses.findIndex(course => course.courseId === courseToModify.courseId)
-      courses[index].courseActive = courseToModify.courseActive
+    const searchCourseByID = await faunaClient.query(
+      Map(
+        Paginate(Match(Index('get_free_course_by_id'), courseToModify.courseId)),
+        Lambda(x => Get(x))
+      )
+    )
 
+    if (searchCourseByID.data.length === 0) {
+      res.status(404).json({ error: 'Course could not be found in data base'})
+      return
+    }
+
+    try {
+      const dataBaseEntryID = searchCourseByID.data[0].ref.id;
+      await faunaClient.query(
+        Update(Ref(Collection("freeCourses"), dataBaseEntryID),
+          { data: { courseActive: courseToModify.courseActive } }
+        )
+      )
       res.status(201).json({
-        message: `Curs ${courseToModify.courseActive ? 'activat' : 'dezactivat'} cu succes !`
-      })
-    } else {
-      res.status(401).json({ error: 'Invalid Token'})
+        message: `Course ${courseToModify.courseActive ? "activated" : "deactivated"} with success !`})
+    } catch (error) {
+      res.status(401).json({message: "There was an error in updating the course state", error})
     }
   })
-  .delete((req, res) => {
-   let courseIdToRemove = req.body.course.courseId
-    const auth_token = req.headers.authorization
-    
-    if(auth_token === authToken) {
-      courses = courses.filter(course => course.courseId != courseIdToRemove)
-      //console.log(courses)
 
+  .delete( async (req, res) => {
+    const courseIdToRemove = req.body.course.courseId
+    const auth_token = req.headers.authorization
+
+    const searchCourseByID = await faunaClient.query(
+      Map(
+        Paginate(Match(Index('get_free_course_by_id'), courseIdToRemove)),
+        Lambda(x => Get(x))
+      )
+    )
+
+    if (searchCourseByID.data.length === 0) {
+      res.status(404).json({ error: 'Course could not be found in data base'})
+      return
+    }
+
+    try {
+      const dataBaseEntryID = searchCourseByID.data[0].ref.id
+      await faunaClient.query(
+        Delete(Ref(Collection('freeCourses'), dataBaseEntryID))
+      )
       res.status(200).json({
-        message: 'Curs sters cu succes !'
+        message: 'Success! Course has been deleted'
       })
-    } else {
-      res.status(401).json({ error: 'Invalid Token'})
+    } catch (error) {
+      res.status(401).json({ message: 'There was an error in deleting the course', error})
     }
   })
 

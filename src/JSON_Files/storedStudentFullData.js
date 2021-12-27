@@ -11,7 +11,14 @@ module.exports = [
     is_career: true,
     is_business: false,
     domain: "vanzari",
-    courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
+    courses: [{
+      title: 'Introducere în Design Grafic - UX & UI (User Experience și User Interface)',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    },
+    {
+      title: 'Introducere în Bazele HR - Recrutare & Selecție + Employer Branding (Imagine de angajator)',
+      date: 'Thu Dec 30 2021 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-07",
     year_month: "2021-11"
   },
@@ -27,7 +34,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Resurse Umane",
-    courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
+    courses: [{
+      title: '(User Experience și User Interface)',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-12-09",
     year_month: "2021-12"
   },
@@ -43,7 +53,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'Introducere în Design Grafic - UX & UI (User Experience și User Interface)',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-04",
     year_month: "2021-11"
   },
@@ -59,7 +72,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'Introducere în Design Grafic - UX & UI (User Experience și User Interface)',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-04",
     year_month: "2021-11"
   },
@@ -75,7 +91,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'New Course here Test whatever',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-12-04",
     year_month: "2021-12"
   },
@@ -91,7 +110,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
+    courses: [{
+      title: 'Introducere în Design Grafic - UX & UI (User Experience și User Interface)',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-12-01",
     year_month: "2021-12"
   },
@@ -107,7 +129,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Atractivitate ca profesionist (Personal Branding și atractivitate în fața angajatorilor și clienților)'],
+    courses: [{
+      title: 'Introducere în bla bla New Course here Test whatever',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-12-21",
     year_month: "2021-12"
   },
@@ -123,7 +148,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: ' Design Grafic Test whatever',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-12-10",
     year_month: "2021-12"
   },
@@ -139,7 +167,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'Test Test Test New Course here Test whatever',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-13",
     year_month: "2021-11"
   },
@@ -155,7 +186,10 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'Introducere în Test Test New Course here Test whateve',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-15",
     year_month: "2021-11"
   },
@@ -171,8 +205,11 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
-    date: "2021-11-21",
+    courses: [{
+      title: 'UX & UI Test Test New Course here Test whateve',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
+    date: "2021-11-15",
     year_month: "2021-11"
   },
   {
@@ -187,8 +224,11 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Marketing Digital și offline + Vânzări față în față, la telefon și în scris'],
-    date: "2021-11-21",
+    courses: [{
+      title: 'Bla Bla Bla Test Test New Course here Test whateve',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
+    date: "2021-11-15",
     year_month: "2021-11"
   },
   {
@@ -203,40 +243,11 @@ module.exports = [
     is_career: false,
     is_business: true,
     domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
+    courses: [{
+      title: 'Asaldlasn Bla Bla Bla Test Test New Course here Test whateve',
+      date: 'Thu Jan 06 2022 10:27:00 GMT+0200 (Eastern European Standard Time)'
+    }],
     date: "2021-11-15",
-    year_month: "2021-11"
-  },
-  {
-    id: 15,
-    firstName: "Test",
-    lastName: "Test3",
-    phoneNo: "0786786354",
-    email: "test@test3.com",
-    job: "Urmeaza sa pornesc o afacere",
-    remarks: null,
-    reference: "linkedin",
-    is_career: false,
-    is_business: true,
-    domain: "Financiar",
-    courses: ['Introducere în Social Media (Strategie Social Media & Copywriting)'],
-    date: "2021-11-13",
-    year_month: "2021-11"
-  },
-  {
-    id: 16,
-    firstName: "Test",
-    lastName: "Test3",
-    phoneNo: "0786786354",
-    email: "test@test3.com",
-    job: "Urmeaza sa pornesc o afacere",
-    remarks: null,
-    reference: "linkedin",
-    is_career: false,
-    is_business: true,
-    domain: "Financiar",
-    courses: ['Introducere în Design Grafic - UX & UI (User Experience și User Interface)'],
-    date: "2021-11-04",
     year_month: "2021-11"
   }
 ]
