@@ -6,11 +6,15 @@ const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../faunaDB");
+const getAccessKey = require("../Authentication/getAccessKey");
 
 const { Ref, Match, Map, Paginate, Get, Update, Collection, Lambda, Index, Var } = faunaDB.query
 
 router.route("/change-email")
 .put(async (req, res) => {
+  const accessKey = req.headers.authorization
+  const appAccessKey = await getAccessKey(accessKey)
+
   const userAccountEmail = req.body.currentUserAccountEmail
   const newUserAccountEmail = req.body.newUserAccountEmail
 
@@ -21,27 +25,31 @@ router.route("/change-email")
     )
   )
 
-  if(checkUserInDB.data.length !== 0) {
-    const docID = checkUserInDB.data[0].ref.value.id
+  if (checkUserInDB.data.length === 0) {
+    res.status(404).json({ message: `Account with e-mail address ${userAccountEmail} could not be found`})
+    return
+  }
 
-    await faunaClient.query(
-      Update(
-        Ref(Collection('login'), docID), 
-        { 
-          data: { 
-            email: newUserAccountEmail
-          } 
-        }
+  if (accessKey === appAccessKey) {
+    try {
+      const docID = checkUserInDB.data[0].ref.value.id
+      await faunaClient.query(
+        Update(
+          Ref(Collection('dashboardUsersAccount'), docID), 
+          { data: { email: newUserAccountEmail } }
+        )
       )
-    ).then(result => console.log(result.data))
-
-    res.status(200).json({
-      response: "User Account Email Updated Successfully !",
-    })
+      res.status(201).json({
+        message: "User Account Email Updated Successfully !",
+        newEmail: newUserAccountEmail
+      })
+    } catch (error) {
+      res.status(401).json({
+        message: "There was an error when trying to update user account password",
+      })
+    }
   } else {
-    res.status(401).json({
-      error: "Error",
-    })
+    res.status(401).json({message: "Unauthorized! App access key is incorrect"})
   }
 })
 

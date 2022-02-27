@@ -7,7 +7,7 @@ const storedStudentPresenceJSON = require("../../JSON_Files/storedStudentPresenc
 
 const { Documents, Collection, Match, Map, Paginate, Get, Lambda, Index, Var} = faunaDB.query;
 
-async function getStudentCoursePresence(courseName) {
+async function getStudentCoursePresence() {
   const currentYearAndMonth = `${dayjs().year()}-${dayjs().month()+1}`
 
   // get all available courses from DB at first
@@ -22,8 +22,8 @@ async function getStudentCoursePresence(courseName) {
   let freeCourses = allAvailableFreeCoursesFromDB.data
   freeCourses = freeCourses.map(item => item.data.courseTitle)
   
-  // query DB and get the data of the course in *freeCourses* list
-  // this will get courses from *storedStudentLimitedData* collection
+  // query DB and get the data of the first course in *freeCourses* list
+  // this will get data from *storedStudentLimitedData* collection
   const searchCourseInDB = await faunaClient.query(
     Map(
       Paginate(Match(Index('get_course_presence_by_name'), freeCourses[0])),
@@ -32,6 +32,7 @@ async function getStudentCoursePresence(courseName) {
   )
   let formatedData = []
   searchCourseInDB.data.forEach(course => formatedData.push(course.data))
+  // filter out all entries which are not for current month
   const returnedData = formatedData.filter(courseDate => courseDate.year_month === currentYearAndMonth)
   return returnedData
 }

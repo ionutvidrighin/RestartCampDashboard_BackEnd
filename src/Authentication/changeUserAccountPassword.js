@@ -10,9 +10,13 @@ const faunaClient = require("../faunaDB");
 const { Ref, Match, Map, Paginate, Get, Update, Collection, Lambda, Index, Var } = faunaDB.query
 
 router.route("/change-password")
-.put(async (req, res) => {
+.put( async (req, res) => {
+  const accessKey = req.headers.authorization
+  const appAccessKey = await getAccessKey(accessKey)
+
   const userAccountEmail = req.body.email
-  const newUserAccountPassword = req.body.newUserAccountPassword
+  const userAccountCurrentPassword = req.body.currentPassword
+  const newUserAccountPassword = req.body.newPassword
 
   const checkUserInDB = await faunaClient.query(
     Map(
@@ -21,27 +25,37 @@ router.route("/change-password")
     )
   )
 
-  if(checkUserInDB.data.length !== 0) {
+  if (checkUserInDB.data.length === 0) {
+    res.status(404).json({ message: `Account with e-mail address ${userAccountEmail} could not be found`})
+    return
+  }
+
+  if (accessKey === appAccessKey) {
     const docID = checkUserInDB.data[0].ref.value.id
+    const currentStoredPassword = checkUserInDB.data[0].data.password
 
-    await faunaClient.query(
-      Update(
-        Ref(Collection('login'), docID), 
-        { 
-          data: { 
-            password: newUserAccountPassword 
-          } 
-        }
+    if (currentStoredPassword !== userAccountCurrentPassword) {
+      res.status(401).json({message: "Parola curenta este gresita"})
+      return
+    }
+
+    try {
+      await faunaClient.query(
+        Update(
+          Ref(Collection('dashboardUsersAccount'), docID), 
+          { data: { password: newUserAccountPassword } }
+        )
       )
-    ).then(result => console.log(result.data))
-
-    res.status(200).json({
-      response: "User Account Password Updated Successfully !",
-    })
+      res.status(201).json({
+        response: "User Account Password Updated Successfully !",
+      })
+    } catch (error) {
+      res.status(401).json({
+        message: "There was an error when trying to update user account password",
+      })
+    }
   } else {
-    res.status(401).json({
-      error: "Error",
-    })
+    res.status(401).json({message: "Unauthorized! App access key is incorrect"})
   }
 })
 

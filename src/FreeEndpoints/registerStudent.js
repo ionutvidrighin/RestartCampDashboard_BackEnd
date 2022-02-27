@@ -6,7 +6,7 @@ const isEqual = require('lodash.isequal');
 const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat')
 const localeRO = require('dayjs/locale/ro');
-const sendConfirmationEmailAfterRegistration = require("../Nodemailer/emailConfirmationAfterRegistration");
+//const sendConfirmationEmailAfterRegistration = require("../Nodemailer/ConfirmationEmailTemplate/sendConfirmationEmailAfterRegistration");
 const storedStudentFullDataJSON = require("../JSON_Files/storedStudentFullData");
 const storedStudentLimitedDataJSON = require("../JSON_Files/storedStudentLimitedData");
 dayjs.extend(localizedFormat)
@@ -47,7 +47,7 @@ class CreateStudentLimitedData {
 router.route('/register-student')
   .post( async (request, response) => {
     const registeredStudent = request.body
-    
+
     const newStudentFullData = new CreateStudentFullData(registeredStudent)
     const newStudentLimitedData = new CreateStudentLimitedData(registeredStudent)
 
@@ -61,10 +61,22 @@ router.route('/register-student')
     if (undefinedValues) {
       response.status(422).json({
         error: "Passed data can't be undefined. Please check all key/values in your payload Object",
-        tip: "Payload Object must contain following data: ** id, firstName, lastName, phoneNo, email, job, remarks, reference, is_career, is_business, domain, courses, registrationDate, year_month **"
+        tip: "Payload Object must contain following data: ** id, firstName, lastName, phoneNo, email, job, remarks, reference, is_career, is_business, domain, course, registrationDate, year_month **"
       })
       return
-    } 
+    }
+
+    /** creating the payload for |sendConfirmationEmailAfterRegistration| function  */
+    const course_name = request.body.course[0].title
+    const course_date = dayjs(request.body.course[0].date).locale(localeRO).format('LL')
+    const student_email = request.body.email
+
+    const payload = {
+      course_name,
+      course_date,
+      student_email
+    }
+    /******************************************************* */
 
     // query the DB in *storedStudentFullData* collection to check if student already exists
     const searchStudentEmail = await faunaClient.query(
@@ -93,7 +105,7 @@ router.route('/register-student')
           warning: "success"
         })
 
-        sendConfirmationEmailAfterRegistration(newStudentFullData.email, newStudentFullData.id)
+        //sendConfirmationEmailAfterRegistration(payload)
 
       } catch (error) {
         console.log(error)
@@ -133,7 +145,7 @@ router.route('/register-student')
           message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,
           warning: 'success'
         })
-        sendConfirmationEmailAfterRegistration(newStudentFullData.email, newStudentFullData.id)
+        //sendConfirmationEmailAfterRegistration(payload)
       } catch (error) {
         console.log(error)
         response.status(422).json({
@@ -141,7 +153,6 @@ router.route('/register-student')
           warning: "error"
         })
       }
-
     }
   })
 

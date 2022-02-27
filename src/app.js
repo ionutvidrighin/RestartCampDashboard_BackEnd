@@ -11,13 +11,14 @@ const registerStudentPresence = require('./FreeEndpoints/registerStudentPresence
 const getCoursesForWebPage = require('./FreeEndpoints/getCoursesForWebPage');
 const dashboardLogin = require('./Authentication/login');
 
-// locked (wit token) enpoints:
+// locked (with token) enpoints:
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
 const getRegisteredStudents = require('./LockedEndpoints/coursesRegistration/getRegisteredStudents');
 const getStudentCoursesPresence = require('./LockedEndpoints/coursesPresence/getStudentCoursesPresence');
 const freeCoursesForDashboard = require('./LockedEndpoints/freeCourses/freeCourses');
 const paidCoursesForDashboard = require('./LockedEndpoints/paidCourses/paidCourses');
+const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1')
 
 const app = express()
 app.set('trust proxy', 1)
@@ -37,6 +38,7 @@ app.use(getStudentCoursesPresence)
 app.use(freeCoursesForDashboard)
 app.use(paidCoursesForDashboard)
 app.use(getCoursesForWebPage)
+app.use(emailConfirmationAfterRegistration)
 
 
 const users = require('./users')
