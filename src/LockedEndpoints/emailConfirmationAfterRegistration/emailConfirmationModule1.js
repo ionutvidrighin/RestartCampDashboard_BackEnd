@@ -15,7 +15,7 @@ const faunaClient = require("../../faunaDB");
 const getAccessKey = require("../../Authentication/getAccessKey")
 const sendTestConfirmationEmail = require('../../Nodemailer/ConfirmationEmailTemplate/sendTestConfirmationEmailAfterRegistration')
 
-const { Var, Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
+const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
 router.route('/email-confirmation-after-registration')
   .get( async (req, res) => {
@@ -53,20 +53,18 @@ router.route('/email-confirmation-after-registration')
           const sendEmail = await sendTestConfirmationEmail(newEmailTemplateObject)
 
           res.status(201).json({
-            message: 'TESTING E-MAIL TEMPLATE content successfully added',
-            data: {
-              emailResponse: sendEmail,
-              emailTemplate: newEmailTemplateObject
-            }
+            success: true,
+            message: 'TESTING E-MAIL TEMPLATE content successfully sent',
+            emailResponse: sendEmail
           })
 
         } catch (error) {
-          res.status(401).json({message: 'There was an error in sending a test E-MAIL TEMPLATE', error})
+          console.log(error)
+          res.status(401).json({success: false, message: 'There was an error in sending a test E-MAIL TEMPLATE', error})
         }
       } else {
         const emailTemplateObject = await faunaClient.query(
-          Map(
-            Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
+          Map(Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
             Lambda(x => Get(x))
           )
         )
@@ -80,11 +78,12 @@ router.route('/email-confirmation-after-registration')
             )
           )
           res.status(201).json({
+            success: true,
             message: 'E-MAIL TEMPLATE content successfully added',
             data: newEmailTemplateObject
           })
         } catch (error) {
-          res.status(401).json({message: 'There was an error in adding the E-MAIL TEMPLATE content', error})
+          res.status(401).json({success: false, message: 'There was a server or database error when adding the E-MAIL TEMPLATE content', error})
         }
       }
     } else {

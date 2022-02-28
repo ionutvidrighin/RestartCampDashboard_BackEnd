@@ -17,7 +17,7 @@ const sendTestConfirmationEmailAfterRegistration = async (input) => {
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'ionut-test1@outlook.com', // generated ethereal user
+      user: 'restart-camp-t@outlook.com', // generated ethereal user
       pass: 'IONUT123', // generated ethereal password
     }
   })
@@ -35,7 +35,7 @@ const sendTestConfirmationEmailAfterRegistration = async (input) => {
   transporter.use("compile", hbs(handlebarOptions))
   
   let options = {
-    from: '"RestartCamp  💌" <ionut-test1@outlook.com>', // sender address
+    from: '"RestartCamp  💌" <restart-camp-t@outlook.com>', // sender address
     to: input.testEmail,
     subject: `Datele de acces - cursuri gratuite Restart Camp`,
     template: 'registrationConfirmation',
