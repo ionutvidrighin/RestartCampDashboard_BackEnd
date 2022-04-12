@@ -28,18 +28,6 @@
   }
 
 
-  /*----------------------------*/
-  .title-section {
-    width: 100%;
-    margin: 3.5rem 0;
-    text-align: center;
-  }
-  .title-section .title {
-    margin: 1.5rem 0;
-  }
-  /*----------------------------*/
-
-
   /* SUBTITLE SECTION STYLING */
   /*----------------------------*/
   .subtitle-section {
@@ -89,17 +77,35 @@
   /* RED BUTTON SECTION STYLING */
   /*----------------------------*/
   .course-details-btn-section {
+    display: flex;
     text-align: center;
     margin: 3rem 0;
+    width: 100%;
   }
-  .course-details-btn-section button {
+  .course-details-btn-section div {
+    width: 50%;
+  }
+  .course-details-btn-section #button1 {
     padding: .8rem 2rem;
+    margin: 0 auto;
+    outline: none;
+    border: none;
+    border-radius: 1.5rem;
+    background-color: #445c7d;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+.course-details-btn-section #button2 {
+    padding: .8rem 2rem;
+    margin: 0 auto;
     outline: none;
     border: none;
     border-radius: 1.5rem;
     background-color: #fd5c4a;
     color: white;
     font-size: 1.2rem;
+    cursor: pointer;
   }
   /*----------------------------*/
 
@@ -197,9 +203,9 @@
 <body>
 
 <div class="container">
-  <section class="title-section center-content">
+  <section style="text-align: center; width: 100%; margin: 3.5rem 0;">
     <img src="https://static.wixstatic.com/media/9a56fd_2e36edbfbcc241aca2a0e3fff1f444a5~mv2.png/v1/fit/w_700,h_90,al_c,q_100/image.png" alt="restartcamp-logo">
-    <p class="title" style="font-weight: bold">
+    <p style="font-weight: bold">
       Vești bune!
       <br>
       TE-AI ÎNSCRIS CU SUCCES 
@@ -210,115 +216,105 @@
     </p>
   </section>
 
-  <section class="subtitle-section center-content">
-    <h3 class="tomato-color-title"> 
-      {{ subtitle_section_title }} 
-      {{!-- CITEȘTE CU ATENȚIE MAI JOS! --}}
+  <section style="width: 100%; margin-bottom: 1rem;">
+    <h3 style="color: #fd5c4a; text-align: center; margin-bottom: 1rem;"> 
+      CITEȘTE CU ATENȚIE MAI JOS!
     </h3>
     <p>
-      {{!-- Noi ți-am rezervat locul și te felicităm pentru decizia luată! <br>
+      Noi ți-am rezervat locul și te felicităm pentru decizia luată! <br>
       Ce trebuie să faci în continuare? <br>
-      Să vii la curs, bineînțeles! Te ajutăm noi cu detaliile necesare, să nu îți mai bați tu capul cu ele. --}}
-      {{ subtitle_section_paragraph }}
+      Să vii la curs, bineînțeles! Te ajutăm noi cu detaliile necesare, să nu îți mai bați tu capul cu ele.
     </p>
   </section>
 
-  <section class="middle-email-section-1">
-    <img src=`{{ course_logo }}` alt="course-logo">
-    <div class="text-section">
+  <section style="display: flex; margin-bottom: 1rem;">
+    <img src='https://ci4.googleusercontent.com/proxy/jdxrO5FtHYEtqSgk8GUJRDYV0hxj6wwnSRDWPqDUpq4ZdfD9s1EhwnzoJaneT2y5aKp9Vy5aHPewpiWtu_ddc0HGqaJEt2WN5IM1w_D-cQ-1AhV-E6RWpnEArO3KbHqM_Q9svunP5C2V4CfjQVpGGxwRjrNq5RiQKhs_2rsM1BVzJWl7XMuMrlx3fqwsl_pcM4L4xSNRRolfedhgnODdjq_EkWHNsoQJCLHexL2U9Z57UhKV=s0-d-e1-ft#https://static.wixstatic.com/media/9a56fd_c800aed3905046be9facad444d56e356~mv2.png/v1/fit/w_700,h_2000,al_c,q_85/9a56fd_c800aed3905046be9facad444d56e356~mv2.png' alt="course-logo" style="width: 35%;">
+    <div style="width: 50%; margin-left: 1rem;">
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_1_title1 }}
-          {{!-- Când are loc cursul  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+          Când are loc cursul 
         </span>
         <br>
         Modulul 1 al cursului {{ course_name }} are loc pe {{ course_date }}, ora 18:30 și va dura 3 ore. Nu este un curs demo, ci este un modul complet, din care vei face primii pași în acest domeniu, ghidat de trainerul nostru.
       </p>
       <br>
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_1_title2 }}
-          {{!-- Datele de acces la curs  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+          Datele de acces la curs
         </span>
         <br>
-        {{ section_1_paragraph2 }}
-        {{!-- Vei primi de la noi un mesaj pentru acces la pagina de conectare la curs, cu 2 ore înainte de începerea acestuia, pe mail și pe Whatsapp. Acesta va fi susținut online, iar tu vei fi invitat să intri pe platforma Zoom. De asemenea, îți vom trimite cateva indicatii pentru folosirea platformei în caz că este prima dată când intri pe ea. --}}
+        Vei primi de la noi un mesaj pentru acces la pagina de conectare la curs, cu 2 ore înainte de începerea acestuia, pe mail și pe Whatsapp. Acesta va fi susținut online, iar tu vei fi invitat să intri pe platforma Zoom. De asemenea, îți vom trimite cateva indicatii pentru folosirea platformei în caz că este prima dată când intri pe ea.
       </p>
     </div>
   </section>
   
-  <section class="middle-email-section-2">
-    <div class="left-section">
+  <section style="display: flex; margin-bottom: 1rem;">
+    <div style="width: 50%; margin-right: 0.5rem">
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_2_title1 }}
-          {{!-- Despre curs  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+          Despre curs
         </span>
         <br>
-        {{ section_2_paragraph1 }}
-        {{!-- Nu este un curs demo, ci este un modul complet, din care vei învăța primii pași în Marketing Digital și offline + Vânzări față în față, la telefon și în scris, ghidat de trainerul nostru. --}}
+        Nu este un curs demo, ci este un modul complet, din care vei învăța primii pași în Marketing Digital și offline + Vânzări față în față, la telefon și în scris, ghidat de trainerul nostru.
       </p>
       <br>
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_2_title2 }}
-          {{!-- Vei fi invitat să participi la exerciții și studii de caz live  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+          Vei fi invitat să participi la exerciții și studii de caz live
         </span>
         <br>
-        {{ section_2_paragraph2 }}
-        {{!-- Și, bineînțeles, vei interacționa cu trainerul și vei putea pune întrebări, astfel încât să poți beneficia de o înțelegere mai bună și o învățare accelerată, experiențială. Așa că, până la finalul cursului, garantăm că vei avea multe idei și soluții pe care să le poți aplica de a doua zi! --}}
+         Și, bineînțeles, vei interacționa cu trainerul și vei putea pune întrebări, astfel încât să poți beneficia de o înțelegere mai bună și o învățare accelerată, experiențială. Așa că, până la finalul cursului, garantăm că vei avea multe idei și soluții pe care să le poți aplica de a doua zi!
       </p>
     </div>
-    <div class="right-section">
+    <div style="width: 50%; margin-left: 0.5rem">
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_2_title3 }}
-          {{!-- Reminderele de la noi  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+           Reminderele de la noi
         </span>
         <br>
-        {{ section_2_paragraph3 }}
-        {{!-- Nu te vom bombarda cu zeci de remindere, ci doar cu 2 pe mail cu o săptămână și cu o zi înainte de curs și 2 pe whatsapp, cu o zi înainte și în ziua cursului. Așa că, cel mai bine e să îți notezi de pe acum în calendar ziua și ora, să nu îți faci alt program, tocmai atunci! Acesta este modul nostru de a avea grijă să îți reamintim, fără a-ți invada inboxul. :) --}}
+       Nu te vom bombarda cu zeci de remindere, ci doar cu 2 pe mail cu o săptămână și cu o zi înainte de curs și 2 pe whatsapp, cu o zi înainte și în ziua cursului. Așa că, cel mai bine e să îți notezi de pe acum în calendar ziua și ora, să nu îți faci alt program, tocmai atunci! Acesta este modul nostru de a avea grijă să îți reamintim, fără a-ți invada inboxul. :)
       </p>
       <br>
       <p>
-        <span class="tomato-color-title"> 
-          {{ section_2_title4 }}
-          {{!-- Locurile sunt limitate, așa că vino la timp!  --}}
+        <span style="color: #fd5c4a; font-weight: bold;"> 
+           Locurile sunt limitate, așa că vino la timp! 
         </span>
         <br>
-        {{ section_2_paragraph4 }}
-        {{!-- Locurile sunt limitate și e posibil, daca intri prea târziu, să nu mai poți ocupa locul rezervat pentru tine. --}}
+         Locurile sunt limitate și e posibil, daca intri prea târziu, să nu mai poți ocupa locul rezervat pentru tine.
       </p>
     </div>
   </section>
 
-  <section class="course-details-btn-section">
-    <div>
-      <a href=`{{ course_access_link }}`>
-        <button> revezi info curs </button>
+  <section style="display: flex; margin-bottom: 1rem;">
+    <div style="width: 50%; text-align: center;">
+      <a href="{{ course_access_link }}">
+        <button style="padding: 0.8rem 2rem; outline: none; border: none; border-radius: 1.5rem; background-color: #445c7d; color: white; font-size: 1.2rem;"> revezi info curs </button>
+      </a>
+    </div>
+    <div style="width: 50%; text-align: center;">
+      <a href="https://www.restart-camp.com/mai-inscriu-un-prieten?utm_campaign=3abe3442-9c89-4b26-b20f-9f1d7bf3013e&utm_source=so&utm_medium=mail&utm_content=bbfad056-620c-4b93-b590-24800b0bf878">
+        <button style="padding: 0.8rem 2rem; outline: none; border: none; border-radius: 1.5rem; background-color: #fd5c4a; color: white; font-size: 1.2rem;"> invita si un prieten </button>
       </a>
     </div>
   </section>
 
-  <section class="contact-section">
-    <div class="left-section">
-      <h5 class="tomato-color-title"> Telefon, Whatsapp & Telegram: </h5> 
+  <section style="display: flex; margin-bottom: 1rem;">
+    <div style="width: 50%; margin-right: 0.5rem; text-align: center;">
+      <h5 style="color: #fd5c4a; font-weight: bold;"> Telefon, Whatsapp & Telegram: </h5> 
       <p> 
-        {{ restart_camp_phone_number }}
-        {{!-- +40724433667 / +40742965615  --}}
+        +40724433667 / +40742965615
       </p>
     </div>
-    <div class="right-section">
-      <h5 class="tomato-color-title"> Email: </h5>
+    <div style="width: 50%; margin-left: 0.5rem; text-align: center;">
+      <h5 style="color: #fd5c4a; font-weight: bold;"> Email: </h5>
       <p id="email-address">
-        {{ restart_camp_email }}
-        {{!-- echipa.restartcamp@gmail.com  --}}
+       echipa.restartcamp@gmail.com
       </p>
     </div>
   </section>
 
-  <section class="social-media-section">
-    <h3 class="center-content"> Vino și în social media! </h3>
+  <section style="text-align: center;">
+    <h3> Vino și în social media! </h3>
     <br>
     <div style="margin: auto; width: fit-content">
       <a href="https://www.facebook.com/paginarestartcamp">
@@ -346,9 +342,8 @@
   </p>
   <br>
   <br>
-
-  <div class="about-restart-camp">
-    <p style="margin: auto 0">Despre Restart Camp</p>
+  <div style="display: flex; justify-content: center; width: 100%; text-align: center;">
+    <p style="margin: auto 0;">Despre Restart Camp</p>
     <a href="https://www.restart-camp.com/">
       <img src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1644861158/restartcamp/arrow_znfk0f.png" alt="arrow" style="margin-top: 0.3rem; margin-left: 0.5rem">
     </a>

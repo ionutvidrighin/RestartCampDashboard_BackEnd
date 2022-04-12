@@ -39,21 +39,21 @@ const sendRealConfirmationEmailAfterRegistration = async (input) => {
       course_date: input.courseData.courseDate,
       course_access_link: input.courseData.courseAccessLink,
       /* subtitle section */
-      subtitle_section_title: input.subtitleSection.title,
-      subtitle_section_paragraph: input.subtitleSection.paragraph,
-      /* section one */
-      section_1_title1: input.sectionOne.title1,
-      section_1_title2: input.sectionOne.title2,
-      section_1_paragraph2: input.sectionOne.paragraph2,
-      /* section two */
-      section_2_title1: input.sectionTwo.subsectionOne.title1,
-      section_2_paragraph1: input.sectionTwo.subsectionOne.paragraph1,
-      section_2_title2: input.sectionTwo.subsectionOne.title2,
-      section_2_paragraph2: input.sectionTwo.subsectionOne.paragraph2,
-      section_2_title3: input.sectionTwo.subsectionTwo.title1,
-      section_2_paragraph3: input.sectionTwo.subsectionTwo.paragraph1,
-      section_2_title4: input.sectionTwo.subsectionTwo.title2,
-      section_2_paragraph4: input.sectionTwo.subsectionTwo.paragraph2,
+      subtitle_section_subtitle_title: input.subtitleSection.subtitle.title,
+      subtitle_section_subtitle_paragraph: input.subtitleSection.subtitle.paragraph,
+      subtitle_section_paragraph_title: input.subtitleSection.paragraph.title,
+      subtitle_section_paragraph_paragraph: input.subtitleSection.paragraph.paragraph,
+      /* section center */
+      section_center_title1: input.sectionCenter.subsectionOne.title1,
+      section_center_paragraph1: input.sectionCenter.subsectionOne.paragraph1,
+      section_center_title2: input.sectionCenter.subsectionOne.title2,
+      section_center_paragraph2: input.sectionCenter.subsectionOne.paragraph2,
+      section_center_title3: input.sectionCenter.subsectionTwo.title1,
+      section_center_paragraph3: input.sectionCenter.subsectionTwo.paragraph1,
+      section_center_title4: input.sectionCenter.subsectionTwo.title2,
+      section_center_paragraph4: input.sectionCenter.subsectionTwo.paragraph2,
+      section_center_button1: input.sectionCenter.button1,
+      section_center_button2: input.sectionCenter.button2,
       /* contact section */
       restart_camp_phone_number: input.contactSection.phone_number,
       restart_camp_email: input.contactSection.email
