@@ -5,7 +5,7 @@ File handling the change of User account password
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
-const faunaClient = require("../faunaDB");
+const faunaClient = require("../FaunaDataBase/faunaDB");
 
 const { Ref, Match, Map, Paginate, Get, Update, Collection, Lambda, Index, Var } = faunaDB.query
 

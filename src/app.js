@@ -19,6 +19,8 @@ const getStudentCoursesPresence = require('./LockedEndpoints/coursesPresence/get
 const freeCoursesForDashboard = require('./LockedEndpoints/freeCourses/freeCourses');
 const paidCoursesForDashboard = require('./LockedEndpoints/paidCourses/paidCourses');
 const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1')
+const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days')
+const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day')
 
 const app = express()
 app.set('trust proxy', 1)
@@ -39,6 +41,8 @@ app.use(freeCoursesForDashboard)
 app.use(paidCoursesForDashboard)
 app.use(getCoursesForWebPage)
 app.use(emailConfirmationAfterRegistration)
+app.use(emailReminder7Days)
+app.use(emailReminder1Day)
 
 
 const users = require('./users')

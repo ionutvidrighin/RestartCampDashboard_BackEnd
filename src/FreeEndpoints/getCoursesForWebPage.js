@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const faunaDB = require("faunadb")
-const faunaClient = require("../faunaDB")
+const faunaClient = require("../FaunaDataBase/faunaDB");
 let freeCourses = require('../LockedEndpoints/freeCourses/courses')
 let paidCourses = require('../LockedEndpoints/paidCourses/courses')
 

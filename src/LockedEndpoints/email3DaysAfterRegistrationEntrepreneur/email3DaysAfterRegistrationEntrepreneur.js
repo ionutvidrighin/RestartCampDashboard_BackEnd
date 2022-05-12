@@ -1,10 +1,10 @@
 /**
-File handling the change of E-mail confirmation after registration TEMPLATE 
+File handling the update of the "Email 3 days after registration for Entrepreneur"  
 */
 
 /*** ENDPOINTS:
-1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "emailConfirmationRegistration" collection
-2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "emailConfirmationRegistration" collection
+1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "emailConfirmationAfterRegistration" collection
+2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "emailConfirmationAfterRegistration" collection
 */
 
 
@@ -12,13 +12,12 @@ const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
-const collections = require('../../FaunaDataBase/collections');
-const getAccessKey = require("../../Authentication/getAccessKey")
-const sendTestConfirmationEmail = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendTest_EmailConfirmationRegistration')
+const getAccessKey = require("../../Authentication/getAccessKey");
+const sendTestConfirmationEmail = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendTest_EmailConfirmationRegistration');
 
 const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
-router.route('/email-confirmation-registration')
+router.route('/email-3days-entrepreneur')
   .get( async (req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
@@ -27,7 +26,7 @@ router.route('/email-confirmation-registration')
       try {
         const emailTemplateObjectFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
+            Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
             Lambda(x => Get(x))
           )
         )
@@ -47,7 +46,7 @@ router.route('/email-confirmation-registration')
     if (accessKey === appAccessKey) {
       const newEmailTemplateObject = req.body
 
-      // if block dealing with sending a test email template  
+      // this check deals with sending a test email template  
       if (newEmailTemplateObject.hasOwnProperty('testEmail')) {
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
@@ -66,7 +65,7 @@ router.route('/email-confirmation-registration')
         }
       } else {
         const emailTemplateObject = await faunaClient.query(
-          Map(Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
+          Map(Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
             Lambda(x => Get(x))
           )
         )
@@ -75,7 +74,7 @@ router.route('/email-confirmation-registration')
           const docID = emailTemplateObject.data[0].ref.id
           await faunaClient.query(
             Update(
-              Ref(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION), docID),
+              Ref(Collection('emailConfirmationAfterRegistration'), docID),
               { data: newEmailTemplateObject }
             )
           )

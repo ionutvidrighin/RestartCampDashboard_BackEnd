@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
-const faunaClient = require("../../faunaDB");
+const faunaClient = require("../../FaunaDataBase/faunaDB");
 const dayjs = require('dayjs');
 const storedStudentPresenceJSON = require("../../JSON_Files/storedStudentPresence");
 

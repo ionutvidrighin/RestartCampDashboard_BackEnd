@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>Document</title>
+    <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+    <![endif]-->
+
+    <style>
+      a:-webkit-any-link {
+        text-decoration: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="email-container" style="min-width: 350px; max-width: 650px; font-family: Helvetica, Arial, sans-serif; margin: 0 auto;">
+      <table class="logo-section" style="margin: 0 auto; width: 100%; text-align: center;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr>
+          <td style="padding: 0 23px">
+            <img src="{{ logoSection }}" alt="top-logo" width="100%">
+            <h2 style="color:#fd5c4a;">ASIGURĂ-TE CĂ AI PUS ÎN CALENDAR CURSUL</h2>
+            <p>Bună! <br>
+              îți reamintim că săptămâna viitoare are loc cursul {{ course.name }} - modul 1, la care te-ai înscris.
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      <table class="section-center" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr>
+          <td align="center" valign="top">
+            <div style="display: inline-block; vertical-align: top;">
+              <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="300px">
+                <tr width="100%">
+                  <td align="left" valign="top" style="padding: 10px">
+                    <h5 style="
+                      font-size: 18px;
+                      margin: 0;
+                      padding: 0;
+                      color:#fd5c4a;">
+                      {{ sectionCenter.title1 }}
+                    </h5>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;">
+                      {{ sectionCenter.paragraph1 }}
+                    </p> 
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top" style="padding: 10px">
+                    <h5 style="
+                      font-size: 18px; 
+                      margin: 0; padding: 0; 
+                      color:#fd5c4a;">
+                      {{ sectionCenter.title2 }}
+                    </h5>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;">
+                      {{ sectionCenter.paragraph2 }} 
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top">
+              <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="300px">
+                <tr>
+                  <td align="left" valign="top" style="padding: 10px">
+                    <h5 style="
+                      font-size: 18px;
+                      margin: 0;
+                      padding: 0;
+                      color:#fd5c4a;">
+                      {{ sectionCenter.title3 }}
+                    </h5>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;">
+                      {{ sectionCenter.paragraph3 }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="left" valign="top" style="padding: 10px">
+                    <h5 style="
+                      font-size: 18px;
+                      margin: 0;
+                      padding: 0;
+                      color:#fd5c4a;">
+                      {{ sectionCenter.title4 }}
+                    </h5>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;">
+                      {{ sectionCenter.paragraph4 }}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <br>
+
+      <table class="referral-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr width="100%">
+          <td align="center" width="100%">
+            <div style="display: inline-block; vertical-align: top;">
+              <table>
+                <tr>
+                  <td>
+                    <a href="{{ sectionReferral.button1Link }}">
+                      <button style="
+                        padding: 10px;
+                        background-color: #3e5676;
+                        color: white;
+                        font-size: 20px;
+                        border: none;
+                        border-radius: 20px;
+                        cursor: pointer;">
+                        {{ sectionReferral.button1Text }}
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top;">
+              <table>
+                <tr>
+                  <td>
+                    <a href="{{ sectionReferral.button2Link }}">
+                      <button style="
+                        padding: 10px;
+                        background-color: #fd5c4a;
+                        color: white;
+                        font-size: 20px;
+                        border: none;
+                        border-radius: 20px;
+                        cursor: pointer;">
+                        {{ sectionReferral.button2Text }}
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <img src="{{ sectionReferral.logo }}" alt="referral" width="100%" style="margin-top: 30px;">
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <p style="
+              padding: 0 25px;
+              font-size: 12px;
+              line-height: 15px;
+              mso-line-height-rule: exactly;">
+              {{ sectionReferral.text }}
+            </p>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+
+      <table class="referral-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr>
+          <td align="center" valign="top">
+            <div style="display: inline-block; vertical-align: top;">
+              <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="300px">
+                <tr width="100%">
+                  <td align="left" valign="center" style="padding: 10px; text-align: center;">
+                    <p style="
+                      font-size: 13px;
+                      font-weight: bold;
+                      margin: 0;
+                      padding: 0;
+                      color:#fd5c4a;">
+                      Telefon, Whatsapp & Telegram:
+                    </p>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;
+                      margin: 0;">
+                      {{ contactSection.phone }}
+                    </p> 
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top;">
+              <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="300px">
+                <tr width="100%">
+                  <td align="left" valign="center" style="padding: 10px; text-align: center;">
+                    <p style="
+                      font-size: 13px;
+                      font-weight: bold;
+                      margin: 0;
+                      padding: 0;
+                      color:#fd5c4a;">
+                      Email:
+                    </p>
+                    <p style="
+                      font-size: 12px;
+                      line-height: 15px;
+                      mso-line-height-rule: exactly;
+                      margin: 0;">
+                      {{ contactSection.email }}
+                    </p> 
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <section class="social-media-section">
+        <h3 style="text-align: center;"> Vino și în social media! </h3>
+        <br>
+        <div style="margin: auto; width: fit-content; text-align: center;">
+          <a href="https://www.facebook.com/paginarestartcamp">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/facebook_e1qtfm.png" alt="facebook" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.instagram.com/restart_camp_romania/">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/instagram_oc4fcv.png" alt="instagram" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.youtube.com/channel/UCDFWUOaKHDTjbjUOQsb2uyg">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657842/restartcamp/youtube_u5heks.png" alt="youtube" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.linkedin.com/company/69405606/">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/linkedin_rxohpg.png" alt="linkedin" style="margin: 0 .5rem; width: 20px;">
+          </a>
+        </div>
+      </section>
+
+      <br>
+      <br>
+
+      <p style="font-size: .8rem; padding: 0 25px; text-align: center; color: rgb(93, 93, 93);">
+        De ce ți-am scris: Te-ai înscris pe website-ul nostru la unul sau mai multe dintre cursurile noastre și ai bifat că îți dorești să primești informații despre programul Restart Camp. Oricand poți oferi echipei de voluntari care realizează proiectul feedback sau întrebări sau poți să te dezabonezi de la această listă printr-un raspuns la acest mail sau <a href="https://support.wix.com/en/article/about-the-unsubscribe-link-in-emails" style="color: #3a71d4">aici</a>.
+      </p>
+      <br>
+      <br>
+
+      <div class="about-restart-camp" style="text-align: center;">
+        <p style="margin: auto 0">Despre Restart Camp</p>
+        <a href="https://www.restart-camp.com/">
+          <img src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1644861158/restartcamp/arrow_znfk0f.png" alt="arrow" style="margin-top: 0.3rem; margin-left: 0.5rem">
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

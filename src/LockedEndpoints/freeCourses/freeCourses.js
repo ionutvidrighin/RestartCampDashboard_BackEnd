@@ -13,7 +13,7 @@ File handling the FREE COURSES in database
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
-const faunaClient = require("../../faunaDB");
+const faunaClient = require("../../FaunaDataBase/faunaDB");
 const getAccessKey = require("../../Authentication/getAccessKey")
 
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query

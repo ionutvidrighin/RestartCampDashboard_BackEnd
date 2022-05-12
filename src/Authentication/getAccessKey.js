@@ -1,5 +1,5 @@
 const faunaDB = require("faunadb");
-const faunaClient = require("../faunaDB");
+const faunaClient = require("../FaunaDataBase/faunaDB");
 
 const { Map, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
 

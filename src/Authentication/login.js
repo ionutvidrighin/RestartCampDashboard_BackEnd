@@ -5,7 +5,7 @@ File handling LOGIN to the App
 const express = require('express')
 const router = express.Router()
 const faunaDB = require("faunadb")
-const faunaClient = require('../faunaDB')
+const faunaClient = require('../FaunaDataBase/faunaDB')
 
 const { Match, Map, Paginate, Get, Lambda, Index, Var} = faunaDB.query;
 

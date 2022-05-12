@@ -6,7 +6,7 @@
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
-const faunaClient = require("../faunaDB");
+const faunaClient = require("../FaunaDataBase/faunaDB");
 
 const { Match, Map, Paginate, Get, Update, Ref, Collection, Lambda, Index, Var} = faunaDB.query;
 
