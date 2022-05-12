@@ -19,10 +19,10 @@ const testingCronFnArg = require('../../Nodemailer/testingCron')
 
 const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
-cron.schedule('*/2 * * * *', async () => {
-  const send = await sendTestReminderEmail1Day(testingCronFnArg)
-  console.log(send)
-});
+// cron.schedule('*/2 * * * *', async () => {
+//   const send = await sendTestReminderEmail1Day(testingCronFnArg)
+//   console.log(send)
+// });
 
 router.route('/email-reminder-1day')
   .get( async (req, res) => {
