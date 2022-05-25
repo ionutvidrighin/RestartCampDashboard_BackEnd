@@ -6,7 +6,7 @@ const { Map, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
 const getAccessKey = async (appAccessKey) => {
   const accessKey = await faunaClient.query(
     Map(
-      Paginate(Match(Index("get_access_key"), appAccessKey)),
+      Paginate(Match(Index("get_app_access_key"), appAccessKey)),
       Lambda("key", Get(Var("key")))
     )
   )

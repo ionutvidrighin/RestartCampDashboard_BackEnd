@@ -9,12 +9,13 @@
 <body>
 
   <script>
-    const a = 'this is a text - https://blablabla.com'
+    const linkWords = {
+      paragraph1: [],
+      paragraph2: [],
+      paragraph3: []
+    }
 
-    const b = a.split('-')
-   console.log(b[0].trim())
-   console.log(b[1])
-   console.log(b[1].trim())
+    console.log(Object.keys(linkWords))
   </script>
   
 </body>

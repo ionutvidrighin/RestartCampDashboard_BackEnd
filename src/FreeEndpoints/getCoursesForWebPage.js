@@ -2,8 +2,8 @@ const express = require("express")
 const router = express.Router()
 const faunaDB = require("faunadb")
 const faunaClient = require("../FaunaDataBase/faunaDB");
-let freeCourses = require('../LockedEndpoints/freeCourses/courses')
-let paidCourses = require('../LockedEndpoints/paidCourses/courses')
+let freeCourses = require('../LockedEndpoints/coursesModule1/courses')
+let paidCourses = require('../LockedEndpoints/coursesModule2/courses')
 
 const {Map, Collection, Paginate, Documents, Get, Lambda} = faunaDB.query
 

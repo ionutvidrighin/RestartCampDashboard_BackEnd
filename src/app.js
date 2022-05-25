@@ -16,11 +16,13 @@ const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail'
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
 const getRegisteredStudents = require('./LockedEndpoints/coursesRegistration/getRegisteredStudents');
 const getStudentCoursesPresence = require('./LockedEndpoints/coursesPresence/getStudentCoursesPresence');
-const freeCoursesForDashboard = require('./LockedEndpoints/freeCourses/freeCourses');
-const paidCoursesForDashboard = require('./LockedEndpoints/paidCourses/paidCourses');
+const coursesModule1 = require('./LockedEndpoints/coursesModule1/coursesModule1');
+const coursesModule2 = require('./LockedEndpoints/coursesModule2/coursesModule2');
 const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1')
 const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days')
 const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day')
+const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour')
+const testing = require('./test')
 
 const app = express()
 app.set('trust proxy', 1)
@@ -30,6 +32,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
+app.use(testing)
 app.use(dashboardLogin)
 app.use(changeUserAccountEmail)
 app.use(changeUserAccountPassword)
@@ -37,12 +40,13 @@ app.use(registerStudent)
 app.use(registerStudentPresence)
 app.use(getRegisteredStudents)
 app.use(getStudentCoursesPresence)
-app.use(freeCoursesForDashboard)
-app.use(paidCoursesForDashboard)
+app.use(coursesModule1)
+app.use(coursesModule2)
 app.use(getCoursesForWebPage)
 app.use(emailConfirmationAfterRegistration)
 app.use(emailReminder7Days)
 app.use(emailReminder1Day)
+app.use(emailReminder1Hour)
 
 
 const users = require('./users')

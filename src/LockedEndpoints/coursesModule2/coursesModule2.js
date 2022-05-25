@@ -1,10 +1,10 @@
 /**
-File handling the PAID COURSES in database
+File handling the COURSES Module 1 in database
 */
 
 /*** ENDPOINTS:
-1. GET - fetches all paid courses stored to data base => "paidCourses" collection
-2. POST - creates a new paid course; stored it to "paidCourses" collection
+1. GET - fetches all paid courses stored to data base => "coursesModule2" collection
+2. POST - creates a new paid course; stored it to "coursesModule2" collection
 3. PUT - modifies various entries in the paid course object
 4. PATCH - makes the paid course ACTIVE / INACTIVE
 5. DELETE - removes the paid course from the data base
@@ -27,7 +27,7 @@ router.route('/paid-courses')
       try {
         const coursesFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('paidCourses'))),
+            Paginate(Documents(Collection('coursesModule2'))),
             Lambda(x => Get(x))
           )
         )
@@ -54,7 +54,7 @@ router.route('/paid-courses')
         const newCourse = req.body
         await faunaClient.query(
           Create(
-            Collection('paidCourses'),
+            Collection('coursesModule2'),
             { data: newCourse }
           )
         )
@@ -89,7 +89,7 @@ router.route('/paid-courses')
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
           Update(
-            Ref(Collection('paidCourses'), docID),
+            Ref(Collection('coursesModule2'), docID),
             { data: courseToModify }
           )
         )
@@ -123,7 +123,7 @@ router.route('/paid-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id;
         await faunaClient.query(
-          Update(Ref(Collection("paidCourses"), docID),
+          Update(Ref(Collection("coursesModule2"), docID),
             { data: { courseActive: courseToModify.courseActive } }
           )
         )
@@ -158,7 +158,7 @@ router.route('/paid-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
-          Delete(Ref(Collection('paidCourses'), docID))
+          Delete(Ref(Collection('coursesModule2'), docID))
         )
         res.status(200).json({
           message: 'Success! Paid Course has been deleted'

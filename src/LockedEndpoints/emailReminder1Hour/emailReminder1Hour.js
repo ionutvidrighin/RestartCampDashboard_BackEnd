@@ -3,31 +3,37 @@ File handling the update of the "1 hour reminder E-mail"
 */
 
 /*** ENDPOINTS:
-1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "emailConfirmationAfterRegistration" collection
-2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "emailConfirmationAfterRegistration" collection
+1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "emailReminder1Hour" collection
+2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "emailReminder1Hour" collection
 */
-
 
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
+const cron = require('node-cron');
+const collections = require('../../FaunaDataBase/collections');
 const getAccessKey = require("../../Authentication/getAccessKey");
-const sendTestConfirmationEmail = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendTest_EmailConfirmationRegistration');
-
+const sendTestReminderEmail1Day = require('../../Nodemailer/EmailReminder1HourTEMPLATE/sendTest_EmailReminder1Hour');
+const testingCronFnArg = require('../../Nodemailer/testingCron')
 
 const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
-router.route('/email-reminder-1day')
-  .get( async (req, res) => {
-    const accessKey = req.headers.authorization
-    const appAccessKey = await getAccessKey(accessKey)
+// cron.schedule('*/2 * * * *', async () => {
+//   const send = await sendTestReminderEmail1Day(testingCronFnArg)
+//   console.log(send)
+// });
 
-    if (accessKey === appAccessKey) {
+router.route('/email-reminder-1hour')
+  .get( async (req, res) => {
+    const userAccessKey = req.headers.authorization
+    const appAccessKey = await getAccessKey(userAccessKey)
+
+    if (userAccessKey === appAccessKey) {
       try {
         const emailTemplateObjectFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
+            Paginate(Documents(Collection(collections.EMAIL_REMINDER_1HOUR))),
             Lambda(x => Get(x))
           )
         )
@@ -41,17 +47,17 @@ router.route('/email-reminder-1day')
   })
 
   .post( async(req, res) => {
-    const accessKey = req.headers.authorization
-    const appAccessKey = await getAccessKey(accessKey)
+    const userAccessKey = req.headers.authorization
+    const appAccessKey = await getAccessKey(userAccessKey)
     
-    if (accessKey === appAccessKey) {
+    if (userAccessKey === appAccessKey) {
       const newEmailTemplateObject = req.body
 
       // this check deals with sending a test email template  
       if (newEmailTemplateObject.hasOwnProperty('testEmail')) {
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
-          const sendEmail = await sendTestConfirmationEmail(newEmailTemplateObject)
+          const sendEmail = await sendTestReminderEmail1Day(newEmailTemplateObject)
           console.log(sendEmail)
 
           res.status(201).json({
@@ -66,7 +72,7 @@ router.route('/email-reminder-1day')
         }
       } else {
         const emailTemplateObject = await faunaClient.query(
-          Map(Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
+          Map(Paginate(Documents(Collection(collections.EMAIL_REMINDER_1HOUR))),
             Lambda(x => Get(x))
           )
         )
@@ -75,7 +81,7 @@ router.route('/email-reminder-1day')
           const docID = emailTemplateObject.data[0].ref.id
           await faunaClient.query(
             Update(
-              Ref(Collection('emailConfirmationAfterRegistration'), docID),
+              Ref(Collection(collections.EMAIL_REMINDER_1HOUR), docID),
               { data: newEmailTemplateObject }
             )
           )

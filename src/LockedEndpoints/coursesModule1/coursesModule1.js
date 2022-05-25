@@ -1,10 +1,10 @@
 /**
-File handling the FREE COURSES in database 
+File handling the COURSES Module 1 in database 
 */
 
 /*** ENDPOINTS:
-1. GET - fetches all free courses stored to data base => "freeCourses" collection
-2. POST - creates a new free course; stored it to "freeCourses" collection
+1. GET - fetches all free courses stored to data base => "coursesModule1" collection
+2. POST - creates a new free course; stored it to "coursesModule1" collection
 3. PUT - modifies various entries in the free course object
 4. PATCH - makes the free course ACTIVE / INACTIVE
 5. DELETE - removes the free course from the data base
@@ -18,7 +18,7 @@ const getAccessKey = require("../../Authentication/getAccessKey")
 
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
 
-router.route('/free-courses')
+router.route('/courses-module1')
   .get( async(req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
@@ -27,7 +27,7 @@ router.route('/free-courses')
       try {
         const coursesFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('freeCourses'))),
+            Paginate(Documents(Collection('coursesModule1'))),
             Lambda(x => Get(x))
           )
         )
@@ -54,7 +54,7 @@ router.route('/free-courses')
       try {
         await faunaClient.query(
           Create(
-            Collection('freeCourses'),
+            Collection('coursesModule1'),
             { data: newCourse }
           )
         )
@@ -89,7 +89,7 @@ router.route('/free-courses')
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
           Update(
-            Ref(Collection('freeCourses'), docID),
+            Ref(Collection('coursesModule1'), docID),
             { data: courseToModify }
           )
         )
@@ -123,7 +123,7 @@ router.route('/free-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id;
         await faunaClient.query(
-          Update(Ref(Collection("freeCourses"), docID),
+          Update(Ref(Collection("coursesModule1"), docID),
             { data: { courseActive: courseToModify.courseActive } }
           )
         )
@@ -158,7 +158,7 @@ router.route('/free-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
-          Delete(Ref(Collection('freeCourses'), docID))
+          Delete(Ref(Collection('coursesModule1'), docID))
         )
         res.status(200).json({
           message: 'Success! Course has been deleted'
