@@ -2,8 +2,6 @@ const express = require("express")
 const router = express.Router()
 const faunaDB = require("faunadb")
 const faunaClient = require("../FaunaDataBase/faunaDB");
-let freeCourses = require('../LockedEndpoints/coursesModule1/courses')
-let paidCourses = require('../LockedEndpoints/coursesModule2/courses')
 
 const {Map, Collection, Paginate, Documents, Get, Lambda} = faunaDB.query
 
@@ -11,32 +9,32 @@ router.route('/restart-camp-courses')
   .get( async (req, res) => {
     try {
       // query all free courses
-      const freeCoursesFromDB = await faunaClient.query(
+      const coursesModule1FromDB = await faunaClient.query(
         Map(
-          Paginate(Documents(Collection('freeCourses'))),
+          Paginate(Documents(Collection('coursesModule1'))),
           Lambda(x => Get(x))
         )
       )
-      let freeCourses = freeCoursesFromDB.data
-      freeCourses = freeCourses.map(item => item.data)
-      freeCourses.sort((a, b) => {
+      let coursesModule1 = coursesModule1FromDB.data
+      coursesModule1 = coursesModule1.map(item => item.data)
+      coursesModule1.sort((a, b) => {
         return new Date(b.courseDate) - new Date(a.courseDate)
       })
 
       // query all paid courses
-      const paidCoursesFromDB = await faunaClient.query(
+      const coursesModule2FromDB = await faunaClient.query(
         Map(
-          Paginate(Documents(Collection('paidCourses'))),
+          Paginate(Documents(Collection('coursesModule2'))),
           Lambda(x => Get(x))
         )
       )
-      let paidCourses = paidCoursesFromDB.data
-      paidCourses = paidCourses.map(item => item.data)
-      paidCourses.sort((a, b) => {
+      let coursesModule2 = coursesModule2FromDB.data
+      coursesModule2 = coursesModule2.map(item => item.data)
+      coursesModule2.sort((a, b) => {
         return new Date(b.courseDate) - new Date(a.courseDate)
       })
 
-      res.status(200).json({freeCourses, paidCourses})
+      res.status(200).json({coursesModule1, coursesModule2})
     } catch (error) {
       res.status(401).json({message: "There was an error in retrieving the Free Courses from database", error})
     }

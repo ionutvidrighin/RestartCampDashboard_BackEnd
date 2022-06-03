@@ -3,6 +3,9 @@
 */
 
 module.exports = {
+  COURSES_MODULE_1: 'coursesModule1',
+  COURSES_MODULE_2: 'coursesModule2',
+  REGISTERED_STUDENTS: 'registeredStudents',
   EMAIL_CONFIRMATION_REGISTRATION: 'emailConfirmationRegistration',
   EMAIL_3DAYS_EMPLOYEE: 'email3DaysEmployee',
   EMAIL_3DAYS_ENTREPRENEUR: 'email3DaysEntrepreneur',

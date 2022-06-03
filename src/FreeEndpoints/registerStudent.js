@@ -1,21 +1,24 @@
-const express = require("express");
-const router = express.Router();
-const faunaDB = require("faunadb");
-const faunaClient = require("../FaunaDataBase/faunaDB");
-const isEqual = require('lodash.isequal');
-const dayjs = require('dayjs');
+const express = require("express")
+const router = express.Router()
+const faunaDB = require("faunadb")
+const faunaClient = require("../FaunaDataBase/faunaDB")
+const collections = require('../FaunaDataBase/collections')
+const indexes = require('../FaunaDataBase/indexes')
+const isEqual = require('lodash.isequal')
+const dayjs = require('dayjs')
 const localizedFormat = require('dayjs/plugin/localizedFormat')
-const localeRO = require('dayjs/locale/ro');
-//const sendConfirmationEmailAfterRegistration = require("../Nodemailer/ConfirmationEmailTemplate/sendConfirmationEmailAfterRegistration");
-const storedStudentFullDataJSON = require("../JSON_Files/storedStudentFullData");
-const storedStudentLimitedDataJSON = require("../JSON_Files/storedStudentLimitedData");
+const localeRO = require('dayjs/locale/ro')
+const sendConfirmationEmailAfterRegistration = require('../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendEmailConfirmationAfterRegistration')
 dayjs.extend(localizedFormat)
 
-const { Match, Map, Paginate, Get, Create, Collection, Lambda, Index, Var} = faunaDB.query;
+const { Match, Map, Paginate, Get, Create, Collection, Documents, Lambda, Index, Var} = faunaDB.query;
 
-class CreateStudentFullData {
+class CreateNewStudent {
   constructor(input) {
     this.id = input.id
+    this.appellation = input.appellation
+    this.address = input.address
+    this.county = input.county
     this.firstName = input.firstName
     this.lastName = input.lastName
     this.phoneNo = input.phoneNo
@@ -31,82 +34,68 @@ class CreateStudentFullData {
     this.year_month = input.year_month
   }
 }
-class CreateStudentLimitedData {
-  constructor(input) {
-    this.id = input.id
-    this.firstName = input.firstName
-    this.lastName = input.lastName
-    this.phoneNo = input.phoneNo
-    this.email = input.email
-    this.course = input.course
-    this.registrationDate = input.registrationDate,
-    this.year_month = input.year_month
-  }
-}
 
 router.route('/register-student')
   .post( async (request, response) => {
-    const registeredStudent = request.body
-
-    const newStudentFullData = new CreateStudentFullData(registeredStudent)
-    const newStudentLimitedData = new CreateStudentLimitedData(registeredStudent)
+    const newStudent = new CreateNewStudent(request.body)
 
     // check if any of the values in the Object coming from FrontEnd is undefined
     // if it is, throw an error as response
     let undefinedValues;
-    Object.values(newStudentFullData).forEach(value => {
+    Object.values(newStudent).forEach(value => {
       if (value === undefined) undefinedValues = true
     })
 
     if (undefinedValues) {
       response.status(422).json({
         error: "Passed data can't be undefined. Please check all key/values in your payload Object",
-        tip: "Payload Object must contain following data: ** id, firstName, lastName, phoneNo, email, job, remarks, reference, is_career, is_business, domain, course, registrationDate, year_month **"
+        tip: "Payload Object must contain following data: ** id, appellation, firstName, lastName, phoneNo, email, address, county, job, remarks, reference, is_career, is_business, domain, course, registrationDate, year_month **"
       })
       return
     }
 
-    /** creating the payload for |sendConfirmationEmailAfterRegistration| function  */
-    const course_name = request.body.course[0].title
-    const course_date = dayjs(request.body.course[0].date).locale(localeRO).format('LL')
-    const student_email = request.body.email
+    // get the Email Confirmation Registration TEMPLATE from DB
+    const emailConfirmationRegistrationTemplate = await faunaClient.query(
+      Map(
+        Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
+        Lambda(x => Get(x))
+      )
+    )
 
-    const payload = {
-      course_name,
-      course_date,
-      student_email
+    // prepare the data needed to send confirmation e-mail after new registration
+    // sendConfirmationEmailAfterRegistration() function will be called down the logic
+    const sendEmailPayload = {
+      emailTemplate: emailConfirmationRegistrationTemplate.data[0].data,
+      course_name: request.body.course[0].title,
+      course_logo: request.body.course[0].logo,
+      course_date: request.body.course[0].date,
+      student_email: request.body.email
     }
     /******************************************************* */
 
-    // query the DB in *storedStudentFullData* collection to check if student already exists
-    const searchStudentEmail = await faunaClient.query(
+    // query the DB in *registeredStudents* collection to check if student already exists
+    const getStudentByEmail = await faunaClient.query(
       Map(
-        Paginate(Match(Index("get_student_before_new_registration"), newStudentFullData.email)),
+        Paginate(Match(Index(indexes.GET_STUDENT_BY_EMAIL), newStudent.email)),
         Lambda("student", Get(Var("student")))
       )
     )
 
-    // case for when Student E-mail address doesn't exist in DB
+    // scenario: Student E-mail address doesn't exist in DB
     // we will register the Student as a new entry in DB
-    if (searchStudentEmail.data.length === 0) {
+    if (getStudentByEmail.data.length === 0) {
       try {
         await faunaClient.query(
-          Create(Collection("storedStudentFullData"), {
-            data: newStudentFullData
-          })
-        )
-        await faunaClient.query(
-          Create(Collection("storedStudentLimitedData"), {
-            data: newStudentLimitedData
+          Create(Collection(collections.REGISTERED_STUDENTS), {
+            data: newStudent
           })
         )
         response.status(200).json({
-          message: `Te-ai înscris cu success! rugăm să-ti verifici inbox-ul adresei ${newStudentFullData.email}`,
+          message: `Te-ai înscris cu success! rugăm să-ti verifici inbox-ul adresei ${newStudent.email}`,
           warning: "success"
         })
 
-        //sendConfirmationEmailAfterRegistration(payload)
-
+        sendConfirmationEmailAfterRegistration(sendEmailPayload)
       } catch (error) {
         console.log(error)
         response.status(422).json({
@@ -114,44 +103,45 @@ router.route('/register-student')
           warning: "error"
         })
       }
-
     } else {
-      const studentEmailAddress = searchStudentEmail.data[0].data.email
-      const existingCourseInDB = searchStudentEmail.data[0].data.course[0]
-      const courseFromPayload = newStudentFullData.course[0]
-      const coursesAreEqual = isEqual(existingCourseInDB, courseFromPayload)
+      // scenario: Student E-mail address exists in DB
+      const studentEmailAddress = getStudentByEmail.data[0].data.email
+      
+      // check if the course to which he is already registered (the one from DB)
+      // is the same with the one to which he registers now
+      const existingCourse = getStudentByEmail.data[0].data.course[0]
+      const newCourse = newStudent.course[0]
+      const coursesAreEqual = isEqual(existingCourse, newCourse)
 
       if (coursesAreEqual) {
-        const courseDate = dayjs(existingCourseInDB.date).locale(localeRO).format('LL')
+        // if courses are the same, send appropiate message to FrontEnd
+        const courseDate = dayjs(existingCourse.date).locale(localeRO).format('LL')
         response.status(406).json({
-          message: `Ești deja înscris la cursul **${existingCourseInDB.title}** din data de ${courseDate}`,
+          message: `Ești deja înscris la cursul **${existingCourse.title}** din data de ${courseDate}`,
           warning: 'warning'
         })
-        return
-      } 
+      } else {
+        // else if, courses are not the same
+        // register the Student as a new entry to DB
+        try {
+          await faunaClient.query(
+            Create(Collection(collections.REGISTERED_STUDENTS), {
+              data: newStudent
+            })
+          )
+          response.status(200).json({
+            message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,
+            warning: 'success'
+          })
 
-      try {
-        await faunaClient.query(
-          Create(Collection("storedStudentFullData"), {
-            data: newStudentFullData
+          sendConfirmationEmailAfterRegistration(sendEmailPayload)
+        } catch (error) {
+          console.log(error)
+          response.status(422).json({
+            message: "A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede!",
+            warning: "error"
           })
-        )
-        await faunaClient.query(
-          Create(Collection("storedStudentLimitedData"), {
-            data: newStudentLimitedData
-          })
-        )
-        response.status(200).json({
-          message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,
-          warning: 'success'
-        })
-        //sendConfirmationEmailAfterRegistration(payload)
-      } catch (error) {
-        console.log(error)
-        response.status(422).json({
-          message: "A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede!",
-          warning: "error"
-        })
+        }
       }
     }
   })

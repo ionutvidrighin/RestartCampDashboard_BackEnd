@@ -1,24 +1,26 @@
 /**
-File handling the COURSES Module 1 in database
+File handling the COURSES Module 2 in database
 */
 
 /*** ENDPOINTS:
-1. GET - fetches all paid courses stored to data base => "coursesModule2" collection
-2. POST - creates a new paid course; stored it to "coursesModule2" collection
-3. PUT - modifies various entries in the paid course object
-4. PATCH - makes the paid course ACTIVE / INACTIVE
-5. DELETE - removes the paid course from the data base
+1. GET - fetches all courses stored to data base => "coursesModule2" collection
+2. POST - creates a new course; stores it to "coursesModule2" collection
+3. PUT - modifies various entries in the course object
+4. PATCH - makes the course ACTIVE / INACTIVE
+5. DELETE - removes the course from the data base
 */
 
-const express = require("express")
-const router = express.Router()
-const faunaDB = require("faunadb")
-const faunaClient = require("../../FaunaDataBase/faunaDB")
-const getAccessKey = require("../../Authentication/getAccessKey")
+const express = require("express");
+const router = express.Router();
+const faunaDB = require("faunadb");
+const faunaClient = require("../../FaunaDataBase/faunaDB");
+const collections = require("../../FaunaDataBase/collections");
+const indexes = require("../../FaunaDataBase/indexes");
+const getAccessKey = require("../../Authentication/getAccessKey");
 
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
 
-router.route('/paid-courses')
+router.route('/courses-module2')
   .get( async (req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
@@ -27,7 +29,7 @@ router.route('/paid-courses')
       try {
         const coursesFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('coursesModule2'))),
+            Paginate(Documents(Collection(collections.COURSES_MODULE_2))),
             Lambda(x => Get(x))
           )
         )
@@ -54,7 +56,7 @@ router.route('/paid-courses')
         const newCourse = req.body
         await faunaClient.query(
           Create(
-            Collection('coursesModule2'),
+            Collection(collections.COURSES_MODULE_2),
             { data: newCourse }
           )
         )
@@ -74,7 +76,7 @@ router.route('/paid-courses')
     const courseToModify = req.body
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_paid_course_by_id'), courseToModify.courseId)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE2_BY_ID), courseToModify.courseId)),
         Lambda(x => Get(x))
       )
     )
@@ -89,7 +91,7 @@ router.route('/paid-courses')
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
           Update(
-            Ref(Collection('coursesModule2'), docID),
+            Ref(Collection(collections.COURSES_MODULE_2), docID),
             { data: courseToModify }
           )
         )
@@ -109,7 +111,7 @@ router.route('/paid-courses')
     const courseToModify = req.body
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_paid_course_by_id'), courseToModify.courseId)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE2_BY_ID), courseToModify.courseId)),
         Lambda(x => Get(x))
       )
     )
@@ -123,7 +125,7 @@ router.route('/paid-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id;
         await faunaClient.query(
-          Update(Ref(Collection("coursesModule2"), docID),
+          Update(Ref(Collection(collections.COURSES_MODULE_2), docID),
             { data: { courseActive: courseToModify.courseActive } }
           )
         )
@@ -144,7 +146,7 @@ router.route('/paid-courses')
     const courseIdToRemove = req.body.course.courseId
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_paid_course_by_id'), courseIdToRemove)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE2_BY_ID), courseIdToRemove)),
         Lambda(x => Get(x))
       )
     )
@@ -158,7 +160,7 @@ router.route('/paid-courses')
       try {
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
-          Delete(Ref(Collection('coursesModule2'), docID))
+          Delete(Ref(Collection(collections.COURSES_MODULE_2), docID))
         )
         res.status(200).json({
           message: 'Success! Paid Course has been deleted'

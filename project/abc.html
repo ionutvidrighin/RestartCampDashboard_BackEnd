@@ -9,13 +9,49 @@
 <body>
 
   <script>
-    const linkWords = {
-      paragraph1: [],
-      paragraph2: [],
-      paragraph3: []
+    // let a = "hello {nume_curs}, {ora_curs}"
+    // console.log(a)
+    // a = a.replace("{nume_curs}", 5+5)
+
+    // console.log(a)
+
+    const a =  {
+      title: "CITESTE CU ATENTIE MAI JOS !",
+      paragraph:
+        "Noi ți-am rezervat locul și te felicităm pentru decizia luată! Ce trebuie să faci în continuare? Să vii la curs, bineînțeles! Te ajutăm noi cu detaliile necesare, să nu îți mai bați tu capul cu ele.",
+      subtitle1: "Când are loc cursul",
+      paragraph1:
+        "Modulul 1 al cursului {nume_curs} are loc pe {data_curs}, ora {ora_curs} și va dura 3 ore.",
+      subtitle2: "Datele de acces la curs",
+      paragraph2:
+        "Vei primi de la noi un mesaj pentru acces la pagina de conectare la curs, cu 2 ore înainte de începerea acestuia, pe mail și pe Whatsapp. Acesta va fi susținut online, iar tu vei fi invitat să intri pe platforma Zoom. De asemenea, îți vom trimite câteva indicații pentru folosirea platformei în caz că este prima dată când intri pe ea."
     }
 
-    console.log(Object.keys(linkWords))
+    let b = Object.entries(a)
+    console.log(b)
+
+    b.map(element => {
+      if (element[1].search("{nume_curs}") != -1) {
+        element[1] = element[1].replace("{nume_curs}", 'Bazele in whaterew')
+        element[1] = element[1].replace("{data_curs}", '12 IUNIE 2022')
+        element[1] = element[1].replace("{ora_curs}", '18:30')
+        return element
+      }
+    })
+    console.log(b)
+    let cc = {}
+    b.forEach(element => {
+      console.log(element)
+      Object.assign(cc, {
+        [element[0]]: element[1]
+      })
+    })
+
+    console.log(cc)
+
+
+
+
   </script>
   
 </body>

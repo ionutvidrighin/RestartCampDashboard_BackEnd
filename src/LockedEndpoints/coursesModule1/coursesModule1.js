@@ -3,18 +3,20 @@ File handling the COURSES Module 1 in database
 */
 
 /*** ENDPOINTS:
-1. GET - fetches all free courses stored to data base => "coursesModule1" collection
-2. POST - creates a new free course; stored it to "coursesModule1" collection
-3. PUT - modifies various entries in the free course object
-4. PATCH - makes the free course ACTIVE / INACTIVE
-5. DELETE - removes the free course from the data base
+1. GET - fetches all courses stored to data base => from "coursesModule1" collection
+2. POST - creates a new course; stores it to "coursesModule1" collection
+3. PUT - modifies various entries in the course object
+4. PATCH - makes the course ACTIVE / INACTIVE
+5. DELETE - removes the course from the data base
 */
 
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
-const getAccessKey = require("../../Authentication/getAccessKey")
+const collections = require('../../FaunaDataBase/collections');
+const indexes = require('../../FaunaDataBase/indexes');
+const getAccessKey = require("../../Authentication/getAccessKey");
 
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
 
@@ -27,16 +29,16 @@ router.route('/courses-module1')
       try {
         const coursesFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('coursesModule1'))),
+            Paginate(Documents(Collection(collections.COURSES_MODULE_1))),
             Lambda(x => Get(x))
           )
         )
-        let freeCourses = coursesFromDB.data
-        freeCourses = freeCourses.map(item => item.data)
-        freeCourses.sort((a, b) => {
+        let coursesModule1 = coursesFromDB.data
+        coursesModule1 = coursesModule1.map(item => item.data)
+        coursesModule1.sort((a, b) => {
           return new Date(b.courseDate) - new Date(a.courseDate)
         })
-        res.status(200).json(freeCourses)
+        res.status(200).json(coursesModule1)
       } catch (error) {
         res.status(401).json({message: "There was an error in retrieving the Free Courses from database"})
       }
@@ -54,7 +56,7 @@ router.route('/courses-module1')
       try {
         await faunaClient.query(
           Create(
-            Collection('coursesModule1'),
+            Collection(collections.COURSES_MODULE_1),
             { data: newCourse }
           )
         )
@@ -74,7 +76,7 @@ router.route('/courses-module1')
     const courseToModify = req.body
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_free_course_by_id'), courseToModify.courseId)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE1_BY_ID), courseToModify.courseId)),
         Lambda(x => Get(x))
       )
     )
@@ -89,7 +91,7 @@ router.route('/courses-module1')
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
           Update(
-            Ref(Collection('coursesModule1'), docID),
+            Ref(Collection(collections.COURSES_MODULE_1), docID),
             { data: courseToModify }
           )
         )
@@ -109,7 +111,7 @@ router.route('/courses-module1')
     const courseToModify = req.body
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_free_course_by_id'), courseToModify.courseId)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE1_BY_ID), courseToModify.courseId)),
         Lambda(x => Get(x))
       )
     )
@@ -123,7 +125,7 @@ router.route('/courses-module1')
       try {
         const docID = searchCourseByID.data[0].ref.id;
         await faunaClient.query(
-          Update(Ref(Collection("coursesModule1"), docID),
+          Update(Ref(Collection(collections.COURSES_MODULE_1), docID),
             { data: { courseActive: courseToModify.courseActive } }
           )
         )
@@ -144,7 +146,7 @@ router.route('/courses-module1')
     const courseIdToRemove = req.body.course.courseId
     const searchCourseByID = await faunaClient.query(
       Map(
-        Paginate(Match(Index('get_free_course_by_id'), courseIdToRemove)),
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE1_BY_ID), courseIdToRemove)),
         Lambda(x => Get(x))
       )
     )
@@ -158,7 +160,7 @@ router.route('/courses-module1')
       try {
         const docID = searchCourseByID.data[0].ref.id
         await faunaClient.query(
-          Delete(Ref(Collection('coursesModule1'), docID))
+          Delete(Ref(Collection(collections.COURSES_MODULE_1), docID))
         )
         res.status(200).json({
           message: 'Success! Course has been deleted'
