@@ -69,6 +69,7 @@ router.route('/register-student')
       course_name: request.body.course[0].title,
       course_logo: request.body.course[0].logo,
       course_date: request.body.course[0].date,
+      course_link_page: request.body.course[0].link_page,
       student_email: request.body.email
     }
     /******************************************************* */

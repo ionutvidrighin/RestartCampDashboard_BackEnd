@@ -4,18 +4,22 @@ const localeRO = require('dayjs/locale/ro')
 dayjs.extend(localizedFormat)
 
 const replaceTextInString = (data, newData) => {
-  let convertToArray = Object.entries(data)
+  const convertToArray = Object.entries(data)
 
   convertToArray.map(element => {
     if (element[1].search("{nume_curs}") != -1) {
       element[1] = element[1].replace("{nume_curs}", newData.name)
-      element[1] = element[1].replace("{data_curs}", dayjs(newData.date).locale(localeRO).format('LL'))
-      element[1] = element[1].replace("{ora_curs}", newData.hour)
-      return element
     }
+    if (element[1].search("{data_curs}") != -1) {
+      element[1] = element[1].replace("{data_curs}", dayjs(newData.date).locale(localeRO).format('LL'))
+    }
+    if (element[1].search("{ora_curs}") != -1) {
+      element[1] = element[1].replace("{ora_curs}", newData.hour)
+    }
+    return element
   })
 
-  let convertToObject = {}
+  const convertToObject = {}
   convertToArray.forEach(element => {
     Object.assign(convertToObject, {
       [element[0]]: element[1]
@@ -26,4 +30,49 @@ const replaceTextInString = (data, newData) => {
 
 }
 
-module.exports = replaceTextInString
+const addLinkToButtons = (data, course_link_page) => {
+  const links = []
+  const texts = []
+  const convertToObject = {}
+  const convertToArray = Object.entries(data)
+
+  // insert the course link page into the String
+  convertToArray.map(string => {
+    if (string[1].search('{link_pagina_curs}') != -1) {
+      string[1] = string[1].replace('{link_pagina_curs}', `{${course_link_page}}`)
+      return string
+    }
+  })
+
+  // extract the Links out of the Strings
+  convertToArray.forEach(string => {
+    if (string[1].includes('{')) {
+      const divided = string[1].split('{')
+      const finalLink = divided[1].slice(0, -1)
+      links.push(finalLink)
+    }
+  })
+
+  // clean up the Strings by removing the Links
+  convertToArray.forEach(element => {
+    const index = element[1].indexOf('{')
+    const finalString = element[1].slice(0, index)
+    texts.push(finalString)
+  })
+
+  // convert to Object and return
+  convertToArray.forEach((element, i) => {
+    Object.assign(convertToObject, {
+      [element[0]]: {
+        text: texts[i],
+        link: links[i]
+      }
+    })
+  })
+
+  return convertToObject
+
+}
+
+module.exports.replaceTextInString = replaceTextInString;
+module.exports.addLinkToButtons = addLinkToButtons;

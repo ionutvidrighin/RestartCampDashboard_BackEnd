@@ -9,45 +9,71 @@
 <body>
 
   <script>
-    // let a = "hello {nume_curs}, {ora_curs}"
-    // console.log(a)
-    // a = a.replace("{nume_curs}", 5+5)
-
-    // console.log(a)
 
     const a =  {
-      title: "CITESTE CU ATENTIE MAI JOS !",
-      paragraph:
-        "Noi ți-am rezervat locul și te felicităm pentru decizia luată! Ce trebuie să faci în continuare? Să vii la curs, bineînțeles! Te ajutăm noi cu detaliile necesare, să nu îți mai bați tu capul cu ele.",
-      subtitle1: "Când are loc cursul",
-      paragraph1:
-        "Modulul 1 al cursului {nume_curs} are loc pe {data_curs}, ora {ora_curs} și va dura 3 ore.",
-      subtitle2: "Datele de acces la curs",
-      paragraph2:
-        "Vei primi de la noi un mesaj pentru acces la pagina de conectare la curs, cu 2 ore înainte de începerea acestuia, pe mail și pe Whatsapp. Acesta va fi susținut online, iar tu vei fi invitat să intri pe platforma Zoom. De asemenea, îți vom trimite câteva indicații pentru folosirea platformei în caz că este prima dată când intri pe ea."
+      button1: "revezi info curs {link_curs}",
+      button2: "invită și un prieten {https://ionos.com}"
     }
 
     let b = Object.entries(a)
     console.log(b)
 
+    const links = []
     b.map(element => {
-      if (element[1].search("{nume_curs}") != -1) {
-        element[1] = element[1].replace("{nume_curs}", 'Bazele in whaterew')
-        element[1] = element[1].replace("{data_curs}", '12 IUNIE 2022')
-        element[1] = element[1].replace("{ora_curs}", '18:30')
+      if (element[1].search('{link_curs}') != -1) {
+        element[1] = element[1].replace("{link_curs}", "{https://ionut.v.com}")
         return element
       }
     })
     console.log(b)
+    b.forEach(element => {
+      if (element[1].includes('{')) {
+        let e = element[1].split('{')
+        let f = e[1].slice(0, -1)
+        links.push(f)
+      }
+    })
+
+    console.log(links)
+
+    const texts = []
+    b.forEach(element => {
+      const index = element[1].indexOf('{')
+      const finalString = element[1].slice(0, index)
+      texts.push(finalString)
+    })
+
+    const convert = {}
+    b.forEach((element, i) => {
+      Object.assign(convert, {
+        [element[0]]: {
+          text: texts[i],
+          link: links[i]
+        }
+      })
+    })
+    console.log(convert)
+
+
+   /* b.map(element => {
+      if (element[1].search("{nume_curs}") != -1) {
+        element[1] = element[1].replace("{nume_curs}", 'Bazele in whaterew')
+      }
+      if (element[1].search("{data_curs}") != -1) {
+        element[1] = element[1].replace("{data_curs}", '12 IUNIE 2022')
+      }
+      if (element[1].search("{ora_curs}") != -1) {
+        element[1] = element[1].replace("{ora_curs}", '18:30')
+      }
+      return element
+    })
+    console.log(b)
     let cc = {}
     b.forEach(element => {
-      console.log(element)
       Object.assign(cc, {
         [element[0]]: element[1]
       })
-    })
-
-    console.log(cc)
+    })*/
 
 
 

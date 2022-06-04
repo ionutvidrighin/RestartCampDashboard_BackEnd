@@ -1,28 +1,36 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
+const replaceTextInString = require('../../helperMethods').replaceTextInString
+const addLinkToButtons = require('../../helperMethods').addLinkToButtons
 
 const sendTest_EmailConfirmationRegistration = async (input) => {
-
-  const button1 = input.sectionReferral.button1.split('-')
-  const button2 = input.sectionReferral.button2.split('-')
-
+  const { sectionTop, sectionCenter, contestLogoLink, contactSection } = input
   Object.assign(input, {
     courseData: {
-      courseName: 'Bazele GDPR & Securitatea Informației',
-      courseDate: '20 Februarie 2022',
-      courseAccessLink: 'https://www.restart-camp.com/cursuri/gdpr-securitatea-informatiei?utm_campaign=c103a99a-e17e-4cc2-8b44-7516ac55a4ac&utm_source=so&utm_medium=mail&utm_content=5c00c386-4bd1-4e93-9262-0391d8df627d',
-      courseLogo: 'https://ci4.googleusercontent.com/proxy/jdxrO5FtHYEtqSgk8GUJRDYV0hxj6wwnSRDWPqDUpq4ZdfD9s1EhwnzoJaneT2y5aKp9Vy5aHPewpiWtu_ddc0HGqaJEt2WN5IM1w_D-cQ-1AhV-E6RWpnEArO3KbHqM_Q9svunP5C2V4CfjQVpGGxwRjrNq5RiQKhs_2rsM1BVzJWl7XMuMrlx3fqwsl_pcM4L4xSNRRolfedhgnODdjq_EkWHNsoQJCLHexL2U9Z57UhKV=s0-d-e1-ft#https://static.wixstatic.com/media/9a56fd_c800aed3905046be9facad444d56e356~mv2.png/v1/fit/w_700,h_2000,al_c,q_85/9a56fd_c800aed3905046be9facad444d56e356~mv2.png'
+      name: 'CURS TEST, CURS TEST',
+      date: '15 Februarie 2022',
+      hour: '18:30', 
+      link_page: 'https://www.restart-camp.com/cursuri/social-media',
+      logo: 'https://static.wixstatic.com/media/9a56fd_c46a6920a74e4b2a9e67604d8ac86527~mv2.png/v1/fill/w_205,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/transparent.png'
     }
   })
 
+  const replacedTextSectionTop = replaceTextInString(sectionTop, input.courseData)
+  const replacedTextSectionCenter = replaceTextInString(sectionCenter, input.courseData)
+  const buttonsRawData = {
+    button1: sectionCenter.button1,
+    button2: sectionCenter.button2
+  }
+  const linksOnButtons = addLinkToButtons(buttonsRawData, input.courseData.link_page) 
+
   let transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
+    host: "smtp.ionos.co.uk",
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'restart-camp-t@outlook.com', // generated ethereal user
-      pass: 'IONUT123', // generated ethereal password
+      user: 'echipa@restart-camp.org', // generated ethereal user
+      pass: 'Crestere312', // generated ethereal password
     }
   })
 
@@ -39,39 +47,45 @@ const sendTest_EmailConfirmationRegistration = async (input) => {
   transporter.use("compile", hbs(handlebarOptions))
   
   let options = {
-    from: '"RestartCamp  💌" <restart-camp-t@outlook.com>', // sender address
+    from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
     to: input.testEmail,
     subject: `Datele de acces - cursuri gratuite Restart Camp`,
-    template: 'emailReminder7Days',
+    template: 'registrationConfirmation',
     context: {
       course: {
-        name: input.courseData.courseName,
-        logo: input.courseData.courseLogo,
-        date: input.courseData.courseDate,
-        access_link: input.courseData.courseAccessLink
+        name: input.courseData.name,
+        logo: input.courseData.logo
       },
-      logoSection: input.logoSection,
+      sectionTop: {
+        title: replacedTextSectionTop.title,
+        paragraph: replacedTextSectionTop.paragraph,
+        subtitle1: replacedTextSectionTop.subtitle1,
+        paragraph1: replacedTextSectionTop.paragraph1,
+        subtitle2: replacedTextSectionTop.subtitle2,
+        paragraph2: replacedTextSectionTop.paragraph2
+      },
       sectionCenter: {
-        title1: input.sectionCenter.title1,
-        paragraph1: input.sectionCenter.paragraph1,
-        title2: input.sectionCenter.title2,
-        paragraph2: input.sectionCenter.paragraph2,
-        title3: input.sectionCenter.title3,
-        paragraph3: input.sectionCenter.paragraph3,
-        title4: input.sectionCenter.title4,
-        paragraph4: input.sectionCenter.paragraph4,
+        title1: replacedTextSectionCenter.title1,
+        paragraph1: replacedTextSectionCenter.paragraph1,
+        title2: replacedTextSectionCenter.title2,
+        paragraph2: replacedTextSectionCenter.paragraph2,
+        title3: replacedTextSectionCenter.title3,
+        paragraph3: replacedTextSectionCenter.paragraph3,
+        title4: replacedTextSectionCenter.title4,
+        paragraph4: replacedTextSectionCenter.paragraph4,
+        button1: {
+          text: linksOnButtons.button1.text,
+          link: linksOnButtons.button1.link
+        },
+        button2: {
+          text: linksOnButtons.button2.text,
+          link: linksOnButtons.button2.link
+        }
       },
-      sectionReferral: {
-        button1Text: button1[0].trim(),
-        button2Link: button1[1].trim(),
-        button2Text: button2[0].trim(),
-        button2Link: button2[1].trim(),
-        logo: input.sectionReferral.logo,
-        text: input.sectionReferral.text
-      },
+      contestLogoLink: contestLogoLink,
       contactSection: {
-        phone: input.contactSection.phone,
-        email: input.contactSection.email
+        phone: contactSection.phone,
+        email: contactSection.email
       }
     }
   }

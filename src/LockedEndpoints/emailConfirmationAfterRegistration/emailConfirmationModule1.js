@@ -47,7 +47,7 @@ router.route('/email-confirmation-registration')
     if (accessKey === appAccessKey) {
       const newEmailTemplateObject = req.body
 
-      // if block dealing with sending a test email template  
+      // section dealing with sending a test email template  
       if (newEmailTemplateObject.hasOwnProperty('testEmail')) {
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
@@ -65,6 +65,7 @@ router.route('/email-confirmation-registration')
           res.status(401).json({success: false, message: 'There was an error in sending a test E-MAIL TEMPLATE', error})
         }
       } else {
+        // store the updated version of the E-mail Template to DB
         const emailTemplateObject = await faunaClient.query(
           Map(Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
             Lambda(x => Get(x))

@@ -2,17 +2,26 @@ const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars');
 const dayjs = require('dayjs');
-const replaceTextInString = require('../../helperMethods')
+const replaceTextInString = require('../../helperMethods').replaceTextInString
+const addLinkToButtons = require('../../helperMethods').addLinkToButtons
 
 const sendConfirmationEmailAfterRegistration = async (input) => {
 
   const { sectionTop, sectionCenter, contestLogoLink, contactSection } = input.emailTemplate
   const courseData = {
-      name: input.course_name,
-      date: input.course_date,
-      hour: `${dayjs(input.course_date).hour()}:${dayjs(input.course_date).minute()}`
+    name: input.course_name,
+    date: input.course_date,
+    hour: `${dayjs(input.course_date).hour()}:${dayjs(input.course_date).minute()}`,
+    link_page: input.course_link_page
   } 
-  const replaceInSectionTop = replaceTextInString(sectionTop, courseData)
+  const replacedTextSectionTop = replaceTextInString(sectionTop, courseData)
+  const replacedTextSectionCenter = replaceTextInString(sectionCenter, courseData)
+
+  const buttonsRawData = {
+    button1: sectionCenter.button1,
+    button2: sectionCenter.button2
+  }
+  const linksOnButtons = addLinkToButtons(buttonsRawData, courseData.link_page) 
 
   let transporter = nodemailer.createTransport({
     host: "smtp.ionos.co.uk",
@@ -44,33 +53,40 @@ const sendConfirmationEmailAfterRegistration = async (input) => {
   transporter.use("compile", hbs(handlebarOptions))
   
   let options = {
-    from: '"RestartCamp  💌" <echipa@restart-camp.org>', // sender address
+    from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
     to: input.student_email,
     subject: `Datele de acces - cursuri gratuite Restart Camp`,
     template: 'registrationConfirmation',
     context: {
       course: {
         name: input.course_name,
-        logo: input.course_logo,
-        page_link: input.course_page_link
+        logo: input.course_logo
       },
       sectionTop: {
-        title: replaceInSectionTop.title,
-        paragraph: replaceInSectionTop.paragraph,
-        subtitle1: replaceInSectionTop.subtitle1,
-        paragraph1: replaceInSectionTop.paragraph1,
-        subtitle2: replaceInSectionTop.subtitle2,
-        paragraph2: replaceInSectionTop.paragraph2
+        title: replacedTextSectionTop.title,
+        paragraph: replacedTextSectionTop.paragraph,
+        subtitle1: replacedTextSectionTop.subtitle1,
+        paragraph1: replacedTextSectionTop.paragraph1,
+        subtitle2: replacedTextSectionTop.subtitle2,
+        paragraph2: replacedTextSectionTop.paragraph2
       },
       sectionCenter: {
-        title1: sectionCenter.title1,
-        paragraph1: sectionCenter.paragraph1,
-        title2: sectionCenter.title2,
-        paragraph2: sectionCenter.paragraph2,
-        title3: sectionCenter.title3,
-        paragraph3: sectionCenter.paragraph3,
-        title4: sectionCenter.title4,
-        paragraph4: sectionCenter.paragraph4
+        title1: replacedTextSectionCenter.title1,
+        paragraph1: replacedTextSectionCenter.paragraph1,
+        title2: replacedTextSectionCenter.title2,
+        paragraph2: replacedTextSectionCenter.paragraph2,
+        title3: replacedTextSectionCenter.title3,
+        paragraph3: replacedTextSectionCenter.paragraph3,
+        title4: replacedTextSectionCenter.title4,
+        paragraph4: replacedTextSectionCenter.paragraph4,
+        button1: {
+          text: linksOnButtons.button1.text,
+          link: linksOnButtons.button1.link
+        },
+        button2: {
+          text: linksOnButtons.button2.text,
+          link: linksOnButtons.button2.link
+        }
       },
       contestLogoLink: contestLogoLink,
       contactSection: {
@@ -81,9 +97,9 @@ const sendConfirmationEmailAfterRegistration = async (input) => {
   }
   transporter.verify(function (error, success) {
     if (error) {
-      console.log(error);
+      console.log(error)
     } else {
-      console.log("Server is ready to take our messages");
+      console.log("Server is ready to take our messages")
     }
   })
   
