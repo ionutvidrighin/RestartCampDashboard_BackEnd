@@ -2,26 +2,26 @@ const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
+const indexes = require("../../FaunaDataBase/indexes");
 const dayjs = require('dayjs');
 const getAccessKey = require("../../Authentication/getAccessKey");
-const storedStudentFullDataJSON = require("../../JSON_Files/storedStudentFullData");
 
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index, Var } = faunaDB.query
 const currentYear = dayjs().year()
 const currentMonth = dayjs().month() + 1 // Months count, starts from 0 with dayjs library
 
+// Function getting the needed data from DB based on date in String format, as "YYYY-MM"
 const getRegisteredStudents = async (date) => {
   const currentYearAndMonth = `${currentYear}-${currentMonth < 10 ? '0'+currentMonth : currentMonth}`
 
   try {
     const dataFromDB = await faunaClient.query(
       Map(
-        Paginate(Match(Index("students_registered_by_year_month"), date === undefined ? currentYearAndMonth : date)),
+        Paginate(Match(Index(indexes.GET_STUDENTS_BY_YEAR_MONTH), date === undefined ? currentYearAndMonth : date)),
         Lambda("students", Get(Var("students")))
       )
     )
-    returnedData = dataFromDB.data
-    console.log(returnedData)
+    let returnedData = dataFromDB.data
     returnedData = returnedData.map(item => item.data)
     return returnedData
   } catch (error) {
@@ -29,7 +29,7 @@ const getRegisteredStudents = async (date) => {
   }
 }
 
-router.route('/get-enrolled-students')
+router.route('/get-students-by-year-month')
   .get(async (req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
@@ -47,7 +47,6 @@ router.route('/get-enrolled-students')
     const appAccessKey = await getAccessKey(accessKey)
     
     const searchCriteria = req.body.date
-    console.log(searchCriteria)
     
     if (accessKey === appAccessKey) {
       const returnedData = await getRegisteredStudents(searchCriteria)
