@@ -10,72 +10,8 @@
 
   <script>
 
-    const a =  {
-      button1: "revezi info curs {link_curs}",
-      button2: "invită și un prieten {https://ionos.com}"
-    }
-
-    let b = Object.entries(a)
-    console.log(b)
-
-    const links = []
-    b.map(element => {
-      if (element[1].search('{link_curs}') != -1) {
-        element[1] = element[1].replace("{link_curs}", "{https://ionut.v.com}")
-        return element
-      }
-    })
-    console.log(b)
-    b.forEach(element => {
-      if (element[1].includes('{')) {
-        let e = element[1].split('{')
-        let f = e[1].slice(0, -1)
-        links.push(f)
-      }
-    })
-
-    console.log(links)
-
-    const texts = []
-    b.forEach(element => {
-      const index = element[1].indexOf('{')
-      const finalString = element[1].slice(0, index)
-      texts.push(finalString)
-    })
-
-    const convert = {}
-    b.forEach((element, i) => {
-      Object.assign(convert, {
-        [element[0]]: {
-          text: texts[i],
-          link: links[i]
-        }
-      })
-    })
-    console.log(convert)
-
-
-   /* b.map(element => {
-      if (element[1].search("{nume_curs}") != -1) {
-        element[1] = element[1].replace("{nume_curs}", 'Bazele in whaterew')
-      }
-      if (element[1].search("{data_curs}") != -1) {
-        element[1] = element[1].replace("{data_curs}", '12 IUNIE 2022')
-      }
-      if (element[1].search("{ora_curs}") != -1) {
-        element[1] = element[1].replace("{ora_curs}", '18:30')
-      }
-      return element
-    })
-    console.log(b)
-    let cc = {}
-    b.forEach(element => {
-      Object.assign(cc, {
-        [element[0]]: element[1]
-      })
-    })*/
-
-
+    const a = new Date()
+    console.log(a)
 
 
   </script>

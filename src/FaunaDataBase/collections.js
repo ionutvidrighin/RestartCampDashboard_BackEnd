@@ -4,6 +4,7 @@
 
 module.exports = {
   COURSES_MODULE_1: 'coursesModule1',
+  COURSES_MODULE_1_PRESENCE: 'coursesModule1Presence',
   COURSES_MODULE_2: 'coursesModule2',
   REGISTERED_STUDENTS: 'registeredStudents',
   EMAIL_CONFIRMATION_REGISTRATION: 'emailConfirmationRegistration',

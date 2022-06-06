@@ -47,6 +47,7 @@ router.route('/get-students-by-year-month')
     const appAccessKey = await getAccessKey(accessKey)
     
     const searchCriteria = req.body.date
+    console.log('searchCriteria', searchCriteria)
     
     if (accessKey === appAccessKey) {
       const returnedData = await getRegisteredStudents(searchCriteria)

@@ -8,39 +8,29 @@ const isEqual = require('lodash.isequal')
 const dayjs = require('dayjs')
 const localizedFormat = require('dayjs/plugin/localizedFormat')
 const localeRO = require('dayjs/locale/ro')
+const CreateNewStudent = require('./helperClasses').CreateNewStudent
 const sendConfirmationEmailAfterRegistration = require('../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendEmailConfirmationAfterRegistration')
 dayjs.extend(localizedFormat)
 
 const { Match, Map, Paginate, Get, Create, Collection, Documents, Lambda, Index, Var} = faunaDB.query;
 
-class CreateNewStudent {
-  constructor(input) {
-    this.id = input.id
-    this.appellation = input.appellation
-    this.address = input.address
-    this.county = input.county
-    this.firstName = input.firstName
-    this.lastName = input.lastName
-    this.phoneNo = input.phoneNo
-    this.email = input.email
-    this.job = input.job
-    this.remarks = input.remarks
-    this.reference = input.reference
-    this.is_career = input.is_career
-    this.is_business = input.is_business
-    this.domain = input.domain
-    this.course = input.course
-    this.registrationDate = input.registrationDate,
-    this.year_month = input.year_month
-  }
-}
-
 router.route('/register-student')
   .post( async (request, response) => {
     const newStudent = new CreateNewStudent(request.body)
+    const newStudentPresence = {
+      id: request.body.id,
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      phone: request.body.phone,
+      email: request.body.email,
+      course: {
+        ...request.body.course[0],
+        date: dayjs(request.body.course.date).format('MM/DD/YYYY')
+      }
+    }
 
     // check if any of the values in the Object coming from FrontEnd is undefined
-    // if it is, throw an error as response
+    // if it is, throw an error as response (this is a precaution to make sure the data stored to DB is right)
     let undefinedValues;
     Object.values(newStudent).forEach(value => {
       if (value === undefined) undefinedValues = true
@@ -86,9 +76,17 @@ router.route('/register-student')
     // we will register the Student as a new entry in DB
     if (getStudentByEmail.data.length === 0) {
       try {
+        // Store newly registered student to DB
         await faunaClient.query(
           Create(Collection(collections.REGISTERED_STUDENTS), {
             data: newStudent
+          })
+        )
+
+        // Store newly registered student to DB for course presence
+        await faunaClient.query(
+          Create(Collection(collections.COURSES_MODULE_1_PRESENCE), {
+            data: newStudentPresence
           })
         )
         response.status(200).json({
@@ -96,7 +94,9 @@ router.route('/register-student')
           warning: "success"
         })
 
-        sendConfirmationEmailAfterRegistration(sendEmailPayload)
+        // send confirmation e-mail to student
+        const sentEmailStatus = await sendConfirmationEmailAfterRegistration(sendEmailPayload)
+        console.log(sentEmailStatus)
       } catch (error) {
         console.log(error)
         response.status(422).json({
@@ -109,7 +109,7 @@ router.route('/register-student')
       const studentEmailAddress = getStudentByEmail.data[0].data.email
       
       // check if the course to which he is already registered (the one from DB)
-      // is the same with the one to which he registers now
+      // is the same with the one to which he registers now (comparing the course Objects)
       const existingCourse = getStudentByEmail.data[0].data.course[0]
       const newCourse = newStudent.course[0]
       const coursesAreEqual = isEqual(existingCourse, newCourse)
@@ -125,9 +125,17 @@ router.route('/register-student')
         // else if, courses are not the same
         // register the Student as a new entry to DB
         try {
+          // Store registered student to DB
           await faunaClient.query(
             Create(Collection(collections.REGISTERED_STUDENTS), {
               data: newStudent
+            })
+          )
+
+          // Store registered student to DB for course presence
+          await faunaClient.query(
+            Create(Collection(collections.COURSES_MODULE_1_PRESENCE), {
+              data: newStudentPresence
             })
           )
           response.status(200).json({
@@ -135,7 +143,10 @@ router.route('/register-student')
             warning: 'success'
           })
 
-          sendConfirmationEmailAfterRegistration(sendEmailPayload)
+          // send confirmation e-mail to student
+          const sentEmailStatus = await sendConfirmationEmailAfterRegistration(sendEmailPayload)
+          console.log(sentEmailStatus)
+
         } catch (error) {
           console.log(error)
           response.status(422).json({
