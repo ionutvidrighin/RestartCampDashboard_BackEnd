@@ -45,11 +45,12 @@ router.route('/get-students-by-year-month')
   .post( async (req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
+    console.log(req.body)
     
     const searchCriteria = req.body.date
     console.log('searchCriteria', searchCriteria)
     
-    if (accessKey === appAccessKey) {
+    if (accessKey === appAccessKey) { 
       const returnedData = await getRegisteredStudents(searchCriteria)
       res.status(200).json(returnedData)
     } else {
