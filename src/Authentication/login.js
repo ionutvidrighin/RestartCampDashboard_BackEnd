@@ -11,40 +11,54 @@ const { Match, Map, Paginate, Get, Lambda, Index, Var} = faunaDB.query;
 
 router.route('/login')
   .post( async (req, res) => {
-    const loginUserEmail = req.body.email
-    const loginUserPassw = req.body.password
+    const loginUsername = req.body.username
+    const loginUserPassword = req.body.password
     const appAccessKey = req.body.accessKey
     
-    const validateLogin = await faunaClient.query(
-      Map(Paginate(Match(Index("login_email"), loginUserEmail)),
-        Lambda('user', Get(Var('user')))
+    try {
+      const validateUsername = await faunaClient.query(
+        Map(Paginate(Match(Index("get_user_by_username"), loginUsername)),
+          Lambda('user', Get(Var('user')))
+        )
       )
-    )
-    const validateAccessKey = await faunaClient.query(
-      Map(
-        Paginate(Match(Index("get_access_key"), appAccessKey)),
-        Lambda("key", Get(Var("key")))
+      const validateAccessKey = await faunaClient.query(
+        Map(
+          Paginate(Match(Index("get_app_access_key"), appAccessKey)),
+          Lambda("key", Get(Var("key")))
+        )
       )
-    )
-    
-    if (validateLogin.data.length === 0 || validateAccessKey.data.length === 0) {
-      res.status(401).json({
-        message: 'Invalid Access Key. Please retry'
-      })
-      return
-    }
 
-    const dbUserEmail = validateLogin.data[0].data.email
-    const dbUserPassw = validateLogin.data[0].data.password
+      if (validateUsername.data.length === 0) {
+        res.status(401).json({
+          message: 'Invalid Login. Please check your credentials'
+        })
+        return
+      }
+      if (validateAccessKey.data.length === 0) {
+        res.status(401).json({
+          message: 'Invalid Access Key. Please retry'
+        })
+        return
+      }
 
-    if (dbUserEmail === loginUserEmail && dbUserPassw === loginUserPassw) {
-      res.status(200).json({
-        message: 'LoggedIn Successfully !',
-        user: `${dbUserEmail.split('@')[0]}`
-      })
-    } else {
+      const dbUsername = validateUsername.data[0].data.username
+      const dbUserPassword = validateUsername.data[0].data.password
+
+  
+      if (dbUsername === loginUsername && dbUserPassword === loginUserPassword) {
+        const successfullyLoggedUser = validateUsername.data[0].data
+        res.status(200).json({
+          message: 'LoggedIn Successfully !',
+          loggedUser: successfullyLoggedUser
+        })
+      } else {
+        res.status(401).send({
+          message: 'Invalid Login. Please check your credentials'
+        })
+      }
+    } catch (error) {
       res.status(401).send({
-        message: 'Invalid Login. Please check your credentials'
+        message: error
       })
     }
   })

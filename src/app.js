@@ -2,6 +2,7 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
+const app = express()
 
 // importing all routes
 
@@ -22,9 +23,7 @@ const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfi
 const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days')
 const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day')
 const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour')
-const testing = require('./test')
 
-const app = express()
 app.set('trust proxy', 1)
 
 app.use(helmet())
@@ -32,7 +31,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
-app.use(testing)
 app.use(dashboardLogin)
 app.use(changeUserAccountEmail)
 app.use(changeUserAccountPassword)
@@ -49,10 +47,10 @@ app.use(emailReminder1Day)
 app.use(emailReminder1Hour)
 
 
-const users = require('./users')
+const defaultResponse = require('./defaultResponse')
 
 app.get('/', async (req, res) => {
-  res.send(users)
+  res.send(defaultResponse)
 })
 
 module.exports = app;
