@@ -6,6 +6,7 @@ module.exports = {
   COURSES_MODULE_1: 'coursesModule1',
   COURSES_MODULE_1_PRESENCE: 'coursesModule1Presence',
   COURSES_MODULE_2: 'coursesModule2',
+  DASHBOARD_USERS: 'dashboardUsersAccounts',
   REGISTERED_STUDENTS: 'registeredStudents',
   EMAIL_CONFIRMATION_REGISTRATION: 'emailConfirmationRegistration',
   EMAIL_3DAYS_EMPLOYEE: 'email3DaysEmployee',

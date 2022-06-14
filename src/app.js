@@ -11,6 +11,7 @@ const registerStudent = require('./FreeEndpoints/registerStudent');
 const registerStudentPresence = require('./FreeEndpoints/registerStudentPresence');
 const getCoursesForWebPage = require('./FreeEndpoints/getCoursesForWebPage');
 const dashboardLogin = require('./Authentication/login');
+const dashboardUsers = require('./LockedEndpoints/dahboardUsersAccounts/dashboardUsersAccounts')
 
 // locked (with token) enpoints:
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
@@ -32,6 +33,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
 app.use(dashboardLogin)
+app.use(dashboardUsers)
 app.use(changeUserAccountEmail)
 app.use(changeUserAccountPassword)
 app.use(registerStudent)

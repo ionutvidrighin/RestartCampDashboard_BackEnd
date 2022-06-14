@@ -143,7 +143,7 @@ router.route('/courses-module1')
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
     
-    const courseIdToRemove = req.body.course.courseId
+    const courseIdToRemove = req.body.element.courseId
     const searchCourseByID = await faunaClient.query(
       Map(
         Paginate(Match(Index(indexes.GET_COURSE_MODULE1_BY_ID), courseIdToRemove)),
