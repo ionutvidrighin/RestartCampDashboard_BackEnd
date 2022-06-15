@@ -3,6 +3,7 @@
 */
 
 module.exports = {
+  APP_ACCESS_KEY: 'appAccessKey',
   COURSES_MODULE_1: 'coursesModule1',
   COURSES_MODULE_1_PRESENCE: 'coursesModule1Presence',
   COURSES_MODULE_2: 'coursesModule2',

@@ -4,13 +4,17 @@ const faunaClient = require("../FaunaDataBase/faunaDB");
 const { Map, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
 
 const getAccessKey = async (appAccessKey) => {
-  const accessKey = await faunaClient.query(
-    Map(
-      Paginate(Match(Index("get_app_access_key"), appAccessKey)),
-      Lambda("key", Get(Var("key")))
+  try {
+    const accessKey = await faunaClient.query(
+      Map(
+        Paginate(Match(Index("get_app_access_key"), appAccessKey)),
+        Lambda("key", Get(Var("key")))
+      )
     )
-  )
-  return accessKey.data[0].data.accessKey
+    return accessKey.data[0].data.accessKey
+  } catch (error) {
+    return error
+  }
 }
 
 module.exports = getAccessKey
