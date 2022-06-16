@@ -83,7 +83,7 @@ router.route('/register-student')
           })
         )
 
-        // Store newly registered student to DB for course presence
+        // Store newly registered student to DB for course presence (different collection)
         await faunaClient.query(
           Create(Collection(collections.COURSES_MODULE_1_PRESENCE), {
             data: newStudentPresence
@@ -104,26 +104,47 @@ router.route('/register-student')
           warning: "error"
         })
       }
-    } else {
-      // scenario: Student E-mail address exists in DB
-      const studentEmailAddress = getStudentByEmail.data[0].data.email
+    } else { // scenario: Student E-mail address exists in DB
+      const studentEntriesRawData = getStudentByEmail.data.map(entry => entry.data)
       
-      // check if the course to which he is already registered (the one from DB)
-      // is the same with the one to which he registers now (comparing the course Objects)
-      const existingCourse = getStudentByEmail.data[0].data.course[0]
+      // check if any of the COURSES to which student is already registered (the ones from DB)
+      // is the same with the COURSE to which he registers now (comparing the Course Objects)
       const newCourse = newStudent.course[0]
-      const coursesAreEqual = isEqual(existingCourse, newCourse)
 
-      if (coursesAreEqual) {
-        // if courses are the same, send appropiate message to FrontEnd
-        const courseDate = dayjs(existingCourse.date).locale(localeRO).format('LL')
+      let coursesAreEqual = null
+      let existingCourse = {
+        title: null,
+        date: null
+      }
+      studentEntriesRawData.forEach(entry => {
+        const individualCourse = entry.course[0]
+        // remove the course ID in each Object 
+        // because the course ID coming from FrontEnd is always different for every new registration
+        // all the rest is the same when courses are equal  
+        delete individualCourse.id
+        delete newCourse.id
+
+        if (isEqual(individualCourse, newCourse)) {
+          coursesAreEqual = true
+          Object.assign(existingCourse, {
+            title: entry.course[0].title,
+            date: dayjs(entry.course[0].date).locale(localeRO).format('LL')
+          })
+        } else {
+          coursesAreEqual = false
+        }
+      })
+
+      if (coursesAreEqual) { 
+        // New Course he registered for now, is the same with a Course he registered in the past
+        // Course Title and Course Date are the same
         response.status(406).json({
-          message: `Ești deja înscris la cursul **${existingCourse.title}** din data de ${courseDate}`,
+          message: `Ești deja înscris la cursul **${existingCourse.title}** din data de ${existingCourse.date}`,
           warning: 'warning'
         })
-      } else {
-        // else if, courses are not the same
-        // register the Student as a new entry to DB
+      } else { 
+        // Course are not the same
+        // Register the Student as a new entry to DB
         try {
           // Store registered student to DB
           await faunaClient.query(
@@ -132,12 +153,14 @@ router.route('/register-student')
             })
           )
 
-          // Store registered student to DB for course presence
+          // Store registered student to DB for course presence (different collection)
           await faunaClient.query(
             Create(Collection(collections.COURSES_MODULE_1_PRESENCE), {
               data: newStudentPresence
             })
           )
+
+          const studentEmailAddress = getStudentByEmail.data[0].data.email
           response.status(200).json({
             message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,
             warning: 'success'

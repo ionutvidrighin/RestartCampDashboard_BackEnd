@@ -14,6 +14,154 @@
     console.log(a)
     console.log(a.substr(-5))
 
+    const bb = [{
+      id: "sQp6H",
+      logo:
+        "https://static.wixstatic.com/media/9a56fd_183ed3b16f46401c95a3e18fea0a3e8f~mv2.png/v1/fill/w_205,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/transparent.png",
+      title: "Bazele HR: Recrutare si Selectie",
+      date: "Mon Jun 20 2022 20:30:00 GMT+0300 (Eastern European Summer Time)",
+      link_page: "https://www.restart-camp.com/cursuri/recrutare-selectie",
+      present: false
+    }]
+
+    const cc = [{
+      date: "Mon Jun 20 2022 20:30:00 GMT+0300 (Eastern European Summer Time)",
+      id: "kbP6p",
+      link_page: "https://www.restart-camp.com/cursuri/recrutare-selectie",
+      logo: "https://static.wixstatic.com/media/9a56fd_183ed3b16f46401c95a3e18fea0a3e8f~mv2.png/v1/fill/w_205,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/transparent.png",
+      present: false,
+      title: "Bazele HR: Recrutare si Selectie"
+    }]
+
+    const dd = [{
+    ts: 1654372811210000,
+    data: {
+      id: '2rihr',
+      appellation: 'Domnul',
+      address: 'România',
+      county: 'Dambovita',
+      firstName: 'STOIAN',
+      lastName: 'Karl',
+      phoneNo: '6546498984549',
+      email: 'ionut.vidrighin@gmail.com',
+      job: 'Nu am lucrat niciodată / Casnic',
+      remarks: '',
+      reference: 'Facebook',
+      is_career: true,
+      is_business: false,
+      domain: 'Suport operațiuni / Client service',
+      course: [{
+      date: "Mon Jun 20 2022 20:30:00 GMT+0300 (Eastern European Summer Time)",
+      id: "kbP6p",
+      link_page: "https://www.restart-camp.com/cursuri/recrutare-selectie",
+      logo: "https://static.wixstatic.com/media/9a56fd_183ed3b16f46401c95a3e18fea0a3e8f~mv2.png/v1/fill/w_205,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/transparent.png",
+      present: false,
+      title: "Bazele HR: Recrutare si Selectie"
+    }],
+      registrationDate: '2022-06-04',
+      year_month: '2022-06'
+    }
+  },
+  {
+    ts: 1654372836730000,
+    data: {
+      id: 'vUs7v',
+      appellation: 'Domnul',
+      address: 'Străinătate',
+      county: '',
+      firstName: 'Diaconu',
+      lastName: 'Ciprian',
+      phoneNo: '649645464656',
+      email: 'ionut.vidrighin@gmail.com',
+      job: 'Nu am lucrat niciodată / Casnic',
+      remarks: '',
+      reference: 'Facebook',
+      is_career: true,
+      is_business: false,
+      domain: 'Suport operațiuni / Client service',
+      course: [Array],
+      registrationDate: '2022-06-04',
+      year_month: '2022-06'
+    }
+  },
+  {
+    ts: 1654372661830000,
+    data: {
+      id: '5iyg',
+      appellation: 'Doamna',
+      address: 'Străinătate',
+      county: '',
+      firstName: 'POPESCU',
+      lastName: 'ANA',
+      phoneNo: '649645464656',
+      email: 'ionut.vidrighin@gmail.com',
+      job: 'Nu am lucrat niciodată / Casnic',
+      remarks: '',
+      reference: 'Facebook',
+      is_career: true,
+      is_business: false,
+      domain: 'Suport operațiuni / Client service',
+      course: [Array],
+      registrationDate: '2022-06-01',
+      year_month: '2022-06'
+    }
+  },
+  {
+    ts: 1655396411660000,
+    data: {
+      id: 'lbhjx',
+      appellation: 'Domnul',
+      address: 'Străinătate',
+      county: '',
+      firstName: 'Test1',
+      lastName: 'Test2',
+      phoneNo: '646654646665',
+      email: 'ionut.vidrighin@gmail.com',
+      job: 'Nu am lucrat niciodată / Casnic',
+      remarks: '',
+      reference: 'De la un coleg / colaborator',
+      is_career: true,
+      is_business: false,
+      domain: 'Controlul și managementul calității',
+      course: [Array],
+      registrationDate: '2022-06-16',
+      year_month: '2022-06'
+    }
+  },
+  {
+    ts: 1655399390690000,
+    data: {
+      id: 'uR6o-',
+      appellation: 'Domnul',
+      address: 'Străinătate ',
+      county: '',
+      firstName: 'Test1',
+      lastName: 'Test2',
+      phoneNo: '64464646654664',
+      email: 'ionut.vidrighin@gmail.com',
+      job: 'Nu am lucrat niciodată / Casnic',
+      remarks: '',
+      reference: 'De la managerul meu',
+      is_career: true,
+      is_business: false,
+      domain: 'Suport operațiuni / Client service',
+      course: [Array],
+      registrationDate: '2022-06-16',
+      year_month: '2022-06'
+    }
+  }
+]
+
+console.log(dd)
+const abc = dd.map(el => el.data)
+console.log(abc)
+
+abc.forEach(entry => {
+  if (entry.course[0].title === cc[0].title) {
+    console.log(entry.course)
+    console.log(cc)
+  }
+})
 
   </script>
   
