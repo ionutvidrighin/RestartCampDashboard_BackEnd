@@ -7,6 +7,8 @@ module.exports = {
   COURSES_MODULE_1: 'coursesModule1',
   COURSES_MODULE_1_PRESENCE: 'coursesModule1Presence',
   COURSES_MODULE_2: 'coursesModule2',
+  COURSES_WEBPAGE_DATA: 'coursesWebPageData',
+  HEADER_FOOTER_WEBPAGE_DATA: 'headerFooterData',
   DASHBOARD_USERS: 'dashboardUsersAccounts',
   REGISTERED_STUDENTS: 'registeredStudents',
   EMAIL_CONFIRMATION_REGISTRATION: 'emailConfirmationRegistration',

@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const faunaDB = require("faunadb")
 const faunaClient = require("../FaunaDataBase/faunaDB");
+const collections = require("../FaunaDataBase/collections");
 
 const {Map, Collection, Paginate, Documents, Get, Lambda} = faunaDB.query
 
@@ -11,7 +12,7 @@ router.route('/restart-camp-courses')
       // query all free courses
       const coursesModule1FromDB = await faunaClient.query(
         Map(
-          Paginate(Documents(Collection('coursesModule1'))),
+          Paginate(Documents(Collection(collections.COURSES_MODULE_1))),
           Lambda(x => Get(x))
         )
       )
@@ -24,7 +25,7 @@ router.route('/restart-camp-courses')
       // query all paid courses
       const coursesModule2FromDB = await faunaClient.query(
         Map(
-          Paginate(Documents(Collection('coursesModule2'))),
+          Paginate(Documents(Collection(collections.COURSES_MODULE_2))),
           Lambda(x => Get(x))
         )
       )

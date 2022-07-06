@@ -11,10 +11,12 @@ const registerStudent = require('./FreeEndpoints/registerStudent');
 const registerStudentPresence = require('./FreeEndpoints/registerStudentPresence');
 const getCoursesForWebPage = require('./FreeEndpoints/getCoursesForWebPage');
 const dashboardLogin = require('./Authentication/login');
-const dashboardUsers = require('./LockedEndpoints/adminSection/dashboardUsersAccounts');
-const getAppAccessKey = require('./LockedEndpoints/adminSection/appAccessKey');
+const coursesWebPageData = require('./FreeEndpoints/CoursesPageData');
+const headerFooterWebPageData = require('./FreeEndpoints/HeaderFooterData');
 
 // locked (with token) enpoints:
+const dashboardUsers = require('./LockedEndpoints/adminSection/dashboardUsersAccounts');
+const getAppAccessKey = require('./LockedEndpoints/adminSection/appAccessKey');
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
 const getRegisteredStudents = require('./LockedEndpoints/coursesRegistration/getRegisteredStudents');
@@ -33,18 +35,22 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
+
 app.use(dashboardLogin)
+app.use(registerStudent)
+app.use(registerStudentPresence)
+app.use(getCoursesForWebPage)
+app.use(coursesWebPageData)
+app.use(headerFooterWebPageData)
+
 app.use(dashboardUsers)
 app.use(getAppAccessKey)
 app.use(changeUserAccountEmail)
 app.use(changeUserAccountPassword)
-app.use(registerStudent)
-app.use(registerStudentPresence)
 app.use(getRegisteredStudents)
 app.use(getStudentCoursesPresence)
 app.use(coursesModule1)
 app.use(coursesModule2)
-app.use(getCoursesForWebPage)
 app.use(emailConfirmationAfterRegistration)
 app.use(emailReminder7Days)
 app.use(emailReminder1Day)

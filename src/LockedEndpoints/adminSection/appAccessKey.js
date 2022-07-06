@@ -55,6 +55,7 @@ router.route('/app-access-key')
             { data: { accessKey: newAppAccessKey } }
           )
         )
+
         res.status(201).json({message: 'Application Access Key has been successfully updated!'})
       } catch (error) {
         res.status(401).json({ message: 'There was an error in updating the Application Access Key', error})
