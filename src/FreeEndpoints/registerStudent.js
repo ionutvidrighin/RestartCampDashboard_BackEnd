@@ -67,7 +67,7 @@ router.route('/register-student')
     // query the DB in *registeredStudents* collection to check if student already exists
     const getStudentByEmail = await faunaClient.query(
       Map(
-        Paginate(Match(Index(indexes.GET_STUDENT_BY_EMAIL), newStudent.email)),
+        Paginate(Match(Index(indexes.GET_STUDENT_COURSE_MODULE1_BY_EMAIL), newStudent.email)),
         Lambda("student", Get(Var("student")))
       )
     )
@@ -78,7 +78,7 @@ router.route('/register-student')
       try {
         // Store newly registered student to DB
         await faunaClient.query(
-          Create(Collection(collections.REGISTERED_STUDENTS), {
+          Create(Collection(collections.REGISTER_STUDENT_COURSE_MODULE1), {
             data: newStudent
           })
         )
@@ -148,7 +148,7 @@ router.route('/register-student')
         try {
           // Store registered student to DB
           await faunaClient.query(
-            Create(Collection(collections.REGISTERED_STUDENTS), {
+            Create(Collection(collections.REGISTER_STUDENT_COURSE_MODULE1), {
               data: newStudent
             })
           )

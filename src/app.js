@@ -28,6 +28,10 @@ const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailRe
 const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day')
 const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour')
 
+// Unsubscribe or Remove a Student - endpoints
+const studentDataForUnsubscribeOrRemove = require('./LockedEndpoints/unsubscribeOrRemoveStudent/studentDataForUnsubscribeOrRemove')
+
+
 app.set('trust proxy', 1)
 
 app.use(helmet())
@@ -35,22 +39,32 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
-
-app.use(dashboardLogin)
+// Unlocked endpoints
 app.use(registerStudent)
 app.use(registerStudentPresence)
 app.use(getCoursesForWebPage)
 app.use(coursesWebPageData)
 app.use(headerFooterWebPageData)
 
+// Dashboard Users
+app.use(dashboardLogin)
 app.use(dashboardUsers)
 app.use(getAppAccessKey)
 app.use(changeUserAccountEmail)
 app.use(changeUserAccountPassword)
-app.use(getRegisteredStudents)
-app.use(getStudentCoursesPresence)
+
+// Get-Post courses data
 app.use(coursesModule1)
 app.use(coursesModule2)
+
+// Get-Post Students data for Tables / Charts
+app.use(getRegisteredStudents)
+app.use(getStudentCoursesPresence)
+
+// Get-Post Unsubscribe/Delete Student data
+app.use(studentDataForUnsubscribeOrRemove)
+
+// Get-Post E-mail templates
 app.use(emailConfirmationAfterRegistration)
 app.use(emailReminder7Days)
 app.use(emailReminder1Day)

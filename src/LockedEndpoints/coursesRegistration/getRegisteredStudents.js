@@ -3,6 +3,7 @@ const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const indexes = require("../../FaunaDataBase/indexes");
+const collections = require('../../FaunaDataBase/collections');
 const dayjs = require('dayjs');
 const getAccessKey = require("../../Authentication/getAccessKey");
 
