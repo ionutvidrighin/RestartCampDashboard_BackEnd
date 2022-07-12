@@ -11,52 +11,41 @@
   <script>
     
     
-    const studentInCourseModule1 = [
-      {
-        ref: "registerStudentCourseModule1",
-        ts: 1654372811210000,
-        data: [{
-          a: '123',
-          b: 'ertygf'
-        }]
-      },
-      {
-        ref: "registerStudentCourseModule1",
-        ts: 1654372836730000,
-        data: [{
-          a: '123',
-          b: '9oikjhg'
-        }]
-      },
-      {
-        ref: "registerStudentCourseModule1",
-        ts: 1654372661830000,
-        data: [{
-          a: '123',
-          b: 'oihjkhg'
-        }]
-      },
-      {
-        ref: "registerStudentCourseModule1",
-        ts: 1655396411660000,
-        data: [{
-          a: '123',
-          b: 'uiokl'
-        }]
-      },
-      {
-        ref: "registerStudentCourseModule1",
-        ts: 1657396199340000,
-        data: [{
-          a: '123',
-          b: '789ijk'
-        }]
-      }
+    const a = [{ 
+      registerStudentCourseModule1: [
+        "333558454948987079",
+        "333560259730735303",
+        "333566508330385608",
+        "334639987846807750",
+        "336736917093613767"
+      ]}, {
+      registerStudentCourseModule2: [
+        "336739274581868743"
+      ]}, {
+      coursesModule1Presence: [
+        "333635031555637440",
+        "336739434653286599"
+      ]}
     ]
     
-    console.log(studentInCourseModule1)
-    const ac = studentInCourseModule1.map(el => el.data)
-    console.log(ac)
+    // a.forEach(el => {
+    //   if (el.hasOwnProperty('registerStudentCourseModule1')) {
+    //     el.registerStudentCourseModule1.forEach(ele => console.log(ele))
+    //   }
+    // })
+
+
+    const abc = [
+      { data: [] },
+      { data: [{}, {}] },
+      { data: [{}, {}, {}, {}] }
+    ]
+
+    console.log('whole', abc)
+    abc.forEach(dataSet => {
+      dataSet.data.forEach(el => console.log(el))
+
+    })
 
 
   </script>

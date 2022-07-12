@@ -46,37 +46,131 @@ router.route('/unsubscribe-remove-student')
     const resolvedPromise = await Promise.all(promise)
     
     //if none of the above indexes could find the Student, return error
-    if (resolvedPromise.length === 0) {
-      res.status(404).json({ message: 'Student could not be found in data base'})
+    let studentNotFound;
+    resolvedPromise.forEach(searchResult => {
+      searchResult.data.forEach(set => {
+        if (set.length === 0) studentNotFound = true
+      })
+    })
+
+    if (studentNotFound) {
+      res.status(404).json({ 
+        error: 'Student could not be found in data base',
+        studentInCoursesModule1: [],
+        studentInCoursesModule2: [],
+        studentPresenceInCoursesModule1: []
+      })
       return
     }
 
     if (accessKey === appAccessKey) {
-      const renameKeyStudentCourseMod1 = { data: "courseModule1" };
-      let studentInCourseModule1 = renameKeysInObject(resolvedPromise[0], renameKeyStudentCourseMod1);
-      studentInCourseModule1 = studentInCourseModule1.courseModule1.map(item => item.data)
+      const renameKeyStudentCourseMod1 = { data: "studentInCoursesModule1" }
+      let dataInCoursesModule1 = renameKeysInObject(resolvedPromise[0], renameKeyStudentCourseMod1)
 
-      const renameKeyStudentCourseMod2 = { data: "courseModule2" };
-      let studentInCourseModule2 = renameKeysInObject(resolvedPromise[1], renameKeyStudentCourseMod2);
-      studentInCourseModule2 = studentInCourseModule2.courseModule2.map(item => item.data)
+      const renameKeyStudentCourseMod2 = { data: "studentInCoursesModule2" }
+      let dataInCoursesModule2 = renameKeysInObject(resolvedPromise[1], renameKeyStudentCourseMod2)
   
-      const renameKeyStudentPresence = { data: "presenceCourseModule1" };
-      let studentPresenceInCourseModule1 = renameKeysInObject(resolvedPromise[2], renameKeyStudentPresence);
-      studentPresenceInCourseModule1 = studentPresenceInCourseModule1.presenceCourseModule1.map(item => item.data)
+      const renameKeyStudentPresence = { data: "studentPresenceInCoursesModule1" }
+      let dataInPresenceCourseModule1 = renameKeysInObject(resolvedPromise[2], renameKeyStudentPresence)
 
-      res.status(200).json({
-        studentInCourseModule1,
-        studentInCourseModule2,
-        studentPresenceInCourseModule1
+      const allStudentData = [dataInCoursesModule1, dataInCoursesModule2, dataInPresenceCourseModule1]
+      const studentInCoursesModule1 = []
+      const studentInCoursesModule2 = []
+      const studentPresenceInCoursesModule1 = []
+
+      allStudentData[0].studentInCoursesModule1.forEach(element => {
+        studentInCoursesModule1.push({
+          ...element.data,
+          refId: element.ref.id
+        })
+      })
+      allStudentData[1].studentInCoursesModule2.forEach(element => {
+        studentInCoursesModule2.push({
+          ...element.data,
+          refId: element.ref.id
+        })
+      })
+      allStudentData[2].studentPresenceInCoursesModule1.forEach(element => {
+        studentPresenceInCoursesModule1.push({
+          ...element.data,
+          refId: element.ref.id
+        })
       })
 
+      res.status(200).json({
+        studentInCoursesModule1,
+        studentInCoursesModule2,
+        studentPresenceInCoursesModule1
+      })
     } else {
       res.status(401).json({message: "Unauthorized! App access key is incorrect"})
     }
   })
 
-  .put(() => {
+  .put( async (req, res) => {
+    const accessKey = req.headers.authorization
+    const appAccessKey = await getAccessKey(accessKey)
+    const FAKE_EMAIL_ADDRESS = "FAKE_EMAIL_ADDRESS@replaced"
+    
+    const modificationObject = req.body
+    console.log(modificationObject)
+    // this is an Array of Object with this form: [ {key: [refID] } ]
+    // where the "key" represents the database collection name
+    // and the value represents the list of reference IDs (exact location in database) to update
 
+    if (accessKey === appAccessKey) {
+
+      let modifyEmailAddressPromises = []
+
+      modificationObject.forEach(dataSet => {
+        if (dataSet.hasOwnProperty(collections.REGISTER_STUDENT_COURSE_MODULE1)) {
+          dataSet.registerStudentCourseModule1.forEach( async (refID) => {
+            const registerStudentCourseModule1 = faunaClient.query(
+              Update(
+                Ref(Collection(collections.REGISTER_STUDENT_COURSE_MODULE1), refID),
+                { data: { email: FAKE_EMAIL_ADDRESS } }
+              )
+            )
+            modifyEmailAddressPromises.push(registerStudentCourseModule1)
+          })
+        }
+        if (dataSet.hasOwnProperty(collections.REGISTER_STUDENT_COURSE_MODULE2)) {
+          dataSet.registerStudentCourseModule2.forEach( async (refID) => {
+            const registerStudentCourseModule2 = faunaClient.query(
+              Update(
+                Ref(Collection(collections.REGISTER_STUDENT_COURSE_MODULE2), refID),
+                { data: { email: FAKE_EMAIL_ADDRESS } }
+              )
+            )
+            modifyEmailAddressPromises.push(registerStudentCourseModule2)
+          })
+        }
+        if (dataSet.hasOwnProperty(collections.COURSES_MODULE_1_PRESENCE)) {
+          dataSet.coursesModule1Presence.forEach( async (refID) => {
+            const coursesModule1Presence = faunaClient.query(
+              Update(
+                Ref(Collection(collections.COURSES_MODULE_1_PRESENCE), refID),
+                { data: { email: FAKE_EMAIL_ADDRESS } }
+              )
+            )
+            modifyEmailAddressPromises.push(coursesModule1Presence)
+          })
+        }
+      })
+
+      Promise.all(modifyEmailAddressPromises)
+        .then(result => {
+          res.status(201)
+          res.json({message: "Student has been successfully unsubscribed!"})
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(500)
+          res.json({error: "Student could not be unsubscribed! "})
+        })
+    } else {
+      res.status(401).json({message: "Unauthorized! App access key is incorrect"})
+    }
   })
 
 module.exports = router
