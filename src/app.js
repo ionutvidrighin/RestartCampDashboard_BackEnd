@@ -12,6 +12,7 @@ const registerStudentPresence = require('./FreeEndpoints/registerStudentPresence
 const getCoursesForWebPage = require('./FreeEndpoints/getCoursesForWebPage');
 const dashboardLogin = require('./Authentication/login');
 const coursesWebPageData = require('./FreeEndpoints/CoursesPageData');
+const coursePresencePageData = require('./FreeEndpoints/CoursePresencePageData');
 const headerFooterWebPageData = require('./FreeEndpoints/HeaderFooterData');
 
 // locked (with token) enpoints:
@@ -44,6 +45,7 @@ app.use(registerStudent)
 app.use(registerStudentPresence)
 app.use(getCoursesForWebPage)
 app.use(coursesWebPageData)
+app.use(coursePresencePageData)
 app.use(headerFooterWebPageData)
 
 // Dashboard Users

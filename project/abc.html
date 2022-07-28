@@ -10,33 +10,25 @@
 
   <script>
     
-    
-    const a = [{ 
-      registerStudentCourseModule1: [
-        "333558454948987079",
-        "333560259730735303",
-        "333566508330385608",
-        "334639987846807750",
-        "336736917093613767"
-      ]}, {
-      registerStudentCourseModule2: [
-        "336739274581868743"
-      ]}, {
-      coursesModule1Presence: [
-        "333635031555637440",
-        "336739434653286599"
-      ]}
-    ]
-    
-    // a.forEach(el => {
-    //   if (el.hasOwnProperty('registerStudentCourseModule1')) {
-    //     el.registerStudentCourseModule1.forEach(ele => console.log(ele))
-    //   }
-    // })
+    const abc = "ATENȚIE! Poți alege [link] unul dintre cursurile de la modulul 1 în mod [link] . Pentru a te înscrie la mai multe, o poți face achiziționându-le de pe Learning Store-ul nostru de aici: [link] "
 
 
 
-    console.log(duplicate(abc))
+    const test = (string, words) => {
+      let spreadString = string.split('[link]')
+      spreadString = spreadString.slice(0, -1)
+
+      const linkWordReplaced = []
+      for (let i = 0; i < spreadString.length; i++) {
+        linkWordReplaced.push(spreadString[i] + " " + words[i])
+      }
+
+      return linkWordReplaced.join('')
+    }
+
+
+    console.log(test(abc, ['doar', 'gratuit', 'click']))
+
   </script>
   
 </body>
