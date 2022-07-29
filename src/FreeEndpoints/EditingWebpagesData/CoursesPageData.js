@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const faunaDB = require("faunadb")
-const faunaClient = require("../FaunaDataBase/faunaDB");
-const collections = require("../FaunaDataBase/collections");
+const faunaClient = require("../../FaunaDataBase/faunaDB");
+const collections = require("../../FaunaDataBase/collections");
 
 const {Update, Ref, Map, Collection, Paginate, Documents, Get, Lambda} = faunaDB.query
 

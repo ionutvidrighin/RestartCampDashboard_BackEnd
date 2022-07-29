@@ -10,24 +10,65 @@
 
   <script>
     
-    const abc = "ATENȚIE! Poți alege [link] unul dintre cursurile de la modulul 1 în mod [link] . Pentru a te înscrie la mai multe, o poți face achiziționându-le de pe Learning Store-ul nostru de aici: [link] "
 
-
-
-    const test = (string, words) => {
-      let spreadString = string.split('[link]')
-      spreadString = spreadString.slice(0, -1)
-
-      const linkWordReplaced = []
-      for (let i = 0; i < spreadString.length; i++) {
-        linkWordReplaced.push(spreadString[i] + " " + words[i])
-      }
-
-      return linkWordReplaced.join('')
+const a = {
+  [
+    {
+      title: "Mesaj Eroare Nume si Prenume:",
+      message: "Nume și Prenume invalid !"
+    },
+    {
+      title: "Mesaj Eroare Adresă e-mail:",
+      message: "Adresă e-mail invalidă !"
+    },
+    {
+      title: "Mesaj Eroare prefixul țară:",
+      message: "Te rugăm să alegi prefixul țării."
+    },
+    {
+      title: "Mesaj Eroare număr de telefon:",
+      message: "Te rugăm să completezi numărul de telefon."
+    },
+    {
+      title: "Mesaj Eroare resedință:",
+      message: "Te rugăm selectează resedința."
+    },
+    {
+      title: "Mesaj Eroare județ:",
+      message: "Te rugăm selectează județul."
+    },
+    {
+      title: "Mesaj Eroare lipsă alegere curs:",
+      message: "Te rugăm selectează cursul la care vei participa."
+    },
+    {
+      title: "Mesaj Eroare alegere cursuri multiple:",
+      message: "Din păcate nu te putem înscriere la mai multe cursuri simultan. Te rugăm finalizează înscrierea pentru câte un curs pe rând."
+    },
+    {
+      title: "Mesaj Eroare activitate profesională:",
+      message: "Te rugăm selectează activitatea profesională."
+    },
+    {
+      title: "Mesaj Eroare nivel carieră - despre program - industrie",
+      message: "Te rugăm selectează nivelul de carieră, despre program și industria ta."
+    }, 
+    {
+      title: "Mesaj Eroare GDPR",
+      message: "Te rugăm să confirmi GDPR."
+    }, 
+    {
+      title: "Mesaj Eroare finalizare înregistrare",
+      message: "A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede !"
+    }, 
+    {
+      title: "Mesaj Succes finalizare înregistrare",
+      message: "Te-ai înscris cu success! Te rugăm să verifici inbox-ul adresei {student.email}."
     }
+  ]
+}
 
-
-    console.log(test(abc, ['doar', 'gratuit', 'click']))
+console.log(a)
 
   </script>
   

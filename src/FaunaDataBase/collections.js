@@ -10,6 +10,7 @@ module.exports = {
   COURSES_WEBPAGE_DATA: 'coursesWebPageData',
   COURSE_PRESENCE_WEBPAGE_DATA: 'coursePresenceWebPageData',
   HEADER_FOOTER_WEBPAGE_DATA: 'headerFooterData',
+  REGISTRATION_FORM_ALERTS: 'registrationFormAlerts',
   DASHBOARD_USERS: 'dashboardUsersAccounts',
   REGISTER_STUDENT_COURSE_MODULE1: 'registerStudentCourseModule1',
   REGISTER_STUDENT_COURSE_MODULE2: 'registerStudentCourseModule2',
