@@ -4,8 +4,8 @@ class CreateNewStudent {
     this.appellation = input.appellation
     this.address = input.address
     this.county = input.county
-    this.firstName = input.firstName
-    this.lastName = input.lastName
+    this.fullName = input.fullName
+    this.phoneCode = input.phoneCode
     this.phoneNo = input.phoneNo
     this.email = input.email
     this.job = input.job
@@ -23,8 +23,7 @@ class CreateNewStudent {
 class CreateNewStudentForPresence {
   constructor(input) {
     this.id = input.id
-    this.firstName = input.firstName
-    this.lastName = input.lastName
+    this.fullName = input.fullName
     this.phoneNo = input.phoneNo
     this.email = input.email
     this.course = input.course

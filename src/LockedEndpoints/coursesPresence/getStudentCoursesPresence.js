@@ -6,41 +6,27 @@ const dayjs = require('dayjs');
 const collections = require('../../FaunaDataBase/collections');
 const indexes = require('../../FaunaDataBase/indexes');
 
-const { Documents, Collection, Match, Map, Paginate, Get, Lambda, Index, Var } = faunaDB.query;
+const { Documents, Collection, Match, Intersection, Map, Paginate, Get, Lambda, Index, Var } = faunaDB.query;
 
-async function getCoursePresenceByTitle(title) {
-  const getCourseByTitle = await faunaClient.query(
-    Map(
-      Paginate(Match(Index(indexes.GET_COURSE_PRESENCE_BY_TITLE), title)),
-      Lambda(course => Get(course))
-    )
-  )
-
-  let returnedData = getCourseByTitle.data
-  returnedData = returnedData.map(item => item.data)
-  returnedData = returnedData.filter(item => {
-    return !dayjs(item.course.date).isAfter(dayjs())
-  })
-
-  return returnedData
-}
-
-
-router.route('/course-presence')
-  .get( async (req, res) => {
-    try {
-      const data = await getStudentCoursePresence()
-      res.status(200).json(data)
-    } catch (error) {
-      res.status(401).json({message: "There was an error in retrieving the Free Courses from database", error})
-    }
-  })
-
+router.route('/get-course-presence')
   .post( async (req, res) => {
-    const courseTitle = req.body.courseTitle
+    const courseName = req.body.courseName
+    const registrationYearMonth = req.body.registrationYearMonth
+
     try {
-      const data = await getCoursePresenceByTitle(courseTitle)
-      res.status(200).json(data)
+      const dataFromDB = await faunaClient.query(
+        Map(
+          Paginate(
+            Intersection(
+              Match(Index(indexes.GET_COURSE_PRESENCE_BY_NAME), courseName),
+              Match(Index(indexes.GET_COURSE_PRESENCE_BY_YEAR_MONTH), registrationYearMonth)
+            )
+          ), Lambda("student", Get(Var("student")))
+        )
+      )
+      let returnedData = dataFromDB.data
+      returnedData = returnedData.map(item => item.data)
+      res.status(200).json(returnedData)
     } catch(error) {
       console.log(error)
       res.status(401).json({message: "There was an error in retrieving the course presence data from database", error})

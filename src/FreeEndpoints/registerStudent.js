@@ -16,17 +16,14 @@ const { Match, Map, Paginate, Get, Create, Collection, Documents, Lambda, Index,
 
 router.route('/register-student')
   .post( async (request, response) => {
+
     const newStudent = new CreateNewStudent(request.body)
     const newStudentPresence = {
       id: request.body.id,
-      firstName: request.body.firstName,
-      lastName: request.body.lastName,
-      phone: request.body.phone,
+      fullName: request.body.fullName,
+      phone: request.body.phoneNo,
       email: request.body.email,
-      course: {
-        ...request.body.course[0],
-        date: dayjs(request.body.course.date).format('MM/DD/YYYY')
-      }
+      course: request.body.course[0]
     }
 
     // check if any of the values in the Object coming from FrontEnd is undefined
@@ -39,7 +36,7 @@ router.route('/register-student')
     if (undefinedValues) {
       response.status(422).json({
         error: "Passed data can't be undefined. Please check all key/values in your payload Object",
-        tip: "Payload Object must contain following data: ** id, appellation, firstName, lastName, phoneNo, email, address, county, job, remarks, reference, is_career, is_business, domain, course, registrationDate, year_month **"
+        tip: "Payload Object must contain following data: ** id, appellation, firstName, lastName, phoneCode, phoneNo, email, address, county, job, remarks, reference, is_career, is_business, domain, course, registrationDate, year_month **"
       })
       return
     }
@@ -136,11 +133,12 @@ router.route('/register-student')
       })
 
       if (coursesAreEqual) { 
-        // New Course he registered for now, is the same with a Course he registered in the past
+        // The new Course he just registered for now, is the same with a Course he registered in the past
         // Course Title and Course Date are the same
         response.status(406).json({
-          message: `Ești deja înscris la cursul **${existingCourse.title}** din data de ${existingCourse.date}`,
-          warning: 'warning'
+          courseTitle: existingCourse.title,
+          courseDate: existingCourse.date,
+          warning: 'already-registered-at-this-course'
         })
       } else { 
         // Course are not the same
