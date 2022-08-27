@@ -47,6 +47,8 @@ router.route('/login')
   
       if (dbUsername === loginUsername && dbUserPassword === loginUserPassword) {
         const successfullyLoggedUser = validateUsername.data[0].data
+        delete successfullyLoggedUser['password']
+
         res.status(200).json({
           message: 'LoggedIn Successfully !',
           loggedUser: successfullyLoggedUser
