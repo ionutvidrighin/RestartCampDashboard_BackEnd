@@ -162,9 +162,7 @@ router.route('/courses-module1')
         await faunaClient.query(
           Delete(Ref(Collection(collections.COURSES_MODULE_1), docID))
         )
-        res.status(200).json({
-          message: 'Success! Course has been deleted'
-        })
+        res.status(200).json({ message: 'Success! Course has been deleted' })
       } catch (error) {
         res.status(401).json({ message: 'There was an error in deleting the course', error})
       }

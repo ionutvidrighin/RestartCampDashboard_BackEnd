@@ -92,7 +92,7 @@ router.route('/change-user-permission')
         await faunaClient.query(
           Update(
             Ref(Collection(collections.DASHBOARD_USERS), docID),
-            { data: { permissions: userToModify.permissions } }
+            { data: { access: userToModify.access, pagesPermission: userToModify.pagesPermission } }
           )
         )
         res.status(201).json({message: 'User permissions have been successfully updated!'})
