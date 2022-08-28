@@ -41,6 +41,7 @@ router.route('/get-dashboard-users')
         )
         let allDashboardUsers = dashboardUsersRaw.data
         allDashboardUsers = allDashboardUsers.map(item => item.data)
+        allDashboardUsers = allDashboardUsers.filter(element => !element.creator)
         res.status(200).json(allDashboardUsers)
       } catch (error) {
         res.status(401).json({message: "There was an error in retrieving the Dashboard Users from database"})
