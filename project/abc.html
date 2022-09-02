@@ -10,11 +10,17 @@
 
   <script>
     
+    const abc = [500, 200, 500]
 
-    const a = "hello {nume}"
-    console.log(a)
-    console.log(a.replace('{nume}', 'abbcc'))
+    console.log(abc)
+    let success
+    console.log('before', success)
 
+    const b = abc.every(code => code === 500)
+
+
+    console.log(b)
+  
   </script>
   
 </body>

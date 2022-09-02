@@ -16,7 +16,7 @@ module.exports = {
   REGISTER_STUDENT_COURSE_MODULE2: 'registerStudentCourseModule2',
   EMAIL_CONFIRMATION_REGISTRATION: 'emailConfirmationRegistration',
   EMAIL_3DAYS_EMPLOYEE: 'email3DaysEmployee',
-  EMAIL_3DAYS_ENTREPRENEUR: 'email3DaysEntrepreneur',
+  EMAIL_3DAYS_COMPANY: 'email3DaysCompany',
   EMAIL_REMINDER_7DAYS: 'emailReminder7Days',
   EMAIL_REMINDER_1DAY: 'emailReminder1Day',
   EMAIL_REMINDER_1HOUR: 'emailReminder1Hour',

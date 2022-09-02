@@ -15,7 +15,6 @@ const cron = require('node-cron');
 const collections = require('../../FaunaDataBase/collections');
 const getAccessKey = require("../../Authentication/getAccessKey");
 const sendTestReminderEmail1Day = require('../../Nodemailer/EmailReminder1DayTEMPLATE/sendTest_EmailReminder1Day');
-const testingCronFnArg = require('../../Nodemailer/testingCron')
 
 const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 

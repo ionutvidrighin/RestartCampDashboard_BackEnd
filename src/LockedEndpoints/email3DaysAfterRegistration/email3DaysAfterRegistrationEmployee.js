@@ -1,23 +1,23 @@
 /**
-File handling the update of the "Email 3 days after registration for Entrepreneur"  
+File handling the manipulation of Template: E-mail Sent After 3 Days from Registration Date - Employee 
 */
 
 /*** ENDPOINTS:
-1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "emailConfirmationAfterRegistration" collection
-2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "emailConfirmationAfterRegistration" collection
+1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "email3DaysEmployee" collection
+2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "email3DaysEmployee" collection
 */
-
 
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
+const collections = require('../../FaunaDataBase/collections');
 const getAccessKey = require("../../Authentication/getAccessKey");
-const sendTestConfirmationEmail = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendTest_EmailConfirmationRegistration');
+const sendTestEmailTemplate = require('../../Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendTestEmailAfter3DaysRegistration');
 
-const { Map, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref } = faunaDB.query
+const { Map, Collection, Paginate, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
-router.route('/email-3days-entrepreneur')
+router.route('/email-3days-after-registration-employee')
   .get( async (req, res) => {
     const accessKey = req.headers.authorization
     const appAccessKey = await getAccessKey(accessKey)
@@ -26,7 +26,7 @@ router.route('/email-3days-entrepreneur')
       try {
         const emailTemplateObjectFromDB = await faunaClient.query(
           Map(
-            Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
+            Paginate(Documents(Collection(collections.EMAIL_3DAYS_EMPLOYEE))),
             Lambda(x => Get(x))
           )
         )
@@ -46,26 +46,27 @@ router.route('/email-3days-entrepreneur')
     if (accessKey === appAccessKey) {
       const newEmailTemplateObject = req.body
 
-      // this check deals with sending a test email template  
+      // section dealing with sending a test email template  
       if (newEmailTemplateObject.hasOwnProperty('testEmail')) {
+        const recipientEmailAddress = newEmailTemplateObject.testEmail
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
-          const sendEmail = await sendTestConfirmationEmail(newEmailTemplateObject)
+          const sendEmail = await sendTestEmailTemplate(recipientEmailAddress, newEmailTemplateObject)
           console.log(sendEmail)
 
           res.status(201).json({
-            success: true,
-            message: 'TESTING E-MAIL TEMPLATE content successfully sent',
+            message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
             emailResponse: sendEmail
           })
 
         } catch (error) {
           console.log(error)
-          res.status(401).json({success: false, message: 'There was an error in sending a test E-MAIL TEMPLATE', error})
+          res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})
         }
       } else {
+        // store the updated version of the E-mail Template to DB
         const emailTemplateObject = await faunaClient.query(
-          Map(Paginate(Documents(Collection('emailConfirmationAfterRegistration'))),
+          Map(Paginate(Documents(Collection(collections.EMAIL_3DAYS_EMPLOYEE))),
             Lambda(x => Get(x))
           )
         )
@@ -74,17 +75,17 @@ router.route('/email-3days-entrepreneur')
           const docID = emailTemplateObject.data[0].ref.id
           await faunaClient.query(
             Update(
-              Ref(Collection('emailConfirmationAfterRegistration'), docID),
+              Ref(Collection(collections.EMAIL_3DAYS_EMPLOYEE), docID),
               { data: newEmailTemplateObject }
             )
           )
           res.status(201).json({
             success: true,
-            message: 'E-MAIL TEMPLATE content successfully added',
+            message: 'E-MAIL Template content successfully updated',
             data: newEmailTemplateObject
           })
         } catch (error) {
-          res.status(401).json({success: false, message: 'There was a server or database error when adding the E-MAIL TEMPLATE content', error})
+          res.status(401).json({message: 'There was a server or database error when updating the E-mai Template content', error})
         }
       }
     } else {

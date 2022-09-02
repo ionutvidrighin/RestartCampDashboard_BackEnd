@@ -25,13 +25,15 @@ const getRegisteredStudents = require('./LockedEndpoints/coursesRegistration/get
 const getStudentCoursesPresence = require('./LockedEndpoints/coursesPresence/getStudentCoursesPresence');
 const coursesModule1 = require('./LockedEndpoints/coursesModule1/coursesModule1');
 const coursesModule2 = require('./LockedEndpoints/coursesModule2/coursesModule2');
-const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1')
-const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days')
-const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day')
-const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour')
+const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1');
+const email3DaysAfterRegistrationEmployee = require('./LockedEndpoints/email3DaysAfterRegistration/email3DaysAfterRegistrationEmployee');
+const email3DaysAfterRegistrationCompany = require('./LockedEndpoints/email3DaysAfterRegistration/email3DaysAfterRegistrationCompany');
+const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days');
+const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day');
+const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour');
 
 // Unsubscribe or Remove a Student - endpoints
-const studentDataForUnsubscribeOrRemove = require('./LockedEndpoints/unsubscribeOrRemoveStudent/studentDataForUnsubscribeOrRemove')
+const studentDataForUnsubscribeOrRemove = require('./LockedEndpoints/unsubscribeOrRemoveStudent/studentDataForUnsubscribeOrRemove');
 
 
 app.set('trust proxy', 1)
@@ -70,6 +72,8 @@ app.use(studentDataForUnsubscribeOrRemove)
 
 // Get-Post E-mail templates
 app.use(emailConfirmationAfterRegistration)
+app.use(email3DaysAfterRegistrationEmployee)
+app.use(email3DaysAfterRegistrationCompany)
 app.use(emailReminder7Days)
 app.use(emailReminder1Day)
 app.use(emailReminder1Hour)
