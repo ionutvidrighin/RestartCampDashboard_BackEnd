@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const app = express()
+const dayjs = require('dayjs')
 
 // importing all routes
 
@@ -17,24 +18,23 @@ const headerFooterWebPageData = require('./FreeEndpoints/EditingWebpagesData/Hea
 const registrationFormAlerts = require('./FreeEndpoints/EditingWebpagesData/RegistrationFormAlerts');
 
 // locked (with token) enpoints:
-const dashboardUsers = require('./LockedEndpoints/adminSection/dashboardUsersAccounts');
-const getAppAccessKey = require('./LockedEndpoints/adminSection/appAccessKey');
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
-const getRegisteredStudents = require('./LockedEndpoints/coursesRegistration/getRegisteredStudents');
-const getStudentCoursesPresence = require('./LockedEndpoints/coursesPresence/getStudentCoursesPresence');
-const coursesModule1 = require('./LockedEndpoints/coursesModule1/coursesModule1');
-const coursesModule2 = require('./LockedEndpoints/coursesModule2/coursesModule2');
-const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailConfirmationAfterRegistration/emailConfirmationModule1');
-const email3DaysAfterRegistrationEmployee = require('./LockedEndpoints/email3DaysAfterRegistration/email3DaysAfterRegistrationEmployee');
-const email3DaysAfterRegistrationCompany = require('./LockedEndpoints/email3DaysAfterRegistration/email3DaysAfterRegistrationCompany');
-const emailReminder7Days = require('./LockedEndpoints/emailReminder7Days/emailReminder7Days');
-const emailReminder1Day = require('./LockedEndpoints/emailReminder1Day/emailReminder1Day');
-const emailReminder1Hour = require('./LockedEndpoints/emailReminder1Hour/emailReminder1Hour');
+const getAppAccessKey = require('./LockedEndpoints/adminSection/appAccessKey');
+const dashboardUsers = require('./LockedEndpoints/adminSection/dashboardUsersAccounts');
+const getRegisteredStudentsModule1 = require('./LockedEndpoints/coursesEndpoints/getRegisteredStudentsModule1');
+const getStudentsCoursePresenceModule1 = require('./LockedEndpoints/coursesEndpoints/getStudentsCoursePresenceModule1');
+const coursesModule1 = require('./LockedEndpoints/coursesEndpoints/coursesModule1');
+const coursesModule2 = require('./LockedEndpoints/coursesEndpoints/coursesModule2');
+const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailTemplatesEndpoints/emailConfirmationRegistrationModule1');
+const email3DaysAfterRegistrationEmployee = require('./LockedEndpoints/emailTemplatesEndpoints/email3DaysAfterRegistrationEmployee');
+const email3DaysAfterRegistrationCompany = require('./LockedEndpoints/emailTemplatesEndpoints/email3DaysAfterRegistrationCompany');
+const emailReminder7Days = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder7Days');
+const emailReminder1Day = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder1Day');
+const emailReminder1Hour = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder1Hour');
 
 // Unsubscribe or Remove a Student - endpoints
 const studentDataForUnsubscribeOrRemove = require('./LockedEndpoints/unsubscribeOrRemoveStudent/studentDataForUnsubscribeOrRemove');
-
 
 app.set('trust proxy', 1)
 
@@ -64,8 +64,8 @@ app.use(coursesModule1)
 app.use(coursesModule2)
 
 // Get-Post Students data for Tables / Charts
-app.use(getRegisteredStudents)
-app.use(getStudentCoursesPresence)
+app.use(getRegisteredStudentsModule1)
+app.use(getStudentsCoursePresenceModule1)
 
 // Get-Post Unsubscribe/Delete Student data
 app.use(studentDataForUnsubscribeOrRemove)
@@ -78,6 +78,30 @@ app.use(emailReminder7Days)
 app.use(emailReminder1Day)
 app.use(emailReminder1Hour)
 
+const faunaDB = require("faunadb");
+const faunaClient = require("./FaunaDataBase/faunaDB");
+const collections = require('./FaunaDataBase/collections');
+const schedule = require('node-schedule');
+const sendEmail3DaysAfterRegistration = require('./Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendEmailAfter3DaysRegistration')
+
+const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
+
+
+const date = dayjs().add(1, 'hour').format()
+schedule.scheduleJob(date, async () => {
+  const rawEmailTemplateData = await faunaClient.query(
+    Map(
+      Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
+      Lambda(x => Get(x))
+    )
+  )
+  const emailTemplate = rawEmailTemplateData.data[0].data 
+  sendEmail3DaysAfterRegistration('ionut.vidrighin@gmail.com', emailTemplate)
+
+  console.log('Ran at ' + dayjs().format())
+})
+
+console.log('is server running ?')
 
 const defaultResponse = require('./defaultResponse')
 

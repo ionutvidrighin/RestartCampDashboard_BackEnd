@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
-const createTemplateContext = require('./template/creatTemplateContext')
+const cron = require('node-cron');
+const EventEmitter = require('events');
+const event = new EventEmitter();
+const createTemplateContext = require('./template/createTemplateContext');
 
-const EMPLOYEE = 'Employee'
-const COMPANY = 'Company'
 
-const sendEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate, studentType) => {
+const sendEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate) => {
  
   let transporter = nodemailer.createTransport({
     host: "smtp.ionos.co.uk",
@@ -34,7 +35,7 @@ const sendEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate, st
     from: '"RestartCamp" <echipa@restart-camp.org>', // sender e-mail address
     to: recipientEmail, // recipient e-mail address
     subject: `Datele de acces - cursuri gratuite Restart Camp`,
-    template: studentType === EMPLOYEE ? 'email3DaysEmployee' : 'email3DaysCompany',,
+    template: 'email3DaysAfterRegistration',
     context: createTemplateContext(emailTemplate)
   }
 
@@ -42,7 +43,7 @@ const sendEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate, st
     if (error) {
       console.log(error)
     } else {
-      console.log("Server is ready to take our messages")
+      console.log("Server is ready to send the e-mail")
     }
   })
   
@@ -51,16 +52,3 @@ const sendEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate, st
 
 module.exports = sendEmail3DaysAfterRegistration
 
-// cron job generator
-// https://crontab.guru/
-
-var cron = require('node-cron');
-//35 15 11 5 *
-
-// cron.schedule('35 15 11 5 *', () => {
-//   sendConfirmationEmailAfterRegistration(test)
-// });
-
-// const d = dayjs().add(2, 'hour').add(1, 'minute').toDate()
-// const abc = dayjs().add(2, 'hour').add(1, 'minute').toDate()
-// console.log(new Date())

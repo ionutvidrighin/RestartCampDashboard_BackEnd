@@ -6,7 +6,7 @@ File handling the manipulation of Template: E-mail Sent After 3 Days from Regist
 1. GET - fetches the entire E-MAIL TEMPLATE stored to data base => "email3DaysCompany" collection
 2. POST - creates new Object containing whole E-MAIL TEMPLATE; stores it to "email3DaysCompany" collection
 */
-
+ 
 const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");

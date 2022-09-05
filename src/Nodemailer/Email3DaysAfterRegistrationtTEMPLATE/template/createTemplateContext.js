@@ -13,8 +13,6 @@ function breakStringAndAddCourseName(string, courseName) {
 }
 
 function createTemplateContext(input) {
-
-  console.log(input)
   return {
     topSection: {
       templateLogo: input.topSection.templateLogo,

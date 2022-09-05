@@ -4,8 +4,8 @@ const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const indexes = require("../../FaunaDataBase/indexes");
 const collections = require('../../FaunaDataBase/collections');
-const dayjs = require('dayjs');
 const getAccessKey = require("../../Authentication/getAccessKey");
+const dayjs = require('dayjs');
 const { Union } = require("faunadb");
 
 const { Map, Create, Intersection, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index, Var } = faunaDB.query
