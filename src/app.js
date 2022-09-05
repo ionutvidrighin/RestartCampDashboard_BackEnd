@@ -87,7 +87,7 @@ const sendEmail3DaysAfterRegistration = require('./Nodemailer/Email3DaysAfterReg
 const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
 
 
-const date = dayjs().add(1, 'hour').format()
+const date = dayjs().add(5, 'minute').format()
 schedule.scheduleJob(date, async () => {
   const rawEmailTemplateData = await faunaClient.query(
     Map(
