@@ -16,10 +16,10 @@ router.route('/header-footer-data')
         )
       )
       const headerFooterData = databaseResponse.data[0].data
-      res.status(200).json({headerFooterData})
+      res.status(200).json(headerFooterData)
     } catch(error) {
       console.log(error)
-      res.status(401).json({message: "There was an error in retrieving the Header & Footer Data from database", error})
+      res.status(401).json({message: "Error in retrieving the Header & Footer Data from database", error})
     }
 
   })
@@ -44,7 +44,7 @@ router.route('/header-footer-data')
       res.status(201).json({message: 'Header & Footer Data has been successfully updated!', newHeaderFooterData})
     } catch (error) {
       console.log(error)
-      res.status(401).json({ message: 'There was an error in updating the Header & Footer Data', error})
+      res.status(401).json({ message: 'Error in updating the Header & Footer Data', error})
     }
   })
 

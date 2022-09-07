@@ -78,30 +78,6 @@ app.use(emailReminder7Days)
 app.use(emailReminder1Day)
 app.use(emailReminder1Hour)
 
-const faunaDB = require("faunadb");
-const faunaClient = require("./FaunaDataBase/faunaDB");
-const collections = require('./FaunaDataBase/collections');
-const schedule = require('node-schedule');
-const sendEmail3DaysAfterRegistration = require('./Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendEmailAfter3DaysRegistration')
-
-const { Map, Create, Delete, Collection, Paginate, Match, Documents, Get, Lambda, Update, Ref, Index } = faunaDB.query
-
-
-const date = dayjs().add(5, 'minute').format()
-schedule.scheduleJob(date, async () => {
-  const rawEmailTemplateData = await faunaClient.query(
-    Map(
-      Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
-      Lambda(x => Get(x))
-    )
-  )
-  const emailTemplate = rawEmailTemplateData.data[0].data 
-  sendEmail3DaysAfterRegistration('ionut.vidrighin@gmail.com', emailTemplate)
-
-  console.log('Ran at ' + dayjs().format())
-})
-
-console.log('is server running ?')
 
 const defaultResponse = require('./defaultResponse')
 

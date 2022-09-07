@@ -56,7 +56,7 @@
         </tr>
       </table>
 
-      <table class="center-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+      <table class="center-section-row1" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
         <tr>
           <td align="center" valign="top">
             <div style="display: inline-block; vertical-align: top;">
@@ -112,7 +112,7 @@
       </table>
       <br>
 
-      <table class="center-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+      <table class="center-section-row2" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
         <tr>
           <td align="center" valign="top">
             <div style="display: inline-block; vertical-align: top;">
@@ -198,7 +198,7 @@
         </tr>
       </table>
 
-      <table class="referral-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+      <table class="buttons-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
         <tr width="100%">
           <td align="center" width="100%">
             <div style="display: inline-block; vertical-align: top;">
@@ -247,7 +247,7 @@
       <br>
       <br>
 
-      <table class="referral-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+      <table class="contest-logo-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
         <tr width="100%">
           <td align="center" width="100%">
             <img src="{{ contestLogoSection }}" alt="concurs" style="width: 100%;">
@@ -257,7 +257,31 @@
       <br>
       <br>
 
-      <table class="referral-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
+      <section class="social-media-section">
+        <h3 style="text-align: center;"> {{ contactSection.title }} </h3>
+        <br>
+        <div style="margin: auto; width: fit-content; text-align: center">
+          <a href="https://www.facebook.com/paginarestartcamp" style="text-decoration: none;">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/facebook_e1qtfm.png" alt="facebook" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.instagram.com/restart_camp_romania/" style="text-decoration: none;">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/instagram_oc4fcv.png" alt="instagram" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.youtube.com/channel/UCDFWUOaKHDTjbjUOQsb2uyg" style="text-decoration: none;">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657842/restartcamp/youtube_u5heks.png" alt="youtube" style="margin: 0 .5rem; width: 20px;">
+          </a>
+    
+          <a href="https://www.linkedin.com/company/69405606/" style="text-decoration: none;">
+            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/linkedin_rxohpg.png" alt="linkedin" style="margin: 0 .5rem; width: 20px;">
+          </a>
+        </div>
+      </section>
+      <br>
+      <br>
+
+      <table class="contact-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
         <tr>
           <td align="center" valign="top">
             <div style="display: inline-block; vertical-align: top;">
@@ -311,27 +335,6 @@
         </tr>
       </table>
 
-      <section class="social-media-section">
-        <h3 style="text-align: center;"> Vino și în social media! </h3>
-        <br>
-        <div style="margin: auto; width: fit-content; text-align: center">
-          <a href="https://www.facebook.com/paginarestartcamp" style="text-decoration: none;">
-            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/facebook_e1qtfm.png" alt="facebook" style="margin: 0 .5rem; width: 20px;">
-          </a>
-    
-          <a href="https://www.instagram.com/restart_camp_romania/" style="text-decoration: none;">
-            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/instagram_oc4fcv.png" alt="instagram" style="margin: 0 .5rem; width: 20px;">
-          </a>
-    
-          <a href="https://www.youtube.com/channel/UCDFWUOaKHDTjbjUOQsb2uyg" style="text-decoration: none;">
-            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657842/restartcamp/youtube_u5heks.png" alt="youtube" style="margin: 0 .5rem; width: 20px;">
-          </a>
-    
-          <a href="https://www.linkedin.com/company/69405606/" style="text-decoration: none;">
-            <img class="social-media-icon" src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1643657841/restartcamp/linkedin_rxohpg.png" alt="linkedin" style="margin: 0 .5rem; width: 20px;">
-          </a>
-        </div>
-      </section>
       <br>
       <br>
 
@@ -344,7 +347,7 @@
       <div class="about-restart-camp" style="text-align: center;">
         <p style="margin: auto 0"> {{ contactSection.aboutRestartCamp.text }} </p>
         <a href={{ contactSection.aboutRestartCamp.link  }}>
-          <img src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1644861158/restartcamp/arrow_znfk0f.png" alt="arrow" style="margin-top: 0.3rem; margin-left: 0.5rem">
+          <img src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1661931446/restartcamp/pngwing.com_1_treoaa.png" alt="arrow" style="margin-top: 0.3rem; margin-left: 0.5rem; width: 20px;">
         </a>
       </div>
     </div>

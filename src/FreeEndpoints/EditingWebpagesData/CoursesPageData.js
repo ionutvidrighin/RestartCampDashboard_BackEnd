@@ -16,10 +16,10 @@ router.route('/courses-page-data')
         )
       )
       const coursesPageData = databaseResponse.data[0].data
-      res.status(200).json({coursesPageData})
+      res.status(200).json(coursesPageData)
     } catch(error) {
       console.log(error)
-      res.status(401).json({message: "There was an error in retrieving the Courses Page Data from database", error})
+      res.status(401).json({message: "Error in retrieving the Courses Webpage Data from database", error})
     }
   })
 
@@ -43,7 +43,7 @@ router.route('/courses-page-data')
       res.status(201).json({message: 'Courses Webpage Data has been successfully updated!', newCoursesPageData})
     } catch (error) {
       console.log(error)
-      res.status(401).json({ message: 'There was an error in updating the Courses Webpage Data', error})
+      res.status(401).json({ message: 'Error in updating the Courses Webpage Data', error})
     }
   })
 

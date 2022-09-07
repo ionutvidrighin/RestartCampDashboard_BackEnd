@@ -52,7 +52,7 @@ router.route('/email-confirmation-registration')
         const recipientEmailAddress = newEmailTemplateObject.testEmail
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
-          const sendEmail = await sendTestEmailTemplate(newEmailTemplateObject, recipientEmailAddress)
+          const sendEmail = await sendTestEmailTemplate(recipientEmailAddress, newEmailTemplateObject)
           //console.log(sendEmail)
 
           res.status(201).json({

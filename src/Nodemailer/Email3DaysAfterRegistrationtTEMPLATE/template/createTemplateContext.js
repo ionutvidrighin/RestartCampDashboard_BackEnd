@@ -26,6 +26,7 @@ function createTemplateContext(input) {
       title2: input.centerSection.title2
     },
     contactSection: {
+      title: input.contactSection.title,
       phone: input.contactSection.phone,
       email: input.contactSection.email,
       paragraph: input.contactSection.paragraph,

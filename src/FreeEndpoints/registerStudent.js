@@ -10,6 +10,7 @@ const localizedFormat = require('dayjs/plugin/localizedFormat')
 const localeRO = require('dayjs/locale/ro')
 const CreateNewStudent = require('./helperClasses').CreateNewStudent
 const sendConfirmationEmailAfterRegistration = require('../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendEmailConfirmationAfterRegistration')
+const sendScheduledEmail3DaysAfterRegistration = require('../Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendEmailAfter3DaysRegistration')
 dayjs.extend(localizedFormat)
 
 const { Match, Map, Paginate, Get, Create, Collection, Documents, Lambda, Index, Var} = faunaDB.query;
@@ -90,13 +91,16 @@ router.route('/register-student')
           })
         )
         response.status(200).json({
-          message: `Te-ai înscris cu success! rugăm să-ti verifici inbox-ul adresei ${newStudent.email}`,
+          message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${newStudent.email}`,
           warning: "success"
         })
 
-        // send confirmation e-mail to student
+        //send confirmation e-mail to student
         const sentEmailStatus = await sendConfirmationEmailAfterRegistration(studentEmailAddress, emailTemplate, courseData)
         console.log(sentEmailStatus)
+
+        const typeOfStudent = newStudent.career
+        sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, newStudent.registrationDate, typeOfStudent)
       } catch (error) {
         console.log(error)
         response.status(422).json({
@@ -177,6 +181,8 @@ router.route('/register-student')
           const sentEmailStatus = await sendConfirmationEmailAfterRegistration(studentEmailAddress, emailTemplate, courseData)
           console.log(sentEmailStatus)
 
+          const typeOfStudent = newStudent.career
+          sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, newStudent.registrationDate, typeOfStudent)
         } catch (error) {
           console.log(error)
           response.status(422).json({

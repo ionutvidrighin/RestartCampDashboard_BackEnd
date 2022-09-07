@@ -3,7 +3,7 @@ const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
 const createTemplateContext = require('./template/creatTemplateContext');
 
-const sendTest_EmailConfirmationRegistration = async (emailTemplate, recipientEmailAddress) => {
+const sendTest_EmailConfirmationRegistration = async (recipientEmail, emailTemplate) => {
   Object.assign(emailTemplate, {
     courseData: {
       name: 'Bazele HR si Testare',
@@ -38,7 +38,7 @@ const sendTest_EmailConfirmationRegistration = async (emailTemplate, recipientEm
   
   let options = {
     from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
-    to: recipientEmailAddress,
+    to: recipientEmail,
     subject: `Datele de acces - cursuri gratuite Restart Camp`,
     template: 'registrationConfirmation',
     context: createTemplateContext(emailTemplate)

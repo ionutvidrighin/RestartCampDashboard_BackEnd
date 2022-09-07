@@ -34,6 +34,15 @@ const sendTestEmail3DaysAfterRegistration = async (recipientEmail, emailTemplate
     template: 'email3DaysAfterRegistration',
     context: createTemplateContext(emailTemplate)
   }
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log("Server is ready to send test e-mail")
+      console.log('E-mail successfully sent to ' + recipientEmail + ' === ' + success)
+    }
+  })
   
   return await transporter.sendMail(options)
 }

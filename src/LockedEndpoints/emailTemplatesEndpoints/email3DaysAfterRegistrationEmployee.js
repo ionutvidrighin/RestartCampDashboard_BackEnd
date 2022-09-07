@@ -52,13 +52,10 @@ router.route('/email-3days-after-registration-employee')
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
           const sendEmail = await sendTestEmailTemplate(recipientEmailAddress, newEmailTemplateObject)
-          console.log(sendEmail)
-
           res.status(201).json({
             message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
             emailResponse: sendEmail
           })
-
         } catch (error) {
           console.log(error)
           res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})

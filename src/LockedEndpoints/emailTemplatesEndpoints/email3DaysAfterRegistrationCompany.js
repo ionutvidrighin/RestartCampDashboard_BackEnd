@@ -53,8 +53,6 @@ router.route('/email-3days-after-registration-company')
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
           const sendEmail = await sendTestEmailTemplate(recipientEmailAddress, newEmailTemplateObject)
-          console.log(sendEmail)
-
           res.status(201).json({
             message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
             emailResponse: sendEmail

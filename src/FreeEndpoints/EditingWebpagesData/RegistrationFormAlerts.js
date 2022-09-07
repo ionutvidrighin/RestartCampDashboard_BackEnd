@@ -16,10 +16,10 @@ router.route('/registration-form-alerts')
         )
       )
       const registrationFormAlerts = databaseResponse.data[0].data
-      res.status(200).json({registrationFormAlerts})
+      res.status(200).json(registrationFormAlerts)
     } catch(error) {
       console.log(error)
-      res.status(401).json({message: "There was an error in retrieving the Registration Form Alerts from database", error})
+      res.status(401).json({message: "Error in retrieving the Registration Form Alerts from database", error})
     }
 
   })

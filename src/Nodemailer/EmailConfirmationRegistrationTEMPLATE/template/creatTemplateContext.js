@@ -57,8 +57,9 @@ function createTemplateContext(input) {
         link: input.buttonsSection.button2.link
       }
     },
-    contestLogoSection: input?.contestLogoSection,
+    contestLogoSection: input.contestLogoSection,
     contactSection: {
+      title: input.contactSection.title,
       phone: input.contactSection.phone,
       email: input.contactSection.email,
       paragraph: input.contactSection.paragraph,
