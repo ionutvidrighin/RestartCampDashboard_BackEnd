@@ -1,4 +1,6 @@
-module.exports = {
+const studentType = {
   employee: 'angajat',
-  company: 'antreprenor'
+  business: 'antreprenor'
 }
+
+module.exports = studentType

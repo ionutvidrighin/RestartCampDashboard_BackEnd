@@ -1,86 +1,66 @@
 // initializing Express Server
-const express = require('express')
-const cors = require('cors')
-const helmet = require('helmet')
-const app = express()
-const dayjs = require('dayjs')
+const express = require('express');
+const cors = require('cors');
+const corsOptions = require('./config/corsConfig');
+const helmet = require('helmet');
+const app = express();
 
-// importing all routes
+app.set('trust proxy', 1);
+
+app.use(cors(corsOptions));
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 
 // unlocked (without token) endpoints:
-const registerStudent = require('./FreeEndpoints/registerStudent');
-const registerStudentPresence = require('./FreeEndpoints/registerStudentPresence');
-const getCoursesForWebPage = require('./FreeEndpoints/getCoursesForWebPage');
 const dashboardLogin = require('./Authentication/login');
-const coursesWebPageData = require('./FreeEndpoints/EditingWebpagesData/CoursesPageData');
-const coursePresencePageData = require('./FreeEndpoints/EditingWebpagesData/CoursePresencePageData');
-const headerFooterWebPageData = require('./FreeEndpoints/EditingWebpagesData/HeaderFooterData');
-const registrationFormAlerts = require('./FreeEndpoints/EditingWebpagesData/RegistrationFormAlerts');
+app.use(dashboardLogin);
+
+// ____________________PUBLIC_ENDPOINTS______________________ //
+const registerStudent = require('./routes/publicRoutes/registerStudent');
+app.use(registerStudent);
+const getAllCourses = require('./routes/publicRoutes/coursesBothModules');
+app.use(getAllCourses);
+const getPublicWebpagesData = require('./routes/publicRoutes/publicWebpagesData');
+app.use(getPublicWebpagesData);
+const updateWebpagesData = require('./routes/updateWebpagesData/updateWebPagesData');
+app.use(updateWebpagesData);
 
 // locked (with token) enpoints:
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
-const getAppAccessKey = require('./LockedEndpoints/adminSection/appAccessKey');
-const dashboardUsers = require('./LockedEndpoints/adminSection/dashboardUsersAccounts');
-const getRegisteredStudentsModule1 = require('./LockedEndpoints/coursesEndpoints/getRegisteredStudentsModule1');
-const getStudentsCoursePresenceModule1 = require('./LockedEndpoints/coursesEndpoints/getStudentsCoursePresenceModule1');
-const coursesModule1 = require('./LockedEndpoints/coursesEndpoints/coursesModule1');
-const coursesModule2 = require('./LockedEndpoints/coursesEndpoints/coursesModule2');
-const emailConfirmationAfterRegistration = require('./LockedEndpoints/emailTemplatesEndpoints/emailConfirmationRegistrationModule1');
-const email3DaysAfterRegistrationEmployee = require('./LockedEndpoints/emailTemplatesEndpoints/email3DaysAfterRegistrationEmployee');
-const email3DaysAfterRegistrationCompany = require('./LockedEndpoints/emailTemplatesEndpoints/email3DaysAfterRegistrationCompany');
-const emailReminder7Days = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder7Days');
-const emailReminder1Day = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder1Day');
-const emailReminder1Hour = require('./LockedEndpoints/emailTemplatesEndpoints/emailReminder1Hour');
 
-// Unsubscribe or Remove a Student - endpoints
-const studentDataForUnsubscribeOrRemove = require('./LockedEndpoints/unsubscribeOrRemoveStudent/studentDataForUnsubscribeOrRemove');
+// ______________________ADMIN_ENDPOINTS__________________________ //
+const dashboardAccessKey = require('./routes/adminRoutes/appAccessKey');
+app.use(dashboardAccessKey);
+const dashboardUsers = require('./routes/adminRoutes/dashboardUsers');
+app.use(dashboardUsers);
 
-app.set('trust proxy', 1)
+// ____________________COURSES_DATA_ENDPOINTS_______________________ //
+const coursesModule1 = require('./routes/coursesRoutes/coursesModule1');
+app.use(coursesModule1);
+const coursesModule2 = require('./routes/coursesRoutes/coursesModule2');
+app.use(coursesModule2);
 
-app.use(helmet())
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(cors())
+// ____________________STUDENTS_DATA_ENDPOINTS______________________ //
+const studentsInCoursesModule1 = require('./routes/registeredStudentsRoutes/studentsCourseModule1');
+app.use(studentsInCoursesModule1);
+const studentsInCoursesPresenceModule1 = require('./routes/registeredStudentsRoutes/studentsPresenceAtCourseModule1');
+app.use(studentsInCoursesPresenceModule1);
+const unsubscribeOrRemoveStudent = require('./routes/registeredStudentsRoutes/unsubscribeOrRemoveStudent');
+app.use(unsubscribeOrRemoveStudent);
 
-// Unlocked endpoints
-app.use(registerStudent)
-app.use(registerStudentPresence)
-app.use(getCoursesForWebPage)
-app.use(coursesWebPageData)
-app.use(coursePresencePageData)
-app.use(headerFooterWebPageData)
-app.use(registrationFormAlerts)
-
-// Dashboard Users
-app.use(dashboardLogin)
-app.use(dashboardUsers)
-app.use(getAppAccessKey)
-app.use(changeUserAccountEmail)
-app.use(changeUserAccountPassword)
-
-// Get-Post courses data
-app.use(coursesModule1)
-app.use(coursesModule2)
-
-// Get-Post Students data for Tables / Charts
-app.use(getRegisteredStudentsModule1)
-app.use(getStudentsCoursePresenceModule1)
-
-// Get-Post Unsubscribe/Delete Student data
-app.use(studentDataForUnsubscribeOrRemove)
-
-// Get-Post E-mail templates
-app.use(emailConfirmationAfterRegistration)
-app.use(email3DaysAfterRegistrationEmployee)
-app.use(email3DaysAfterRegistrationCompany)
-app.use(emailReminder7Days)
-app.use(emailReminder1Day)
-app.use(emailReminder1Hour)
+// ____________________EMAIL_TEMPLATES_ENDPOINTS_____________________ //
+const emailConfirmationAfterRegistration = require('./routes/emailTemplatesRoutes/emailConfirmationRegistration');
+app.use(emailConfirmationAfterRegistration);
+const email3DaysAfterRegistrationEmployee = require('./routes/emailTemplatesRoutes/email3DaysAfterRegistrationEmployee');
+app.use(email3DaysAfterRegistrationEmployee);
+const email3DaysAfterRegistrationCompany = require('./routes/emailTemplatesRoutes/email3DaysAfterRegistrationBusiness');
+app.use(email3DaysAfterRegistrationCompany);
 
 
 const defaultResponse = require('./defaultResponse')
-
 app.get('/', async (req, res) => {
   res.send(defaultResponse)
 })

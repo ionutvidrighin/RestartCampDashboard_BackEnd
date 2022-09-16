@@ -25,11 +25,19 @@
 
   <script>
     
-    let myPromise = new Promise( () => {
-      return 'abc'
-    })
+    const abc = ['unscribe',
+      {registerStudentCourseModule1: [1, 2, 3, 4, 5]},
+      {registerStudentCourseModule2: [25, 89, 69]},
+      {coursesModule1Presence: [85, 9, 6, 7]}
+    ]
 
-    myPromise.then(res => console.log(res))
+    console.log(abc)
+
+    abc.forEach(el => {
+      if (el.hasOwnProperty('registerStudentCourseModule1')) {
+        console.log(el)
+      }
+    })
   
   </script>
   
