@@ -21,7 +21,7 @@ router.route('/courses-module2')
 
   .put(coursesModule2.updateCourse)
 
-  .patch(coursesModule2.updateCourseState)
+  .patch(coursesModule2.toggleCourseState)
 
   .delete(coursesModule2.deleteCourse)
 

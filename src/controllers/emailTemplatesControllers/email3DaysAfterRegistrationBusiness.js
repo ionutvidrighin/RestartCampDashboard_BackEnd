@@ -1,91 +1,100 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config({path: '../../../.env'});
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const collections = require('../../FaunaDataBase/collections');
-const getAccessKey = require("../../Authentication/getAccessKey");
 const sendTestEmail = require('../../Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendTestEmailAfter3DaysRegistration');
 
 const { Map, Collection, Paginate, Documents, Get, Lambda, Update, Ref } = faunaDB.query
 
 const getEmailTemplate = async (req, res) => {
-  const accessKey = req.headers.authorization
-  const appAccessKey = await getAccessKey(accessKey)
-
-  if (accessKey === appAccessKey) {
-    try {
-      const emailTemplateObjectFromDB = await faunaClient.query(
-        Map(
-          Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
-          Lambda(x => Get(x))
-        )
-      )
-      res.status(200).json(emailTemplateObjectFromDB.data[0].data)
-    } catch (error) {
-      console.log(error)
-      res.status(401).json({message: "There was an error in retrieving the E-mail template content from database"})
-    }
-  } else {
-    res.status(401).json({message: "Unauthorized! App access key is incorrect"})
-  }
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        try {
+          const emailTemplateObjectFromDB = await faunaClient.query(
+            Map(
+              Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
+              Lambda(x => Get(x))
+            )
+          )
+          res.status(200).json(emailTemplateObjectFromDB.data[0].data)
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({message: "There was an error in retrieving the E-mail template content from database"})
+        }
+      }
+  })
 }
 
 const updateEmailTemplate = async(req, res) => {
-  const accessKey = req.headers.authorization
-  const appAccessKey = await getAccessKey(accessKey)
-  const newEmailTemplateObject = req.body
-  
-  if (accessKey === appAccessKey) {
-    try {
-      // store the updated version of the E-mail Template to DB
-      const emailTemplateObject = await faunaClient.query(
-        Map(Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
-          Lambda(x => Get(x))
-        )
-      )
-      const docID = emailTemplateObject.data[0].ref.id
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const newEmailTemplateObject = req.body
+        try {
+          // store the updated version of the E-mail Template to DB
+          const emailTemplateObject = await faunaClient.query(
+            Map(Paginate(Documents(Collection(collections.EMAIL_3DAYS_COMPANY))),
+              Lambda(x => Get(x))
+            )
+          )
 
-      await faunaClient.query(
-        Update(
-          Ref(Collection(collections.EMAIL_3DAYS_COMPANY), docID),
-          { data: newEmailTemplateObject }
-        )
-      )
-
-      res.status(201).json({
-        success: true,
-        message: 'E-MAIL Template content successfully updated',
-        data: newEmailTemplateObject
-      })
-    } catch (error) {
-      console.log(error)
-      res.status(401).json({message: 'There was a server or database error when updating the E-mai Template content', error})
-    }
-  } else {
-    res.status(401).json({message: "Unauthorized! App access key is incorrect"})
-  }
+          const docID = emailTemplateObject.data[0].ref.id
+          await faunaClient.query(
+            Update(
+              Ref(Collection(collections.EMAIL_3DAYS_COMPANY), docID),
+              { data: newEmailTemplateObject }
+            )
+          )
+      
+          res.status(201).json({
+            success: true,
+            message: 'E-MAIL Template content successfully updated',
+            data: newEmailTemplateObject
+          })
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({message: 'There was a server or database error when updating the E-mai Template content', error})
+        }
+      }
+  })
 }
 
 const sendEmailTemplate = async(req, res) => {
-  const accessKey = req.headers.authorization
-  const appAccessKey = await getAccessKey(accessKey)
-  const newEmailTemplateObject = req.body
-  const recipientEmailAddress = newEmailTemplateObject.testEmail
-  
-  if (accessKey === appAccessKey) {
-    try {         
-      // call the function that sends the actual TEST E-MAIL TEMPLATE
-      const sendEmail = await sendTestEmail(recipientEmailAddress, newEmailTemplateObject)
-      res.status(201).json({
-        message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
-        emailResponse: sendEmail
-      })
-
-    } catch (error) {
-      console.log(error)
-      res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})
-    }
-  } else {
-    res.status(401).json({message: "Unauthorized! App access key is incorrect"})
-  }
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const newEmailTemplateObject = req.body
+        const recipientEmailAddress = newEmailTemplateObject.testEmail
+        try {         
+          // call the function that sends the actual TEST E-MAIL TEMPLATE
+          const sendEmail = await sendTestEmail(recipientEmailAddress, newEmailTemplateObject)
+          res.status(201).json({
+            message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
+            emailResponse: sendEmail
+          })
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})
+        }
+      }
+  })
 }
 
 module.exports = {

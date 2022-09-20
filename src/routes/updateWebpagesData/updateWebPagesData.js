@@ -15,4 +15,4 @@ router.route('/registration-form-alerts')
   .put(updateWebpagesData.updateRegistrationFormAlerts)
   
 
-module.exports = router;
+module.exports = router

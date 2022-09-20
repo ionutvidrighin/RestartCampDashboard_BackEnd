@@ -12,10 +12,10 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-
-// unlocked (without token) endpoints:
-const dashboardLogin = require('./Authentication/login');
-app.use(dashboardLogin);
+const defaultResponse = require('./defaultResponse')
+app.get('/', async (req, res) => {
+  res.send(defaultResponse)
+})
 
 // ____________________PUBLIC_ENDPOINTS______________________ //
 const registerStudent = require('./routes/publicRoutes/registerStudent');
@@ -24,10 +24,18 @@ const getAllCourses = require('./routes/publicRoutes/coursesBothModules');
 app.use(getAllCourses);
 const getPublicWebpagesData = require('./routes/publicRoutes/publicWebpagesData');
 app.use(getPublicWebpagesData);
-const updateWebpagesData = require('./routes/updateWebpagesData/updateWebPagesData');
-app.use(updateWebpagesData);
 
-// locked (with token) enpoints:
+// ____________________LOCKED_ENDPOINTS_(with Token)______________________ //
+const dashboardLogin = require('./Authentication/login');
+app.use(dashboardLogin);
+
+const generateDatabaseToken = require('./routes/databaseAccess');
+app.use(generateDatabaseToken)
+
+// ______________VERIFY_DATABASE_TOKEN_MIDDLEWARE_APPLIED_TO_ALL_ROUTES_BELOW_________________ //
+const verifyDatabaseAccessToken = require('./middleware/verifyDataBaseAccessToken');
+app.use(verifyDatabaseAccessToken)
+
 const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail');
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
 
@@ -36,6 +44,10 @@ const dashboardAccessKey = require('./routes/adminRoutes/appAccessKey');
 app.use(dashboardAccessKey);
 const dashboardUsers = require('./routes/adminRoutes/dashboardUsers');
 app.use(dashboardUsers);
+
+// ____________________UPDATE_WEBPAGES_DATA________________________ //
+const updateWebpagesData = require('./routes/updateWebpagesData/updateWebPagesData');
+app.use(updateWebpagesData);
 
 // ____________________COURSES_DATA_ENDPOINTS_______________________ //
 const coursesModule1 = require('./routes/coursesRoutes/coursesModule1');
@@ -59,10 +71,5 @@ app.use(email3DaysAfterRegistrationEmployee);
 const email3DaysAfterRegistrationCompany = require('./routes/emailTemplatesRoutes/email3DaysAfterRegistrationBusiness');
 app.use(email3DaysAfterRegistrationCompany);
 
-
-const defaultResponse = require('./defaultResponse')
-app.get('/', async (req, res) => {
-  res.send(defaultResponse)
-})
 
 module.exports = app;
