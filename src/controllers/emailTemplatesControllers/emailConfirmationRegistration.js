@@ -1,74 +1,84 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config({path: '../../../.env'});
-const faunaDB = require("faunadb");
-const faunaClient = require("../../FaunaDataBase/faunaDB");
-const collections = require('../../FaunaDataBase/collections');
-const sendTestEmail = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendTestEmailConfirmationRegistration');
+const path = require('path');
+const fs = require('fs');
+const sendTestEmail = require('../../Nodemailer/EmailConfirmationRegistration/sendTestEmailConfirmationRegistration');
 
-const { Map, Collection, Paginate, Documents, Get, Lambda } = faunaDB.query
 
-const getEmailTemplate = async (req, res) => {
+const uploadFile = (req, res) => {
   jwt.verify(
     req.token, 
-    process.env.FAUNA_SECRET, 
+    process.env.FAUNA_SECRET,
     async (err, data) => {
+      let sampleFile;
+      let uploadPath;
+
       if (err) {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        try {
-          const emailTemplateObjectFromDB = await faunaClient.query(
-            Map(
-              Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
-              Lambda(x => Get(x))
-            )
-          )
-          res.status(200).json(emailTemplateObjectFromDB.data[0].data)
-        } catch (error) {
-          res.status(401).json({message: "There was an error in retrieving the E-mail template content from database"})
+        if (!req.files || Object.keys(req.files).length === 0) {
+          return res.status(400).json({message: 'No file uploaded !'})
         }
+      
+        sampleFile = req.files.File;
+        uploadPath = path.join(__dirname, '../../', 'Nodemailer', 'EmailConfirmationRegistration/template', sampleFile.name)
+      
+        // Useing mv() method to place the file anywhere on the server
+        sampleFile.mv(uploadPath, function(error) {
+          if (error) {
+            console.log(error)
+            return res.status(500).json({message: error})
+          }
+      
+          res.status(200).json({message: 'File successfully uploaded !'});
+        })
       }
-  })
+    }
+  )
 }
 
-const updateEmailTemplate = async(req, res) => {
+const downloadFile = (req, res) => {
   jwt.verify(
     req.token, 
-    process.env.FAUNA_SECRET, 
+    process.env.FAUNA_SECRET,
     async (err, data) => {
       if (err) {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const newEmailTemplateObject = req.body
-        try {
-          // store the updated version of the E-mail Template to DB
-          const emailTemplateObject = await faunaClient.query(
-            Map(Paginate(Documents(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION))),
-              Lambda(x => Get(x))
-            )
-          )
-
-          const docID = emailTemplateObject.data[0].ref.id
-          await faunaClient.query(
-            Update(
-              Ref(Collection(collections.EMAIL_CONFIRMATION_REGISTRATION), docID),
-              { data: newEmailTemplateObject }
-            )
-          )
-          res.status(201).json({
-            success: true,
-            message: 'E-MAIL Template content successfully updated',
-            data: newEmailTemplateObject
-          })
-        } catch (error) {
-          res.status(401).json({message: 'There was a server or database error when updating the E-mai Template content', error})
-        }
+        const file = path.join(__dirname, '../../', 'Nodemailer/EmailConfirmationRegistration/template', 'emailRegistrationConfirmation.handlebars')
+        res.download(file)
       }
-  })
+    }
+  )
 }
 
-const sendTestEmailTemplate = async(req, res) => {
+const renderTemplate = (req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET,
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const filePath = path.join(__dirname, "../../", "Nodemailer/EmailConfirmationRegistration/template", "emailRegistrationConfirmation.handlebars")
+
+        res.setHeader('Content-Type', 'text/html');
+        
+        fs.readFile(filePath, 'utf-8', (err, template) => {
+          if (err) {
+            res.status(500).json({message: "There was an error in reading the template"})
+          }
+          res.end(template)
+        })
+      }
+    }
+  )
+}
+
+const sendTestEmailTemplate = (req, res) => {
   jwt.verify(
     req.token, 
     process.env.FAUNA_SECRET, 
@@ -77,16 +87,21 @@ const sendTestEmailTemplate = async(req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const newEmailTemplateObject = req.body
-        const recipientEmailAddress = newEmailTemplateObject.testEmail
+        const recipientEmailAddress = req.body.emailAddress
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
-          const sendEmail = await sendTestEmail(recipientEmailAddress, newEmailTemplateObject)
-      
-          res.status(201).json({ 
-            message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
-            emailResponse: sendEmail
-          })
+          const sendEmail = await sendTestEmail(recipientEmailAddress)
+
+          if (sendEmail.response.includes('250 Requested mail action okay')) {
+            res.status(201).json({ 
+              message: `Test E-mail trimis cu success la ${recipientEmailAddress}`,
+              emailResponse: sendEmail
+            })
+          } else {
+            res.status(500).json({ 
+              message: `Eroare, E-mail-ul nu s-a putut trimite la ${recipientEmailAddress}`
+            })
+          }
         } catch (error) {
           console.log(error)
           res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})
@@ -96,7 +111,8 @@ const sendTestEmailTemplate = async(req, res) => {
 }
 
 module.exports = {
-  getEmailTemplate,
-  updateEmailTemplate,
-  sendTestEmailTemplate
+  sendTestEmailTemplate,
+  uploadFile,
+  downloadFile,
+  renderTemplate
 }

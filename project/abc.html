@@ -1,45 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <title>Simple Upload Example</title>
 </head>
 <body>
+<form action="http://localhost:4545/upload" enctype="multipart/form-data" method="POST">
+    <input type="file" name="upload" multiple>
+    <input type="submit" value="Upload">
+</form>
 
-  <table class="contact-section" style="margin: 0 auto; width: 100%;" cellpadding="0" cellspacing="0" border="0" role="presentation">
-    <tr>
-      <p style="margin: 0 auto; width: fit-content; height: 50px;">
-        <span style="margin: auto 0; position: relative; top: 50%; transform: translateY(-50%);">Despre Restart Camp</span>
-        <span>
-          <a href={{ contactSection.aboutRestartCamp.link  }}>
-            <img src="https://res.cloudinary.com/drr6nvfqj/image/upload/v1644861158/restartcamp/arrow_znfk0f.png" alt="arrow" style="margin-top: 0.3rem; margin-left: 0.5rem">
-          </a>
-        </span>
-      </p>
-    </tr>
-  </table>
-
-
-
-  <script>
-    
-    const abc = ['unscribe',
-      {registerStudentCourseModule1: [1, 2, 3, 4, 5]},
-      {registerStudentCourseModule2: [25, 89, 69]},
-      {coursesModule1Presence: [85, 9, 6, 7]}
-    ]
-
-    console.log(abc)
-
-    abc.forEach(el => {
-      if (el.hasOwnProperty('registerStudentCourseModule1')) {
-        console.log(el)
-      }
-    })
-  
-  </script>
-  
+<div>
+    <button class="download">
+        download
+    </button>
+</div>
 </body>
+
+<script>
+    const btn = document.querySelector('.download')
+    btn.addEventListener('click', () => {
+        fetch('http://localhost:4545/download')
+        .then((response) => console.log(response.text()))
+        .then((data) => {
+            let blob = new Blob([data], {
+                type: 'text/html'
+            })
+            console.log(blob)
+        })
+    }) 
+</script>
 </html>

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const dashboardUsers = require('../../controllers/adminControllers/dashboardUsers');
-// const verifyToken = require('../../middleware/verifyDataBaseAccessToken');
 
 router.route('/get-dashboard-users')
   .get(dashboardUsers.getDashboardUsers)

@@ -4,18 +4,22 @@ const cors = require('cors');
 const corsOptions = require('./config/corsConfig');
 const helmet = require('helmet');
 const app = express();
+const fileUpload = require('express-fileupload');
 
 app.set('trust proxy', 1);
 
-app.use(cors(corsOptions));
-app.use(helmet());
+//app.use(cors(corsOptions));
+app.use(cors())
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(fileUpload())
 
 const defaultResponse = require('./defaultResponse')
 app.get('/', async (req, res) => {
   res.send(defaultResponse)
 })
+
 
 // ____________________PUBLIC_ENDPOINTS______________________ //
 const registerStudent = require('./routes/publicRoutes/registerStudent');
@@ -32,7 +36,7 @@ app.use(dashboardLogin);
 const generateDatabaseToken = require('./routes/databaseAccess');
 app.use(generateDatabaseToken)
 
-// ______________VERIFY_DATABASE_TOKEN_MIDDLEWARE_APPLIED_TO_ALL_ROUTES_BELOW_________________ //
+// ______________VERIFY_DATABASE_TOKEN_MIDDLEWARE_APPLIED_TO_ALL_ENDPOINTS_BELOW_________________ //
 const verifyDatabaseAccessToken = require('./middleware/verifyDataBaseAccessToken');
 app.use(verifyDatabaseAccessToken)
 
@@ -70,6 +74,15 @@ const email3DaysAfterRegistrationEmployee = require('./routes/emailTemplatesRout
 app.use(email3DaysAfterRegistrationEmployee);
 const email3DaysAfterRegistrationCompany = require('./routes/emailTemplatesRoutes/email3DaysAfterRegistrationBusiness');
 app.use(email3DaysAfterRegistrationCompany);
-
+const emailReminder1hour = require('./routes/emailTemplatesRoutes/emailReminder1hour');
+app.use(emailReminder1hour);
+const emailReminder1day = require('./routes/emailTemplatesRoutes/emailReminder1day');
+app.use(emailReminder1day);
+const emailReminder7days = require('./routes/emailTemplatesRoutes/emailReminder7days');
+app.use(emailReminder7days);
+const emailVoucher40hoursAfterCourse = require('./routes/emailTemplatesRoutes/emailVoucher40hoursAfterCourse');
+app.use(emailVoucher40hoursAfterCourse);
+const emailVoucher4hoursAfterCourse = require('./routes/emailTemplatesRoutes/emailVoucher4hoursAfterCourse');
+app.use(emailVoucher4hoursAfterCourse);
 
 module.exports = app;

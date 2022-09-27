@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const email3DaysAfterRegistrationBusiness = require('../../controllers/emailTemplatesControllers/email3DaysAfterRegistrationBusiness');
+const email3DaysAfterRegistrationCompany = require('../../controllers/emailTemplatesControllers/email3DaysAfterRegistrationEmployee');
 
-router.route('/email-3days-after-registration-company')
-  .get(email3DaysAfterRegistrationBusiness.getEmailTemplate)
 
-  .post(email3DaysAfterRegistrationBusiness.updateEmailTemplate)
+router.post('/upload-email-3days-company-template', email3DaysAfterRegistrationCompany.uploadFile)
 
-router.route('/test-email-3days-after-registration-company')
-  .post(email3DaysAfterRegistrationBusiness.sendEmailTemplate)
+router.post('/test-email-3days-company-template', email3DaysAfterRegistrationCompany.sendTestEmailTemplate)
+
+router.get('/download-email-3days-company-template', email3DaysAfterRegistrationCompany.downloadFile)
+
+router.get('/render-email-3days-company-template', email3DaysAfterRegistrationCompany.renderTemplate)
 
 
 module.exports = router;

@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({path: '../../../.env'});
 const path = require('path');
 const fs = require('fs');
-const sendTestEmail = require('../../Nodemailer/Email3DaysAfterRegistration/sendTestEmailAfter3DaysRegistration');
+const sendTestEmail = require('../../Nodemailer/EmailReminder1hour/sendTestEmailReminder1hour');
+
 
 const uploadFile = (req, res) => {
   jwt.verify(
@@ -21,7 +22,7 @@ const uploadFile = (req, res) => {
         }
       
         sampleFile = req.files.File;
-        uploadPath = path.join(__dirname, '../../', 'Nodemailer', 'Email3DaysAfterRegistration/template', sampleFile.name)
+        uploadPath = path.join(__dirname, '../../', 'Nodemailer', 'EmailReminder1hour/template', sampleFile.name)
       
         // Useing mv() method to place the file anywhere on the server
         sampleFile.mv(uploadPath, function(error) {
@@ -46,7 +47,7 @@ const downloadFile = (req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const file = path.join(__dirname, '../../', 'Nodemailer/Email3DaysAfterRegistration/template', 'email3DaysAfterRegistrationCompany.handlebars')
+        const file = path.join(__dirname, '../../', 'Nodemailer/EmailReminder1hour/template', 'emailReminder1hour.handlebars')
         res.download(file)
       }
     }
@@ -62,7 +63,7 @@ const renderTemplate = (req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const filePath = path.join(__dirname, "../../", "Nodemailer/Email3DaysAfterRegistration/template", "email3DaysAfterRegistrationCompany.handlebars")
+        const filePath = path.join(__dirname, "../../", "Nodemailer/EmailReminder1hour/template", "emailReminder1hour.handlebars")
 
         res.setHeader('Content-Type', 'text/html');
         
@@ -77,7 +78,7 @@ const renderTemplate = (req, res) => {
   )
 }
 
-const sendTestEmailTemplate = async(req, res) => {
+const sendTestEmailTemplate = (req, res) => {
   jwt.verify(
     req.token, 
     process.env.FAUNA_SECRET, 
@@ -86,15 +87,21 @@ const sendTestEmailTemplate = async(req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const recipientEmailAddress = req.body.testEmail
-        const studentType = req.body.studentType
+        const recipientEmailAddress = req.body.emailAddress
         try {         
           // call the function that sends the actual TEST E-MAIL TEMPLATE
-          const sendEmail = await sendTestEmail(recipientEmailAddress, studentType)
-          res.status(201).json({
-            message: `Test E-mail Template successfully sent to ${recipientEmailAddress}`,
-            emailResponse: sendEmail
-          })
+          const sendEmail = await sendTestEmail(recipientEmailAddress)
+
+          if (sendEmail.response.includes('250 Requested mail action okay')) {
+            res.status(201).json({ 
+              message: `Test E-mail trimis cu success la ${recipientEmailAddress}`,
+              emailResponse: sendEmail
+            })
+          } else {
+            res.status(500).json({ 
+              message: `Eroare, E-mail-ul nu s-a putut trimite la ${recipientEmailAddress}`
+            })
+          }
         } catch (error) {
           console.log(error)
           res.status(401).json({success: false, message: 'There was a server error when sending a test E-MAIL TEMPLATE', error})
@@ -104,8 +111,8 @@ const sendTestEmailTemplate = async(req, res) => {
 }
 
 module.exports = {
+  sendTestEmailTemplate,
   uploadFile,
   downloadFile,
-  renderTemplate,
-  sendTestEmailTemplate
+  renderTemplate
 }

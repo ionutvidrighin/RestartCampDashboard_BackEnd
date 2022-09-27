@@ -7,8 +7,8 @@ const dayjs = require('dayjs');
 const localeRO = require('dayjs/locale/ro');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
 const CreateNewStudent = require('./helperClass').CreateNewStudent
-const sendConfirmationEmailAfterRegistration = require('../../Nodemailer/EmailConfirmationRegistrationTEMPLATE/sendEmailConfirmationAfterRegistration');
-const sendScheduledEmail3DaysAfterRegistration = require('../../Nodemailer/Email3DaysAfterRegistrationtTEMPLATE/sendEmailAfter3DaysRegistration');
+const sendConfirmationEmailAfterRegistration = require('../../Nodemailer/EmailConfirmationRegistration/sendEmailConfirmationAfterRegistration');
+const sendScheduledEmail3DaysAfterRegistration = require('../../Nodemailer/Email3DaysAfterRegistration/sendEmailAfter3DaysRegistration');
 dayjs.extend(localizedFormat)
 
 const { Map, Create, Collection, Paginate, Match, Get, Lambda, Update, Ref, Index, Var } = faunaDB.query
