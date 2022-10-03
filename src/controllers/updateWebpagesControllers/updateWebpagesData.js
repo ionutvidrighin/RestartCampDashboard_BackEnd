@@ -16,25 +16,29 @@ const updateCoursesPageData = async (req, res) => {
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
         const newCoursesPageData = req.body
-        try {      
-          const dataBaseLocationToUpdate = await faunaClient.query(
-            Map(
-              Paginate(Documents(Collection(collections.COURSES_WEBPAGE_DATA))),
-              Lambda(data => Get(data))
+        if (Object.keys(newCoursesPageData).length !== 0) {
+          try {      
+            const dataBaseLocationToUpdate = await faunaClient.query(
+              Map(
+                Paginate(Documents(Collection(collections.COURSES_WEBPAGE_DATA))),
+                Lambda(data => Get(data))
+              )
             )
-          )
-
-          const docID = dataBaseLocationToUpdate.data[0].ref.id
-          await faunaClient.query(
-            Update(
-              Ref(Collection(collections.COURSES_WEBPAGE_DATA), docID),
-              { data: newCoursesPageData }
+  
+            const docID = dataBaseLocationToUpdate.data[0].ref.id
+            await faunaClient.query(
+              Update(
+                Ref(Collection(collections.COURSES_WEBPAGE_DATA), docID),
+                { data: newCoursesPageData }
+              )
             )
-          )
-          res.status(201).json({message: 'Courses Webpage Data has been successfully updated!', newCoursesPageData})
-        } catch (error) {
-          console.log(error)
-          res.status(401).json({ message: 'Error in updating the Courses Webpage Data', error})
+            res.status(201).json({message: 'Courses Webpage Data has been successfully updated!', newCoursesPageData})
+          } catch (error) {
+            console.log(error)
+            res.status(401).json({ message: 'Error in updating the Courses Webpage Data', error})
+          }
+        } else {
+          res.status(401).json({ message: 'Nicio modificare detectata'})
         }
       }
   })

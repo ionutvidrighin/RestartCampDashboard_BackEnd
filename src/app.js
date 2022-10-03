@@ -22,8 +22,10 @@ app.get('/', async (req, res) => {
 
 
 // ____________________PUBLIC_ENDPOINTS______________________ //
-const registerStudent = require('./routes/publicRoutes/registerStudent');
-app.use(registerStudent);
+const registerNewStudent = require('./routes/publicRoutes/registerNewStudent');
+app.use(registerNewStudent);
+const registerStudentPresence = require('./routes/publicRoutes/registerStudentPresenceAtCourse');
+app.use(registerStudentPresence);
 const getAllCourses = require('./routes/publicRoutes/coursesBothModules');
 app.use(getAllCourses);
 const getPublicWebpagesData = require('./routes/publicRoutes/publicWebpagesData');

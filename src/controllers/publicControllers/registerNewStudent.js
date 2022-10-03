@@ -24,6 +24,7 @@ const registerNewStudent = async (request, response) => {
     course: request.body.course[0]
   }
 
+  /*
   // check if any of the values in the Object coming from FrontEnd is undefined
   // if it is, throw an error as response (this is a precaution to make sure the data stored to DB has the right format)
   let undefinedValues;
@@ -37,7 +38,7 @@ const registerNewStudent = async (request, response) => {
       tip: "Payload Object must contain following data: ** id, appellation, fullName, phoneCode, phoneNo, email, address, county, job, remarks, reference, career, domain, course, registrationDate, year_month **"
     })
     return
-  }
+  }*/
 
   try {
     /* query data base to check if student is already registered
@@ -67,14 +68,14 @@ const registerNewStudent = async (request, response) => {
     if (searchStudent.data.length === 0) {
       /** scenario: student doesn't exist in data base **/
 
-      // Store newly registered student to data base
+      // Store newly registered student to DB
       await faunaClient.query(
         Create(Collection(collections.REGISTER_STUDENT_COURSE_MODULE1), {
           data: newStudent
         })
       )
 
-      // Store newly registered student to data for course presence (different collection)
+      // Store newly registered student to DB for course presence (different collection)
       await faunaClient.query(
         Create(Collection(collections.COURSES_MODULE_1_PRESENCE), {
           data: newStudentPresence
@@ -94,7 +95,7 @@ const registerNewStudent = async (request, response) => {
     } else {
       /** scenario: student exists in data base **/
       /* at this point we need to go through all his registrations
-      *  and compare the course he selected now for new registration,
+      *  and compare the course he selected now for this new registration,
       *  with each course he already registered for in the past
       */
 
@@ -166,72 +167,4 @@ const registerNewStudent = async (request, response) => {
   }
 }
 
-// function taking care of pulling Student & Course data from data base, to display it on UI 
-// to further proceed with the presence confirm at a given course
-const getCourseForPresenceConfirmByCourseId = async (request, response) => {
-  const courseIdRequest = request.body.courseId
-
-  try {
-    const searchedStudent = await faunaClient.query(
-      Map(
-        Paginate(Match(Index(indexes.GET_COURSE_FOR_PRESENCE_CONFIRM_BY_COURSE_ID), courseIdRequest)),
-        Lambda("student", Get(Var("student")))
-      )
-    )
-    const courseIdInDB = searchedStudent.data[0].data.id
-
-    if (courseIdInDB === courseIdRequest) {
-      response.status(200).json(searchedStudent.data[0].data)
-    } else {
-      response.status(401).json({
-        message: "Date invalide, te rugam sa te asiguri ca adresa de e-mail este cea folosita in momentul inregistrarii la curs," +
-                 " iar ID-ul de curs este cel primit in e-mail-ul de confirmare."
-      })
-    }
-  } catch (error) {
-    console.log(error)
-    response.status(404).json({
-      message: "Student and Course data for Presence Confirm could not be retrieved from data base",
-      error
-    })
-  }
-}
-
-// function taking care of confirming student's presence at a given course
-const confirmStudentPresenceAtCourse = async (req, res) => {
-  const courseId = req.body.courseId
-
-  try {
-    const courseData = await faunaClient.query(
-      Map(
-        Paginate(Match(Index(indexes.GET_COURSE_FOR_PRESENCE_CONFIRM_BY_COURSE_ID), courseId)),
-        Lambda('course', Get(Var('course')))
-      )
-    )
-
-    if (courseData.data.length == 0) {
-      res.status(404).json({message: `☹️ Din păcate nu găsim cursul cu ID: ${courseId}. Te rugăm să corectitudinea ID-ului.`})
-    } else {
-      const courseName = courseData.data[0].data.course.title
-  
-      const docID = courseData.data[0].ref.id
-      await faunaClient.query(
-        Update(
-          Ref(Collection(collections.COURSES_MODULE_1_PRESENCE), docID),
-          { data: { course: { present: true } } }
-        )
-      )
-      res.status(201).json({message: `Prezență confirmată la cursul ${courseName}`})
-    }
-  } catch (error) {
-    console.log(error)
-    res.status(404).json({message: "☹️ A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede.", error})
-  }
-}
-
-
-module.exports = { 
-  registerNewStudent,
-  getCourseForPresenceConfirmByCourseId,
-  confirmStudentPresenceAtCourse
-}
+module.exports = registerNewStudent
