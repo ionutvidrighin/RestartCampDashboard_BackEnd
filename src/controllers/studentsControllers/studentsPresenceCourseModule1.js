@@ -17,7 +17,12 @@ const getStudentPresenceAtCourseModule1 = async (req, res) => {
       } else {
         const courseName = req.body.courseName
         const registrationYearMonth = req.body.registrationYearMonth
+        const userTablePermissions = req.body.userTablePermissions
+
         try {
+          const restrictedColumns = []
+          userTablePermissions.forEach(column => column.selected && restrictedColumns.push(column.value))
+
           const dataFromDB = await faunaClient.query(
             Map(
               Paginate(
@@ -30,7 +35,24 @@ const getStudentPresenceAtCourseModule1 = async (req, res) => {
           )
           let returnedData = dataFromDB.data
           returnedData = returnedData.map(item => item.data)
-          res.status(200).json(returnedData)
+
+          const returnedDataAccordingToPermissions = []
+          returnedData.forEach(entry => {
+            restrictedColumns.forEach(column => {
+              if (entry.hasOwnProperty(column)) {
+                delete entry[column]
+              }
+              if (column === 'courseName') {
+                delete entry.course['title']
+              }
+              if (column === 'present') {
+                delete entry.course['present']
+              }
+            })
+            returnedDataAccordingToPermissions.push(entry)
+          })
+
+          res.status(200).json(returnedDataAccordingToPermissions)
         } catch(error) {
           console.log(error)
           res.status(401).json({message: "There was an error in retrieving the course presence data from database", error})

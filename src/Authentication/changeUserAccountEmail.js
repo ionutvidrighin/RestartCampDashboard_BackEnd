@@ -6,14 +6,12 @@ const express = require("express");
 const router = express.Router();
 const faunaDB = require("faunadb");
 const faunaClient = require("../FaunaDataBase/faunaDB");
-const getAccessKey = require("../Authentication/getAccessKey");
 
 const { Ref, Match, Map, Paginate, Get, Update, Collection, Lambda, Index, Var } = faunaDB.query
 
 router.route("/change-email")
 .put(async (req, res) => {
   const accessKey = req.headers.authorization
-  const appAccessKey = await getAccessKey(accessKey)
 
   const userAccountEmail = req.body.currentUserAccountEmail
   const newUserAccountEmail = req.body.newUserAccountEmail
@@ -30,7 +28,7 @@ router.route("/change-email")
     return
   }
 
-  if (accessKey === appAccessKey) {
+  if (accessKey) {
     try {
       const docID = checkUserInDB.data[0].ref.value.id
       await faunaClient.query(

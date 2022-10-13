@@ -16,7 +16,12 @@ const getStudentsByYearMonth = async (req, res) => {
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
         const searchingDate = req.body.date
+        const userTablePermissions = req.body.userTablePermissions
+
         try {
+          const restrictedColumns = []
+          userTablePermissions.forEach(column => column.selected && restrictedColumns.push(column.value))
+
           const DBdata = await faunaClient.query(
             Map(
               Paginate(Match(Index(indexes.GET_STUDENTS_BY_YEAR_MONTH), searchingDate)),
@@ -25,8 +30,20 @@ const getStudentsByYearMonth = async (req, res) => {
           )
           let returnedData = DBdata.data
           returnedData = returnedData.map(item => item.data)
-          res.status(200).json(returnedData)
+
+          const returnedDataAccordingToPermissions = []
+          returnedData.forEach(entry => {
+            restrictedColumns.forEach(column => {
+              if (entry.hasOwnProperty(column)) {
+                delete entry[column]
+              }
+            })
+            returnedDataAccordingToPermissions.push(entry)
+          })
+
+          res.status(200).json(returnedDataAccordingToPermissions)
         } catch (error) {
+          console.log(error)
           res.status(401).json({message: "There was an error in retrieving the registered Students Courses Module 1 from database"})
         }
       }
@@ -45,7 +62,12 @@ const getStudentsByCourseNameAndCareer = async(req, res) => {
         const courseName = req.body.courseName
         const registrationYearMonth = req.body.registrationYearMonth
         const studentCareer = req.body.career
+        const userTablePermissions = req.body.userTablePermissions
+
         try {
+          const restrictedColumns = []
+          userTablePermissions.forEach(column => column.selected && restrictedColumns.push(column.value))
+
           const dataFromDB = await faunaClient.query(
             Map(
               Paginate(
@@ -59,7 +81,21 @@ const getStudentsByCourseNameAndCareer = async(req, res) => {
           )
           let returnedData = dataFromDB.data
           returnedData = returnedData.map(item => item.data)
-          res.status(200).json(returnedData)
+          
+          const returnedDataAccordingToPermissions = []
+          returnedData.forEach(entry => {
+            restrictedColumns.forEach(column => {
+              if (entry.hasOwnProperty(column)) {
+                delete entry[column]
+              }
+              if (column === 'courseName') {
+                delete entry.course['title']
+              }
+            })
+            returnedDataAccordingToPermissions.push(entry)
+          })
+
+          res.status(200).json(returnedDataAccordingToPermissions)
         } catch (error) {
           console.log(error)
           res.status(404).json({message: "Students Data (by CourseName, Career and Date) could not be retrieved from data base.", error})
@@ -68,8 +104,37 @@ const getStudentsByCourseNameAndCareer = async(req, res) => {
   })
 }
 
+const getStudentsWithoutUnsubscribedAndDeleted = (req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const searchingDate = req.body.date
+        try {
+          const DBdata = await faunaClient.query(
+            Map(
+              Paginate(Match(Index(indexes.GET_STUDENTS_BY_YEAR_MONTH), searchingDate)),
+              Lambda("students", Get(Var("students")))
+            )
+          )
+          let returnedData = DBdata.data
+          returnedData = returnedData.map(item => item.data)
+          returnedData = returnedData.filter(student => student.subscribedToEmails && student.activeStudent)
+          res.status(200).json(returnedData)
+        } catch (error) {
+          res.status(401).json({message: "There was an error in retrieving the registered Students Courses Module 1 from database"})
+        }
+      }
+  })
+}
+
 
 module.exports = {
   getStudentsByYearMonth,
-  getStudentsByCourseNameAndCareer
+  getStudentsByCourseNameAndCareer,
+  getStudentsWithoutUnsubscribedAndDeleted
 }

@@ -30,6 +30,8 @@ const getAllCourses = require('./routes/publicRoutes/coursesBothModules');
 app.use(getAllCourses);
 const getPublicWebpagesData = require('./routes/publicRoutes/publicWebpagesData');
 app.use(getPublicWebpagesData);
+const studentEmailSubscription = require('./routes/publicRoutes/studentEmailSubscription');
+app.use(studentEmailSubscription);
 
 // ____________________LOCKED_ENDPOINTS_(with Token)______________________ //
 const dashboardLogin = require('./Authentication/login');
@@ -46,8 +48,6 @@ const changeUserAccountEmail = require('./Authentication/changeUserAccountEmail'
 const changeUserAccountPassword = require('./Authentication/changeUserAccountPassword');
 
 // ______________________ADMIN_ENDPOINTS__________________________ //
-const dashboardAccessKey = require('./routes/adminRoutes/appAccessKey');
-app.use(dashboardAccessKey);
 const dashboardUsers = require('./routes/adminRoutes/dashboardUsers');
 app.use(dashboardUsers);
 
@@ -66,8 +66,8 @@ const studentsInCoursesModule1 = require('./routes/registeredStudentsRoutes/stud
 app.use(studentsInCoursesModule1);
 const studentsInCoursesPresenceModule1 = require('./routes/registeredStudentsRoutes/studentsPresenceAtCourseModule1');
 app.use(studentsInCoursesPresenceModule1);
-const unsubscribeOrRemoveStudent = require('./routes/registeredStudentsRoutes/unsubscribeOrRemoveStudent');
-app.use(unsubscribeOrRemoveStudent);
+const getStudentData = require('./routes/registeredStudentsRoutes/getStudentData');
+app.use(getStudentData);
 
 // ____________________EMAIL_TEMPLATES_ENDPOINTS_____________________ //
 const emailConfirmationAfterRegistration = require('./routes/emailTemplatesRoutes/emailConfirmationRegistration');

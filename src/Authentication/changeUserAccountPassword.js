@@ -12,7 +12,6 @@ const { Ref, Match, Map, Paginate, Get, Update, Collection, Lambda, Index, Var }
 router.route("/change-password")
 .put( async (req, res) => {
   const accessKey = req.headers.authorization
-  const appAccessKey = await getAccessKey(accessKey)
 
   const userAccountEmail = req.body.email
   const userAccountCurrentPassword = req.body.currentPassword
@@ -30,7 +29,7 @@ router.route("/change-password")
     return
   }
 
-  if (accessKey === appAccessKey) {
+  if (accessKey) {
     const docID = checkUserInDB.data[0].ref.value.id
     const currentStoredPassword = checkUserInDB.data[0].data.password
 

@@ -76,7 +76,7 @@ const changeDashbordUserPermission = async (req, res) => {
           await faunaClient.query(
             Update(
               Ref(Collection(collections.DASHBOARD_USERS), docID),
-              { data: { access: userToModify.access, pagesPermission: userToModify.pagesPermission } }
+              { data: { role: userToModify.role, permissions: userToModify.permissions } }
             )
           )
           res.status(201).json({message: 'User permissions have been successfully updated!'})

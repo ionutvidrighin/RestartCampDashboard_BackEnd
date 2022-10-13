@@ -74,5 +74,16 @@ const addLinkToButtons = (data, course_link_page) => {
 
 }
 
-module.exports.replaceTextInString = replaceTextInString;
-module.exports.addLinkToButtons = addLinkToButtons;
+function renameKeysInObject(object, newKeys) {
+  const keyValues = Object.keys(object).map(key => {
+    const newKey = newKeys[key] || key
+    return { [newKey]: object[key] }
+  })
+  return Object.assign({}, ...keyValues)
+}
+
+module.exports = {
+  replaceTextInString,
+  addLinkToButtons,
+  renameKeysInObject
+}
