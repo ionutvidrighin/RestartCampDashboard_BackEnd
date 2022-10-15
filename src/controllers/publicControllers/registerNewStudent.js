@@ -21,7 +21,7 @@ const registerNewStudent = async (request, response) => {
     fullName: request.body.fullName,
     phone: request.body.phoneNo,
     email: request.body.email,
-    course: request.body.course[0]
+    course: request.body.courseName[0]
   }
 
   /*
@@ -58,11 +58,11 @@ const registerNewStudent = async (request, response) => {
     const studentRegistrationDate = newStudent.registrationDate
     const studentEmailAddress = newStudent.email
     const courseData = {
-      name: newStudent.course[0].title,
-      logo: newStudent.course[0].logo,
-      date: dayjs(newStudent.course[0].date).locale('ro').format('LL'),
-      hour: `${dayjs(newStudent.course[0].date).hour()}:${dayjs(newStudent.course[0].date).minute()}`,
-      link_page: newStudent.course[0].link_page,
+      name: newStudent.courseName[0].title,
+      logo: newStudent.courseName[0].logo,
+      date: dayjs(newStudent.courseName[0].date).locale('ro').format('LL'),
+      hour: `${dayjs(newStudent.courseName[0].date).hour()}:${dayjs(newStudent.courseName[0].date).minute()}`,
+      link_page: newStudent.courseName[0].link_page,
     }
 
     if (searchStudent.data.length === 0) {
@@ -103,8 +103,8 @@ const registerNewStudent = async (request, response) => {
       let coursesAreEqual = null
       let conflictingCourse = {}
       allStudentRegistrations.forEach(registration => {
-        const existingCourse = registration.course[0]
-        const newCourse = newStudent.course[0]
+        const existingCourse = registration.courseName[0]
+        const newCourse = newStudent.courseName[0]
 
         // removing the course id from both course Objects (because they are different - FrontEnd sends unique ID every time)
         delete existingCourse.id

@@ -74,7 +74,7 @@ const addLinkToButtons = (data, course_link_page) => {
 
 }
 
-function renameKeysInObject(object, newKeys) {
+const renameKeysInObject = (object, newKeys) => {
   const keyValues = Object.keys(object).map(key => {
     const newKey = newKeys[key] || key
     return { [newKey]: object[key] }
@@ -82,8 +82,24 @@ function renameKeysInObject(object, newKeys) {
   return Object.assign({}, ...keyValues)
 }
 
+const preparePhoneNumbersWhatsappFormat = (data) => {
+  const entriesList = []
+  data.forEach(entry => {
+    const formattedPhoneCode = entry.phoneCode.substring(1)
+    const formattedPhoneNo = entry.phoneNo.charAt(0) === '0' ? entry.phoneNo.substring(1) : entry.phoneNo
+
+    const phoneNo = `A,${formattedPhoneCode}${formattedPhoneNo}`
+    const courseName = entry.courseName[0].title
+    const registrationDate = entry.registrationDate
+    entriesList.push({registrationDate, phoneNo, courseName, })
+  })
+
+  return entriesList
+}
+
 module.exports = {
   replaceTextInString,
   addLinkToButtons,
-  renameKeysInObject
+  renameKeysInObject,
+  preparePhoneNumbersWhatsappFormat
 }

@@ -3,6 +3,7 @@ require('dotenv').config({path: '../../../.env'});
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const indexes = require("../../FaunaDataBase/indexes");
+const helperMethods = require('../../utils/helperMethods');
 
 const { Map, Intersection, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
 
@@ -104,6 +105,37 @@ const getStudentsByCourseNameAndCareer = async(req, res) => {
   })
 }
 
+const getStudentsWhatsappNumbers = async(req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const searchingDate = req.body.date
+
+        try {
+          const DBdata = await faunaClient.query(
+            Map(
+              Paginate(Match(Index(indexes.GET_STUDENTS_BY_YEAR_MONTH), searchingDate)),
+              Lambda("students", Get(Var("students")))
+            )
+          )
+          let returnedData = DBdata.data
+          returnedData = returnedData.map(item => item.data)
+          returnedData = helperMethods.preparePhoneNumbersWhatsappFormat(returnedData)
+
+          res.status(200).json(returnedData)
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({message: "There was an error in retrieving the registered Students Courses Module 1 from database"})
+        }
+      }
+  })
+}
+
 const getStudentsWithoutUnsubscribedAndDeleted = (req, res) => {
   jwt.verify(
     req.token, 
@@ -136,5 +168,6 @@ const getStudentsWithoutUnsubscribedAndDeleted = (req, res) => {
 module.exports = {
   getStudentsByYearMonth,
   getStudentsByCourseNameAndCareer,
+  getStudentsWhatsappNumbers,
   getStudentsWithoutUnsubscribedAndDeleted
 }
