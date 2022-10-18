@@ -15,7 +15,7 @@ class CreateNewStudent {
     this.domain = input.domain
     this.subscribedToEmails = true,
     this.activeStudent = true,
-    this.course = input.course
+    this.courseName = input.courseName
     this.registrationDate = input.registrationDate,
     this.year_month = input.year_month
   }

@@ -21,24 +21,8 @@ const registerNewStudent = async (request, response) => {
     fullName: request.body.fullName,
     phone: request.body.phoneNo,
     email: request.body.email,
-    course: request.body.courseName[0]
+    courseName: request.body.courseName[0]
   }
-
-  /*
-  // check if any of the values in the Object coming from FrontEnd is undefined
-  // if it is, throw an error as response (this is a precaution to make sure the data stored to DB has the right format)
-  let undefinedValues;
-  Object.values(newStudent).forEach(value => {
-    if (value === undefined) undefinedValues = true
-  })
-
-  if (undefinedValues) {
-    response.status(422).json({
-      error: "Passed data can't be undefined. Please check all key/values in your payload Object",
-      tip: "Payload Object must contain following data: ** id, appellation, fullName, phoneCode, phoneNo, email, address, county, job, remarks, reference, career, domain, course, registrationDate, year_month **"
-    })
-    return
-  }*/
 
   try {
     /* query data base to check if student is already registered
