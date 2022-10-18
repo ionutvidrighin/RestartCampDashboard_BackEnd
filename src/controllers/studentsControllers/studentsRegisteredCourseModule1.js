@@ -3,9 +3,43 @@ require('dotenv').config({path: '../../../.env'});
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const indexes = require("../../FaunaDataBase/indexes");
+const collections = require("../../FaunaDataBase/collections");
 const helperMethods = require('../../utils/helperMethods');
 
-const { Map, Intersection, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
+const { Documents, Collection, Map, Intersection, Paginate, Match, Get, Lambda, Index, Var } = faunaDB.query
+
+const getAllStudentsData = async (req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        try {
+          const DBdata = await faunaClient.query(
+            Map(
+              Paginate(Documents(Collection(collections.REGISTER_STUDENT_COURSE_MODULE1))),
+              Lambda(x => Get(x))
+            )
+          )
+
+          let allStudentsData = DBdata.data
+          allStudentsData = allStudentsData.map(item => {
+            const student = item.data
+            const courseName = item.data.courseName[0].title
+            student.courseName = courseName
+            return student
+          })
+          res.status(200).json(allStudentsData)
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({message: "There was an error in retrieving the Free Courses from database"})
+        }
+      }
+  })
+}
 
 const getStudentsByYearMonth = async (req, res) => {
   jwt.verify(
@@ -80,6 +114,7 @@ const getStudentsByCourseNameAndCareer = async(req, res) => {
               ), Lambda("student", Get(Var("student")))
             )
           )
+
           let returnedData = dataFromDB.data
           returnedData = returnedData.map(item => item.data)
           
@@ -166,6 +201,7 @@ const getStudentsWithoutUnsubscribedAndDeleted = (req, res) => {
 
 
 module.exports = {
+  getAllStudentsData,
   getStudentsByYearMonth,
   getStudentsByCourseNameAndCareer,
   getStudentsWhatsappNumbers,

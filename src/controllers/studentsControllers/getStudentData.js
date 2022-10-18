@@ -51,7 +51,7 @@ const getStudentDataByStudentName = async (req, res) => {
           // if all promises returned empty data: [], send error to FrontEnd
           if (noResultsInDB[0] === 0 && noResultsInDB[1] === 0 && noResultsInDB[2] === 0) {
             res.status(404).json({ 
-              error: `Cursantul cu numele: ${studentName}, nu exista in baza de date.`,
+              message: `Cursantul cu numele: ${studentName}, nu exista in baza de date.`,
               studentInCoursesModule1: [],
               studentInCoursesModule2: [],
               studentPresenceInCoursesModule1: []
