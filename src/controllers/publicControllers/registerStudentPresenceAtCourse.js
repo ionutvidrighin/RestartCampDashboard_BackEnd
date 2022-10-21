@@ -54,7 +54,7 @@ const confirmStudentPresenceAtCourse = async (req, res) => {
     if (courseData.data.length == 0) {
       res.status(404).json({message: `☹️ Din păcate nu găsim cursul cu ID: ${courseId}. Te rugăm să verifici corectitudinea ID-ului.`})
     } else {
-      const courseName = courseData.data[0].data.course.title
+      const courseName = courseData.data[0].data.courseName.title
   
       const docID = courseData.data[0].ref.id
       await faunaClient.query(
