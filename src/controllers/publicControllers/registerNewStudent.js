@@ -46,7 +46,7 @@ const registerNewStudent = async (request, response) => {
       logo: newStudent.courseName[0].logo,
       date: dayjs(newStudent.courseName[0].date).locale('ro').format('LL'),
       hour: `${dayjs(newStudent.courseName[0].date).hour()}:${dayjs(newStudent.courseName[0].date).minute()}`,
-      link_page: newStudent.courseName[0].link_page,
+      course_page: newStudent.courseName[0].link_page,
     }
 
     if (searchStudent.data.length === 0) {
@@ -67,7 +67,8 @@ const registerNewStudent = async (request, response) => {
       )
 
       //send registration confirmation e-mail to student
-      await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+      const confirmationRegistrationEmail = await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+      console.log('confirmationRegistrationEmail => ', confirmationRegistrationEmail)
       // send scheduled email - 3 days after registration
       sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
 
@@ -132,9 +133,10 @@ const registerNewStudent = async (request, response) => {
         )
 
         //send registration confirmation e-mail to student
-        await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+        const confirmationRegistrationEmail = await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+        console.log('confirmationRegistrationEmail => ', confirmationRegistrationEmail)
         // send scheduled email - 3 days after registration
-        //await sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
+        sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
 
         response.status(200).json({
           message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,

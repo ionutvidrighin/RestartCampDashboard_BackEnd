@@ -11,9 +11,6 @@ router.route('/get-students-by-year-month')
 router.route('/get-students-by-course-name-and-career')
   .post(studentsRegisteredCourseModule1.getStudentsByCourseNameAndCareer)
 
-router.route('/get-students-whatsapp-numbers')
-  .post(studentsRegisteredCourseModule1.getStudentsWhatsappNumbers)
-
 router.route('/get-students-without-unsubscribed-and-deleted')
   .post(studentsRegisteredCourseModule1.getStudentsWithoutUnsubscribedAndDeleted)
 

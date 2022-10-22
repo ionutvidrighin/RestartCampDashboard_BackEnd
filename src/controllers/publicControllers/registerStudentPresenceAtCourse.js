@@ -26,14 +26,14 @@ const getCourseForPresenceConfirmByCourseId = async (request, response) => {
       response.status(200).json(searchedStudent.data[0].data)
     } else {
       response.status(401).json({
-        message: "Date invalide, te rugam sa te asiguri ca adresa de e-mail este cea folosita in momentul inregistrarii la curs," +
-                 " iar ID-ul de curs este cel primit in e-mail-ul de confirmare."
+        message: "Date invalide! Te rugam sa te asiguri ca adresa de e-mail este cea folosita in momentul inregistrarii la aceasta sesiune," +
+                 " iar codul de confirmare primit pe e-mail este cel corect!"
       })
     }
   } catch (error) {
     console.log(error)
     response.status(404).json({
-      message: "Student and Course data for Presence Confirm could not be retrieved from data base",
+      message: "Eroare! Link invalid. Te rugam sa te intorci la e-mailul primit de la noi si sa dai click direct linkul de acces la aceasta sesiune!",
       error
     })
   }
@@ -52,7 +52,7 @@ const confirmStudentPresenceAtCourse = async (req, res) => {
     )
 
     if (courseData.data.length == 0) {
-      res.status(404).json({message: `☹️ Din păcate nu găsim cursul cu ID: ${courseId}. Te rugăm să verifici corectitudinea ID-ului.`})
+      res.status(404).json({message: `☹️ Din păcate nu găsim sesiunea cu codul de confirmare: ${courseId}. Te rugăm să verifici corectitudinea codului primit pe e-mail.`})
     } else {
       const courseName = courseData.data[0].data.courseName.title
   
@@ -60,14 +60,14 @@ const confirmStudentPresenceAtCourse = async (req, res) => {
       await faunaClient.query(
         Update(
           Ref(Collection(collections.COURSES_MODULE_1_PRESENCE), docID),
-          { data: { course: { present: true } } }
+          { data: { courseName: { present: true } } }
         )
       )
-      res.status(201).json({message: `Prezență confirmată la cursul ${courseName}`})
+      res.status(201).json({message: `Felicitări! Accesul tău este confirmat la sesiunea - ${courseName}`})
     }
   } catch (error) {
     console.log(error)
-    res.status(404).json({message: "☹️ A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede.", error})
+    res.status(404).json({message: "☹️ A apărut o eroare. Te rugăm să iei legătura cu noi cât mai repede pentru a ne ajuta să o rezolvăm.", error})
   }
 }
 

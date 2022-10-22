@@ -3,9 +3,10 @@ require('dotenv').config({path: '../../../.env'});
 const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const indexes = require("../../FaunaDataBase/indexes");
+const helperMethods = require('../../utils/helperMethods');
 
 const { Match, Intersection, Map, Paginate, Get, Lambda, Index, Var } = faunaDB.query;
-
+ 
 const getStudentPresenceAtCourseModule1 = async (req, res) => {
   jwt.verify(
     req.token, 
@@ -16,7 +17,7 @@ const getStudentPresenceAtCourseModule1 = async (req, res) => {
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
         const courseName = req.body.courseName
-        const registrationYearMonth = req.body.registrationYearMonth
+        const searchingDate = req.body.registrationYearMonth
         const userTablePermissions = req.body.userTablePermissions
 
         try {
@@ -28,7 +29,7 @@ const getStudentPresenceAtCourseModule1 = async (req, res) => {
               Paginate(
                 Intersection(
                   Match(Index(indexes.GET_COURSE_PRESENCE_BY_NAME), courseName),
-                  Match(Index(indexes.GET_COURSE_PRESENCE_BY_YEAR_MONTH), registrationYearMonth)
+                  Match(Index(indexes.GET_COURSE_PRESENCE_BY_YEAR_MONTH), searchingDate)
                 )
               ), Lambda("student", Get(Var("student")))
             )
@@ -61,5 +62,42 @@ const getStudentPresenceAtCourseModule1 = async (req, res) => {
   })
 }
 
+const getStudentsWhatsappNumbers = async(req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET, 
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const courseName = req.body.courseName
+        const searchingDate = req.body.registrationYearMonth
 
-module.exports = getStudentPresenceAtCourseModule1
+        try {
+          const DBdata = await faunaClient.query(
+            Map(
+              Paginate(
+                Intersection(
+                  Match(Index(indexes.GET_COURSE_PRESENCE_BY_NAME), courseName),
+                  Match(Index(indexes.GET_COURSE_PRESENCE_BY_YEAR_MONTH), searchingDate)
+                )
+              ), Lambda("students", Get(Var("students")))
+            )
+          )
+
+          let returnedData = DBdata.data
+          returnedData = returnedData.map(item => item.data)
+          returnedData = helperMethods.preparePhoneNumbersWhatsappFormat(returnedData)
+
+          res.status(200).json(returnedData)
+        } catch (error) {
+          console.log(error)
+          res.status(401).json({message: "There was an error in retrieving the registered Students Courses Module 1 from database"})
+        }
+      }
+  })
+}
+
+
+module.exports = { getStudentPresenceAtCourseModule1, getStudentsWhatsappNumbers }

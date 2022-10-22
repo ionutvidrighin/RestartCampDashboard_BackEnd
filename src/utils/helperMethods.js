@@ -83,18 +83,30 @@ const renameKeysInObject = (object, newKeys) => {
 }
 
 const preparePhoneNumbersWhatsappFormat = (data) => {
-  const entriesList = []
+  const list = {
+    present: [],
+    absent: []
+  }
+
   data.forEach(entry => {
+    const id = entry.id
     const formattedPhoneCode = entry.phoneCode.substring(1)
-    const formattedPhoneNo = entry.phoneNo.charAt(0) === '0' ? entry.phoneNo.substring(1) : entry.phoneNo
+    const formattedPhoneNo = entry.phone.charAt(0) === '0' ? entry.phone.substring(1) : entry.phone
 
     const phoneNo = `A,${formattedPhoneCode}${formattedPhoneNo}`
-    const courseName = entry.courseName[0].title
-    const registrationDate = entry.registrationDate
-    entriesList.push({registrationDate, phoneNo, courseName, })
+    const courseName = entry.courseName.title
+    const courseDate = entry.courseName.date
+    const wasStudentPresent = entry.courseName.present
+    const studentPresence = entry.courseName.present ? 'DA':'NU'
+
+    if (wasStudentPresent) {
+      list.present.push({id, courseDate, phoneNo, courseName, studentPresence})
+    } else {
+      list.absent.push({id, courseDate, phoneNo, courseName, studentPresence})
+    }
   })
 
-  return entriesList
+  return list
 }
 
 module.exports = {

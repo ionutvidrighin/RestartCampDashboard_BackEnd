@@ -10,7 +10,7 @@ module.exports = function sendScheduledEmail3DaysAfterRegistration(recipientEmai
   schedule.scheduleJob(threeDaysFromRegistrationDate, async () => {
     sendEmail3DaysAfterRegistration(recipientEmail, studentType)
   
-    console.log('==========E-MAIL SENDING==========')
+    console.log('==========THREE DAYS E-MAIL SENDING==========')
     console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
   })
 }

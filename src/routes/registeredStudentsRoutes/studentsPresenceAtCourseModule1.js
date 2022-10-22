@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const getStudentPresenceAtCourseModule1 = require('../../controllers/studentsControllers/studentsPresenceCourseModule1');
+const studentsPresence = require('../../controllers/studentsControllers/studentsPresenceCourseModule1');
 
 
 router.route('/get-course-presence')
-  .post(getStudentPresenceAtCourseModule1)
+  .post(studentsPresence.getStudentPresenceAtCourseModule1)
+
+router.route('/get-students-whatsapp-numbers')
+  .post(studentsPresence.getStudentsWhatsappNumbers)
 
 module.exports = router

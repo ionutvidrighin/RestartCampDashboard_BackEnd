@@ -1,10 +1,12 @@
 // initializing Express Server
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const corsOptions = require('./config/corsConfig');
 const helmet = require('helmet');
-const app = express();
 const fileUpload = require('express-fileupload');
+const path = require('path');
+const fs = require('fs');
 
 app.set('trust proxy', 1);
 
@@ -18,6 +20,18 @@ app.use(fileUpload())
 const defaultResponse = require('./defaultResponse')
 app.get('/', async (req, res) => {
   res.send(defaultResponse)
+})
+
+app.get('/application-flow', (req, res) => {
+  const applicationFlowDiagram = path.join(__dirname, 'application-flow.html')
+  res.setHeader('Content-Type', 'text/html');
+        
+  fs.readFile(applicationFlowDiagram, 'utf-8', (err, template) => {
+    if (err) {
+      res.status(500).json({message: "There was an error in reading the template"})
+    }
+    res.end(template)
+  })
 })
 
 

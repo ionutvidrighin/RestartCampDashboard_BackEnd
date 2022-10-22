@@ -3,7 +3,6 @@ const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
 const createTemplateContext = require('./template/createTemplateContext')
 
-
 const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData) => {
   try {     
     let transporter = nodemailer.createTransport({
@@ -19,7 +18,7 @@ const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData
     const handlebarOptions = {
       viewEngine: {
         extName: ".handlebars",
-        partialsDir: path.resolve(__dirname, "template"),
+        partialsDir: path.resolve(__dirname, "template"), 
         defaultLayout: false
       },
       viewPath: path.resolve(__dirname, "template"),
