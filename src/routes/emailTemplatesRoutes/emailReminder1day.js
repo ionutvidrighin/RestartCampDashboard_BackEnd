@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const emailReminder1Day = require('../../controllers/emailTemplatesControllers/emailReminder1day');
 
+router.get('/get-email-reminder-1day-subject-template', emailReminder1Day.getCurrentEmailTemplateSubject)
+
+router.post('/upload-email-reminder-1day-subject-template', emailReminder1Day.updateEmailSubject)
 
 router.post('/upload-email-reminder-1day-template', emailReminder1Day.uploadFile)
 

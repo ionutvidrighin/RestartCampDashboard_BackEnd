@@ -2,8 +2,57 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({path: '../../../.env'});
 const path = require('path');
 const fs = require('fs');
-const sendTestEmail = require('../../Nodemailer/EmailVoucher40hoursAfterCourse/sendTestEmailVoucher40hours');
+const emailSubjectJSON = require('../../Nodemailer/EmailVoucher18hoursAfterCourse/emailSubject.json');
+const sendTestEmail = require('../../Nodemailer/EmailVoucher18hoursAfterCourse/sendTestEmailVoucher18hours');
 
+const getCurrentEmailTemplateSubject = (req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET,
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        try {
+          const emailSubject = emailSubjectJSON.emailSubject
+          res.status(200).json({ value: emailSubject })
+        } catch(err) {
+          res.status(500).json({message: err})
+        }
+      }
+    }
+  )
+}
+
+const updateEmailSubject = (req, res) => {
+  jwt.verify(
+    req.token, 
+    process.env.FAUNA_SECRET,
+    async (err, data) => {
+      if (err) {
+        console.log(err)
+        res.status(403).json({message: "Unauthorized! No Access Token provided."})
+      } else {
+        const newEmailSubject = req.body.emailSubject
+
+        try {
+          const localJSONpath = path.join(__dirname, '../../Nodemailer/EmailVoucher18hoursAfterCourse/emailSubject.json')
+          
+          Object.assign(emailSubjectJSON, {
+            emailSubject: newEmailSubject
+          })
+  
+          fs.writeFileSync(localJSONpath, JSON.stringify(emailSubjectJSON))
+          
+          res.status(200).json({value: emailSubjectJSON.emailSubject, message: 'Subiect E-mail actualizat cu success!'})
+        } catch(err) {
+          res.status(500).json({message: err})
+        }
+      }
+    }
+  )
+}
 
 const uploadFile = (req, res) => {
   jwt.verify(
@@ -22,7 +71,7 @@ const uploadFile = (req, res) => {
         }
       
         sampleFile = req.files.File;
-        uploadPath = path.join(__dirname, '../../', 'Nodemailer', 'EmailVoucher40hoursAfterCourse/template', sampleFile.name)
+        uploadPath = path.join(__dirname, '../../', 'Nodemailer', 'EmailVoucher18hoursAfterCourse/template', sampleFile.name)
       
         // Useing mv() method to place the file anywhere on the server
         sampleFile.mv(uploadPath, function(error) {
@@ -47,7 +96,7 @@ const downloadFile = (req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const file = path.join(__dirname, '../../', 'Nodemailer/EmailVoucher40hoursAfterCourse/template', 'emailVoucher40hours.handlebars')
+        const file = path.join(__dirname, '../../', 'Nodemailer/EmailVoucher18hoursAfterCourse/template', 'emailVoucher18hours.handlebars')
         res.download(file)
       }
     }
@@ -63,7 +112,7 @@ const renderTemplate = (req, res) => {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const filePath = path.join(__dirname, "../../", "Nodemailer/EmailVoucher40hoursAfterCourse/template", "emailVoucher40hours.handlebars")
+        const filePath = path.join(__dirname, "../../", "Nodemailer/EmailVoucher18hoursAfterCourse/template", "emailVoucher18hours.handlebars")
 
         res.setHeader('Content-Type', 'text/html');
         
@@ -111,8 +160,10 @@ const sendTestEmailTemplate = (req, res) => {
 }
 
 module.exports = {
+  getCurrentEmailTemplateSubject,
   sendTestEmailTemplate,
   uploadFile,
   downloadFile,
-  renderTemplate
+  renderTemplate,
+  updateEmailSubject
 }

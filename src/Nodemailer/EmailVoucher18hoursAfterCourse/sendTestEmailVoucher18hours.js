@@ -1,9 +1,10 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
-const createTemplateContext = require('./template/createTemplateContext')
+const createTemplateContext = require('./createTemplateContext')
+const { emailSubject } = require('./emailSubject.json')
 
-const sendTestEmailVoucher40hours = async (recipientEmail) => {
+const sendTestEmailVoucher18hours = async (recipientEmail) => {
   const dummyCourseData = {
     name: 'Bazele HR si Testare',
     course_page: 'https://www.restart-camp.com/cursuri/social-media'
@@ -34,12 +35,12 @@ const sendTestEmailVoucher40hours = async (recipientEmail) => {
   let options = {
     from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
     to: recipientEmail,
-    subject: `Datele de acces - cursuri gratuite Restart Camp`,
-    template: 'emailVoucher40hours',
+    subject: emailSubject,
+    template: 'emailVoucher18hours',
     context: createTemplateContext(dummyCourseData)
   }
   
   return await transporter.sendMail(options)
 }
 
-module.exports = sendTestEmailVoucher40hours
+module.exports = sendTestEmailVoucher18hours

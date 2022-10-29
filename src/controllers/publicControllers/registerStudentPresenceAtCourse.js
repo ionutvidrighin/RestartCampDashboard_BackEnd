@@ -33,7 +33,7 @@ const getCourseForPresenceConfirmByCourseId = async (request, response) => {
   } catch (error) {
     console.log(error)
     response.status(404).json({
-      message: "Eroare! Link invalid. Te rugam sa te intorci la e-mailul primit de la noi si sa dai click direct linkul de acces la aceasta sesiune!",
+      message: "Eroare! Link invalid. Te rugam sa te intorci la e-mailul primit de la noi si sa dai click direct pe linkul de acces la aceasta sesiune!",
       error
     })
   }

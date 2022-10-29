@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const email3DaysAfterRegistrationCompany = require('../../controllers/emailTemplatesControllers/email3DaysAfterRegistrationEmployee');
+const email3DaysAfterRegistrationCompany = require('../../controllers/emailTemplatesControllers/email3DaysAfterRegistrationBusiness');
 
+router.get('/get-email-3days-company-subject-template', email3DaysAfterRegistrationCompany.getCurrentEmailTemplateSubject)
+
+router.post('/update-email-3days-company-subject-template', email3DaysAfterRegistrationCompany.updateEmailSubject)
 
 router.post('/upload-email-3days-company-template', email3DaysAfterRegistrationCompany.uploadFile)
 

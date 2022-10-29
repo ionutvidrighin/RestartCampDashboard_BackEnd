@@ -4,7 +4,7 @@ const hbs = require('nodemailer-express-handlebars')
 const createTemplateContext = require('./createTemplateContext')
 const { emailSubject } = require('./emailSubject.json')
 
-const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData) => {
+const sendEmailVoucher18hours = async (recipientEmail, courseData) => {
   try {     
     let transporter = nodemailer.createTransport({
       host: "smtp.ionos.co.uk",
@@ -32,7 +32,7 @@ const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData
       from: '"RestartCamp" <echipa@restart-camp.org>', // sender e-mail address
       to: recipientEmail, // recipient e-mail address
       subject: emailSubject,
-      template: 'emailRegistrationConfirmation',
+      template: 'emailVoucher18hours',
       context: createTemplateContext(courseData)
     }
   
@@ -50,4 +50,4 @@ const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData
   }  
 }
 
-module.exports = sendConfirmationEmailAfterRegistration
+module.exports = sendEmailVoucher18hours

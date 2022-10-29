@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const emailConfirmationRegistration = require('../../controllers/emailTemplatesControllers/emailConfirmationRegistration');
-  
+
+router.get('/get-email-confirmation-subject-template', emailConfirmationRegistration.getCurrentEmailTemplateSubject)
+
+router.post('/update-email-confirmation-subject-template', emailConfirmationRegistration.updateEmailSubject)
+
 router.post('/upload-email-confirmation-template', emailConfirmationRegistration.uploadFile)
 
 router.post('/test-email-confirmation-registration', emailConfirmationRegistration.sendTestEmailTemplate)

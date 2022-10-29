@@ -46,30 +46,55 @@ const updateCoursesPageData = async (req, res) => {
 
 const updateCoursesPresencePageData = async (req, res) => {
   jwt.verify(
-    req.token, 
+    req.token,  
     process.env.FAUNA_SECRET, 
     async (err, data) => {
       if (err) {
         console.log(err)
         res.status(403).json({message: "Unauthorized! No Access Token provided."})
       } else {
-        const newCoursePresencePageData = req.body
-        try {      
-          const dataBaseLocationToUpdate = await faunaClient.query(
+        /* there are 4 possible scenarios when updating data for "Confirm Presence at Course WebPage"
+        * 1. scenario I - page is accessed by user on the same day with course day
+        *                 it will have a request.body of form -> { "courseDateIsInPresent": { data here... } }
+        * 2. scenario II - page is accessed by user when course already took place
+        *                  it will have a request.body of form { "courseDateIsInPast": { data here... } }
+        * 3. scenario III - page is accessed by user when course will take place on future date
+        *                   it will have a request.body of form { "courseDateIsInFuture": { data here... } }
+        * 4. scenario IV - page is revealed to user after he confirms his identity. It contains info about
+        *                  accessing Zoom to enter at course
+        *                  request.body will be of form { "courseZoomAccessPage": { data here.... } }
+        */
+
+        const requestBody = req.body
+        const requestBodyKeys = Object.keys(req.body)
+        const scenario = requestBodyKeys.find(element => element !== 'collectionId')
+        const docID = req.body.collectionId
+        const updatedDataResponse = {}
+        try {
+          await faunaClient.query(
+            Update(
+              Ref(Collection(collections.COURSE_PRESENCE_WEBPAGE_DATA), docID),
+              { data: { [scenario]: requestBody[scenario] } }
+            )
+          )
+
+          let updatedDBdata = await faunaClient.query(
             Map(
               Paginate(Documents(Collection(collections.COURSE_PRESENCE_WEBPAGE_DATA))),
               Lambda(data => Get(data))
             )
           )
-      
-          const docID = dataBaseLocationToUpdate.data[0].ref.id
-          await faunaClient.query(
-            Update(
-              Ref(Collection(collections.COURSE_PRESENCE_WEBPAGE_DATA), docID),
-              { data: newCoursePresencePageData }
-            )
-          )
-          res.status(201).json({message: 'Course Presence Webpage Data has been successfully updated!', newCoursePresencePageData})
+          updatedDBdata = updatedDBdata.data.forEach(dataSet => {
+            const dataSetKeyName = Object.keys(dataSet.data)
+            Object.assign(updatedDataResponse, {
+              [dataSetKeyName]: {
+                pageData: dataSet.data[dataSetKeyName],
+                collectionId: dataSet.ref.id
+              }
+            })
+          })
+
+          res.status(201).json({message: 'Course Presence Webpage Data has been successfully updated!', updatedData: updatedDataResponse})
         } catch (error) {
           console.log(error)
           res.status(401).json({ message: 'There was an error in updating the Course Presence Webpage Data', error})

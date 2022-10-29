@@ -3,17 +3,18 @@ const path = require('path');
 const dayjs = require('dayjs');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
-const createTemplateContext = require('./template/createTemplateContext');
+const createTemplateContext = require('.createTemplateContext');
+const { emailSubject } = require('./emailSubject.json');
 
 
 module.exports = function sendScheduledEmailReminder1Day(recipientEmail, courseStartDate) {
-  // calculate 1 day before course start, based on "courseStartDate"
+  // subtract 1 day from course start, to send a reminder
   const oneDayBeforeCourseStart = dayjs(courseStartDate).add(3, 'days').format()
   
   schedule.scheduleJob(oneDayBeforeCourseStart, async () => {
     sendEmailReminder1Day(recipientEmail)
   
-    console.log('==========E-MAIL REMINDER 1 DAY SENDING==========')
+    console.log('==========1DAY Reminder E-MAIL SENDING==========')
     console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
   })
 }
@@ -45,8 +46,8 @@ const sendEmailReminder1Day = async (recipientEmail) => {
     let options = {
       from: '"RestartCamp" <echipa@restart-camp.org>', // sender e-mail address
       to: recipientEmail, // recipient e-mail address
-      subject: `Datele de acces - cursuri gratuite Restart Camp`,
-      template: 'emailReminder1hour',
+      subject: emailSubject,
+      template: 'emailReminder1day',
       context: createTemplateContext()
     }
 

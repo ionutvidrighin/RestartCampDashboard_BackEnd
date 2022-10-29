@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
-const createTemplateContext = require('./template/createTemplateContext')
+const createTemplateContext = require('./createTemplateContext')
+const { emailSubject } = require('./emailSubject.json')
 
 const sendTestEmailReminder7days = async (recipientEmail) => {
   const dummyCourseData = {
@@ -34,7 +35,7 @@ const sendTestEmailReminder7days = async (recipientEmail) => {
   let options = {
     from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
     to: recipientEmail,
-    subject: `Datele de acces - cursuri gratuite Restart Camp`,
+    subject: emailSubject,
     template: 'emailReminder7days',
     context: createTemplateContext(dummyCourseData)
   }

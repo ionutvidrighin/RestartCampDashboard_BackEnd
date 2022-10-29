@@ -7,6 +7,7 @@ router.route('/courses-page-data')
 
 router.route('/course-presence-page-data')
   .get(publicWebpagesData.getCoursesPresencePageData)
+  .post(publicWebpagesData.getCoursesPresencePageData)
 
 router.route('/header-footer-data')
   .get(publicWebpagesData.getHeaderFooterData)

@@ -96,8 +96,8 @@ const emailReminder1day = require('./routes/emailTemplatesRoutes/emailReminder1d
 app.use(emailReminder1day);
 const emailReminder7days = require('./routes/emailTemplatesRoutes/emailReminder7days');
 app.use(emailReminder7days);
-const emailVoucher40hoursAfterCourse = require('./routes/emailTemplatesRoutes/emailVoucher40hoursAfterCourse');
-app.use(emailVoucher40hoursAfterCourse);
+const emailVoucher18hoursAfterCourse = require('./routes/emailTemplatesRoutes/emailVoucher18hoursAfterCourse');
+app.use(emailVoucher18hoursAfterCourse);
 const emailVoucher4hoursAfterCourse = require('./routes/emailTemplatesRoutes/emailVoucher4hoursAfterCourse');
 app.use(emailVoucher4hoursAfterCourse);
 

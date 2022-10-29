@@ -21,6 +21,12 @@ const getCoursesPageData = async (req, res) => {
 }
 
 const getCoursesPresencePageData = async (req, res) => {
+  /** this function is used in 2 endpoints (GET and POST)
+   * POST endpoint will always have a body of form { scenario: [String] }
+   * based on the String value inside the Array, we take out the needed part and send it to FrontEnd
+   **/
+  const requestHasBody = Object.keys(req.body).length !== 0
+
   try {
     const databaseResponse = await faunaClient.query(
       Map(
@@ -28,8 +34,28 @@ const getCoursesPresencePageData = async (req, res) => {
         Lambda(data => Get(data))
       )
     )
-    const coursePresencePageData = databaseResponse.data[0].data
-    res.status(200).json({coursePresencePageData})
+    let responseBody = databaseResponse.data
+    
+    let coursePresencePageData = {}
+    if (requestHasBody) {
+      const requestDataScenario = req.body.scenario
+      responseBody.forEach(dataSet => {
+        requestDataScenario.forEach(scenario => {
+          if (dataSet.data.hasOwnProperty(scenario)) {
+            Object.assign(coursePresencePageData, {
+              [scenario]: {
+                collectionId: dataSet.ref.id,
+                pageData: dataSet.data[scenario]
+              }
+            })
+          }
+        })
+      })
+      responseBody = coursePresencePageData
+    } else {
+      responseBody = responseBody.map(dataSet => dataSet.data)
+    }
+    res.status(200).json(coursePresencePageData)
   } catch(error) {
     console.log(error)
     res.status(401).json({message: "There was an error in retrieving the Course Presence Page Data from database", error})

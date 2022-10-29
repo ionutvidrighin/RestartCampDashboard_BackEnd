@@ -7,19 +7,19 @@ const createTemplateContext = require('./createTemplateContext');
 const { emailSubject } = require('./emailSubject.json');
 
 
-module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, courseStartDate) {
-    // subtract 1 hour from course start, to send a reminder
+module.exports = function sendScheduledEmailReminder7days(recipientEmail, courseStartDate) {
+    // subtract 7 days from course start date to send a reminder
     const oneHourBeforeCourseStart = dayjs(courseStartDate).add(3, 'days').format()
   
   schedule.scheduleJob(oneHourBeforeCourseStart, async () => {
-    sendEmailReminder1Hour(recipientEmail)
+    sendEmailReminder7days(recipientEmail)
   
-    console.log('==========1HOUR Reminder E-MAIL SENDING==========')
+    console.log('==========7 DAYS Reminder E-MAIL SENDING==========')
     console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
   })
 }
 
-const sendEmailReminder1Hour = async (recipientEmail) => {
+const sendEmailReminder7days = async (recipientEmail) => {
   try {
     let transporter = nodemailer.createTransport({
       host: "smtp.ionos.co.uk",
@@ -47,7 +47,7 @@ const sendEmailReminder1Hour = async (recipientEmail) => {
       from: '"RestartCamp" <echipa@restart-camp.org>', // sender e-mail address
       to: recipientEmail, // recipient e-mail address
       subject: emailSubject,
-      template: 'emailReminder1hour',
+      template: 'emailReminder7days',
       context: createTemplateContext()
     }
 

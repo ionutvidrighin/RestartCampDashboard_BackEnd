@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const hbs = require('nodemailer-express-handlebars')
-const createTemplateContext = require('./template/createTemplateContext')
+const createTemplateContext = require('./createTemplateContext')
+const { emailSubject } = require('./emailSubject.json')
 
 const sendTestEmailConfirmationRegistration = async (recipientEmail) => {
   const dummyCourseData = {
@@ -37,7 +38,7 @@ const sendTestEmailConfirmationRegistration = async (recipientEmail) => {
   let options = {
     from: '"RestartCamp" <echipa@restart-camp.org>', // sender address
     to: recipientEmail,
-    subject: `Datele de acces - cursuri gratuite Restart Camp`,
+    subject: emailSubject,
     template: 'emailRegistrationConfirmation',
     context: createTemplateContext(dummyCourseData)
   }
