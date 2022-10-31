@@ -26,8 +26,7 @@ const getCourseForPresenceConfirmByCourseId = async (request, response) => {
       response.status(200).json(searchedStudent.data[0].data)
     } else {
       response.status(401).json({
-        message: "Date invalide! Te rugam sa te asiguri ca adresa de e-mail este cea folosita in momentul inregistrarii la aceasta sesiune," +
-                 " iar codul de confirmare primit pe e-mail este cel corect!"
+        message: "Eroare! Link invalid. Te rugam sa te intorci la e-mailul primit de la noi si sa dai click direct pe linkul de acces la aceasta sesiune!",
       })
     }
   } catch (error) {

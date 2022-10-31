@@ -9,11 +9,11 @@ const localizedFormat = require('dayjs/plugin/localizedFormat');
 const CreateNewStudent = require('./helperClass').CreateNewStudent
 const sendConfirmationEmailAfterRegistration = require('../../Nodemailer/EmailConfirmationRegistration/sendEmailConfirmationAfterRegistration');
 const sendScheduledEmail3DaysAfterRegistration = require('../../Nodemailer/Email3DaysAfterRegistration/sendEmailAfter3DaysRegistration');
+const sendScheduledEmailReminder1Hour = require('../../Nodemailer/EmailReminder1hour/sendEmailReminder1hour')
 dayjs.extend(localizedFormat)
 
 const { Map, Create, Collection, Paginate, Match, Get, Lambda, Update, Ref, Index, Var } = faunaDB.query
 
-// function taking care of registering a Student to data base
 const registerNewStudent = async (request, response) => {
   const newStudent = new CreateNewStudent(request.body)
   const newStudentPresence = {
@@ -25,10 +25,9 @@ const registerNewStudent = async (request, response) => {
   }
 
   try {
-    /* query data base to check if student is already registered
+    /* query DB to check if student is already registered
     *  NOTE: student may register multiple times with the same e-mail address
-    *       however the course he register for, has to be unique
-    *       (student can't register multiple times for the same exact course)
+    *        however the course he registers for, has to be unique
     */
     const searchStudent = await faunaClient.query(
       Map(
@@ -41,6 +40,7 @@ const registerNewStudent = async (request, response) => {
     const studentType = newStudent.career
     const studentRegistrationDate = newStudent.registrationDate
     const studentEmailAddress = newStudent.email
+    const courseStartDate = dayjs(newStudent.courseName[0].date)
     const courseData = {
       name: newStudent.courseName[0].title,
       logo: newStudent.courseName[0].logo,
@@ -49,8 +49,20 @@ const registerNewStudent = async (request, response) => {
       course_page: newStudent.courseName[0].link_page,
     }
 
+    // get the selected course details from DB and extract the "Zoom Access Link"
+    // then add it *newStudentPresence* object
+    const selectedCourseDataFromDB = await faunaClient.query(
+      Map(
+        Paginate(Match(Index(indexes.GET_COURSE_MODULE1_BY_NAME), newStudentPresence.courseName.title)),
+        Lambda(course => Get(course))
+      )
+    )
+    Object.assign(newStudentPresence, {
+      courseZoomAccess: selectedCourseDataFromDB.data[0].data.courseZoomAccessLink
+    })
+
     if (searchStudent.data.length === 0) {
-      /** scenario: student doesn't exist in data base **/
+      /** scenario 1: student doesn't exist in data base **/
 
       // Store newly registered student to DB
       await faunaClient.query(
@@ -67,10 +79,11 @@ const registerNewStudent = async (request, response) => {
       )
 
       //send registration confirmation e-mail to student
-      const confirmationRegistrationEmail = await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
-      console.log('confirmationRegistrationEmail => ', confirmationRegistrationEmail)
+      await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
       // send scheduled email - 3 days after registration
       sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
+      // send scheduled email - 1 hour before course start reminder
+      sendScheduledEmailReminder1Hour(studentEmailAddress, courseStartDate, courseData)
 
       response.status(200).json({
         message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${newStudent.email}`,
@@ -133,10 +146,11 @@ const registerNewStudent = async (request, response) => {
         )
 
         //send registration confirmation e-mail to student
-        const confirmationRegistrationEmail = await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
-        console.log('confirmationRegistrationEmail => ', confirmationRegistrationEmail)
+        await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
         // send scheduled email - 3 days after registration
         sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
+        // send scheduled email - 1 hour before course start reminder
+        sendScheduledEmailReminder1Hour(studentEmailAddress, courseStartDate, courseData)
 
         response.status(200).json({
           message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${studentEmailAddress}`,

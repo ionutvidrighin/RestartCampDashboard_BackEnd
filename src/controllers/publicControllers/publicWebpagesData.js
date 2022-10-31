@@ -34,6 +34,7 @@ const getCoursesPresencePageData = async (req, res) => {
         Lambda(data => Get(data))
       )
     )
+
     let responseBody = databaseResponse.data
     
     let coursePresencePageData = {}
@@ -55,7 +56,7 @@ const getCoursesPresencePageData = async (req, res) => {
     } else {
       responseBody = responseBody.map(dataSet => dataSet.data)
     }
-    res.status(200).json(coursePresencePageData)
+    res.status(200).json(responseBody)
   } catch(error) {
     console.log(error)
     res.status(401).json({message: "There was an error in retrieving the Course Presence Page Data from database", error})

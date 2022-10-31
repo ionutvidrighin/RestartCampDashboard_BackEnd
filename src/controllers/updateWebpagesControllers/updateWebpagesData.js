@@ -4,7 +4,7 @@ const faunaDB = require("faunadb");
 const faunaClient = require("../../FaunaDataBase/faunaDB");
 const collections = require('../../FaunaDataBase/collections');
 
-const { Update, Ref, Map, Collection, Paginate, Documents, Get, Lambda } = faunaDB.query
+const { Update, Replace, Ref, Map, Collection, Paginate, Documents, Get, Lambda } = faunaDB.query
 
 const updateCoursesPageData = async (req, res) => {
   jwt.verify(
@@ -64,17 +64,19 @@ const updateCoursesPresencePageData = async (req, res) => {
         *                  accessing Zoom to enter at course
         *                  request.body will be of form { "courseZoomAccessPage": { data here.... } }
         */
-
         const requestBody = req.body
         const requestBodyKeys = Object.keys(req.body)
         const scenario = requestBodyKeys.find(element => element !== 'collectionId')
-        const docID = req.body.collectionId
+        const docID = req.body[scenario].collectionId
+        const newData = requestBody[scenario]
         const updatedDataResponse = {}
+
         try {
+          delete newData.collectionId
           await faunaClient.query(
-            Update(
+            Replace(
               Ref(Collection(collections.COURSE_PRESENCE_WEBPAGE_DATA), docID),
-              { data: { [scenario]: requestBody[scenario] } }
+              { data: { [scenario]: newData[scenario] } }
             )
           )
 

@@ -4,6 +4,18 @@ const hbs = require('nodemailer-express-handlebars')
 const createTemplateContext = require('./createTemplateContext')
 const { emailSubject } = require('./emailSubject.json')
 
+module.exports = function sendScheduledEmailVoucher4hours(recipientEmail, courseStartDate) {
+  // add 4 hours after course end
+  const fourHoursAfterCourseEnd = dayjs(courseStartDate).add(4, 'hour').format()
+  
+  schedule.scheduleJob(fourHoursAfterCourseEnd, async () => {
+    sendEmailVoucher4hours(recipientEmail)
+  
+    console.log('==========4Hours E-MAIL SENDING==========')
+    console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
+  })
+}
+
 const sendEmailVoucher4hours = async (recipientEmail, courseData) => {
   try {     
     let transporter = nodemailer.createTransport({
@@ -40,7 +52,7 @@ const sendEmailVoucher4hours = async (recipientEmail, courseData) => {
       if (error) {
         console.log(error)
       } else {
-        console.log("Server is ready to take our messages")
+        console.log("Server is about to send *4Hours Voucher Email*")
       }
     })
 

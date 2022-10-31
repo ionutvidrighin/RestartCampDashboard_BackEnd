@@ -9,7 +9,7 @@ const { emailSubject } = require('./emailSubject.json');
 
 module.exports = function sendScheduledEmailReminder1Day(recipientEmail, courseStartDate) {
   // subtract 1 day from course start, to send a reminder
-  const oneDayBeforeCourseStart = dayjs(courseStartDate).add(3, 'days').format()
+  const oneDayBeforeCourseStart = dayjs(courseStartDate).subtract(1, 'days').format()
   
   schedule.scheduleJob(oneDayBeforeCourseStart, async () => {
     sendEmailReminder1Day(recipientEmail)
@@ -56,7 +56,7 @@ const sendEmailReminder1Day = async (recipientEmail) => {
         console.log(error)
       } else {
         console.log(success)
-        console.log("Server is about to send *3DaysAfterRegistration* e-mail to " + recipientEmail)
+        console.log("Server is about to send *1 Day Email Reminder* e-mail to " + recipientEmail)
       }
     })
     

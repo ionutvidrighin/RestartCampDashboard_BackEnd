@@ -4,6 +4,7 @@
 
 module.exports = {
   GET_COURSE_MODULE1_BY_ID: 'get_course_module1_by_id',
+  GET_COURSE_MODULE1_BY_NAME: 'get_course_module_1_by_name',
   GET_COURSE_MODULE2_BY_ID: 'get_course_module2_by_id',
 
   //____________GETTING DASHBOARD USER________________________//
