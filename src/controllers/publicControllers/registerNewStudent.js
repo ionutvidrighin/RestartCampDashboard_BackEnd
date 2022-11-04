@@ -79,11 +79,12 @@ const registerNewStudent = async (request, response) => {
       )
 
       //send registration confirmation e-mail to student
-      await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+      //await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
       // send scheduled email - 3 days after registration
       //sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
       // send scheduled email - 1 hour before course start reminder
-      const thisDay = dayjs().add(50, 'minutes').format()
+      const thisDay = dayjs().add(5, 'minute').format()
+      console.log('current date&time', thisDay)
       sendScheduledEmailReminder1Hour(studentEmailAddress, thisDay, courseData)
 
       response.status(200).json({
@@ -146,12 +147,12 @@ const registerNewStudent = async (request, response) => {
           })
         )
 
-        const thisDay = dayjs().add(50, 'minutes').format()
-
+        const thisDay = dayjs().add(5, 'minute').format()
+        console.log('current date&time', thisDay)
         //send registration confirmation e-mail to student
-        await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
+        //await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
         // send scheduled email - 3 days after registration
-        sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
+        //sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
         // send scheduled email - 1 hour before course start reminder
         sendScheduledEmailReminder1Hour(studentEmailAddress, thisDay, courseData)
 

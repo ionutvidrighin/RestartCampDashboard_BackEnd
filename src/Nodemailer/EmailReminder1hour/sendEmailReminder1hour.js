@@ -8,8 +8,9 @@ const { emailSubject } = require('./emailSubject.json');
 
 
 module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, courseStartDate, courseData) {
+  console.log('is scheduledFn triggered')
   // subtract 1 hour from course start, to send a reminder
-  const oneHourBeforeCourseStart = dayjs(courseStartDate).subtract(40, 'minutes').format()
+  const oneHourBeforeCourseStart = dayjs(courseStartDate).subtract(3, 'minute').format()
   
   schedule.scheduleJob(oneHourBeforeCourseStart, async () => {
     await sendEmailReminder1Hour(recipientEmail, courseData)
