@@ -30,7 +30,7 @@ module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, course
 
   const month = dayjs(subtract1Hour).month()
   const dayOfMonth = dayjs(subtract1Hour).date()
-  const hour = dayjs(subtract1Hour).hour()
+  const hour = dayjs(subtract1Hour).hour() + 1
   const minute = dayjs(subtract1Hour).minute()
 
   console.log({
