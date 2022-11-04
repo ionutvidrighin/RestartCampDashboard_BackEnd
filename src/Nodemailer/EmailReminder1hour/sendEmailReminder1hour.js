@@ -2,26 +2,69 @@ const hbs = require('nodemailer-express-handlebars');
 const path = require('path');
 const dayjs = require('dayjs');
 const nodemailer = require('nodemailer');
+const cron = require('node-cron');
 const schedule = require('node-schedule');
 const createTemplateContext = require('./createTemplateContext');
 const { emailSubject } = require('./emailSubject.json');
 
+/*
+ # ┌────────────── second (optional)
+ # │ ┌──────────── minute
+ # │ │ ┌────────── hour
+ # │ │ │ ┌──────── day of month
+ # │ │ │ │ ┌────── month
+ # │ │ │ │ │ ┌──── day of week
+ # │ │ │ │ │ │
+ # │ │ │ │ │ │
+ # * * * * * *
+*/
+
 
 module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, courseStartDate, courseData) {
-  console.log('function is triggered')
+
+  const subtract1Hour = dayjs(courseStartDate).subtract(4, 'minute').format()
+
+
+  const month = dayjs(subtract1Hour).month()
+  const dayOfMonth = dayjs(subtract1Hour).date()
+  const hour = dayjs(subtract1Hour).hour()
+  const minute = dayjs(subtract1Hour).minute()
+
+  const sendEmail = async () => {
+    console.log('function is triggered')
+    console.log('time now is ->', dayjs().format())
+    console.log('time when email will be sent ->', subtract1Hour)
+    try {
+      const response = await sendEmailReminder1Hour(recipientEmail, courseData)
+      console.log('email response', response)
+      console.log('==========1HOUR Reminder E-MAIL SENDING==========')
+      console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  var task = cron.schedule(`${minute} ${hour} ${dayOfMonth} ${month} *`, () => {
+    sendEmail()
+  }, {
+    scheduled: false
+  })
+  task.start()
+
+
+  /*console.log('function is triggered')
   console.log('time of course is -> ', courseStartDate)
-  // subtract 1 hour from course start, to send a reminder
-  const oneHourBeforeCourseStart = dayjs(courseStartDate).subtract(4, 'minute').format()
+
+  const scheduledTime = dayjs(courseStartDate).subtract(4, 'minute').format()
   console.log('time now is ->', dayjs().format())
-  console.log('time when email will be sent ->', oneHourBeforeCourseStart)
+  console.log('time when email will be sent ->', scheduledTime)
   
-  schedule.scheduleJob(oneHourBeforeCourseStart, async () => {
+  schedule.scheduleJob(scheduledTime, async () => {
     const response = await sendEmailReminder1Hour(recipientEmail, courseData)
     console.log('email response', response)
-  
     console.log('==========1HOUR Reminder E-MAIL SENDING==========')
     console.log('E-mail sent to ' + recipientEmail + ' on ' + dayjs().format())
-  })
+  })*/
 }
 
 const sendEmailReminder1Hour = async (recipientEmail, courseData) => {
