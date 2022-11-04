@@ -7,7 +7,17 @@ const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 const dayjs = require('dayjs')
 
-console.log(dayjs().add(50, 'minutes').format())
+const today = dayjs().add(5, 'minutes').format()
+const dummyCourseData = {
+  name: 'Bazele HR si Testare',
+  date: '15 Februarie 2022',
+  hour: '18:30', 
+  course_page: 'https://www.restart-camp.com/cursuri/social-media',
+  logo: 'https://static.wixstatic.com/media/9a56fd_c46a6920a74e4b2a9e67604d8ac86527~mv2.png/v1/fill/w_205,h_206,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/transparent.png'
+}
+
+const scheduled = require('./Nodemailer/EmailReminder1hour/sendEmailReminder1hour')
+scheduled('ionut.vidrighin@gmail.com', today, dummyCourseData)
 
 app.set('trust proxy', 1);
 
