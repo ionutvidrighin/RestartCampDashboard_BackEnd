@@ -81,9 +81,10 @@ const registerNewStudent = async (request, response) => {
       //send registration confirmation e-mail to student
       await sendConfirmationEmailAfterRegistration(studentEmailAddress, courseData)
       // send scheduled email - 3 days after registration
-      sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
+      //sendScheduledEmail3DaysAfterRegistration(studentEmailAddress, studentRegistrationDate, studentType)
       // send scheduled email - 1 hour before course start reminder
-      sendScheduledEmailReminder1Hour(studentEmailAddress, courseStartDate, courseData)
+      const thisDay = dayjs().add(50, 'minutes').format()
+      sendScheduledEmailReminder1Hour(studentEmailAddress, thisDay, courseData)
 
       response.status(200).json({
         message: `Te-ai înscris cu success! Te rugăm să-ti verifici inbox-ul adresei ${newStudent.email}`,

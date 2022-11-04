@@ -9,7 +9,7 @@ const { emailSubject } = require('./emailSubject.json');
 
 module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, courseStartDate, courseData) {
   // subtract 1 hour from course start, to send a reminder
-  const oneHourBeforeCourseStart = dayjs(courseStartDate).subtract(1, 'hour').format()
+  const oneHourBeforeCourseStart = dayjs(courseStartDate).subtract(40, 'minutes').format()
   
   schedule.scheduleJob(oneHourBeforeCourseStart, async () => {
     await sendEmailReminder1Hour(recipientEmail, courseData)

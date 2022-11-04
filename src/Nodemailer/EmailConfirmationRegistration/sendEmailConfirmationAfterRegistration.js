@@ -40,7 +40,7 @@ const sendConfirmationEmailAfterRegistration = async (recipientEmail, courseData
       if (error) {
         console.log(error)
       } else {
-        console.log("Server is ready to take our messages")
+        console.log("Server is about to send *Email Confirmation Registration* to " + recipientEmail)
       }
     })
 

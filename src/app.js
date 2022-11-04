@@ -5,6 +5,9 @@ const cors = require('cors');
 const corsOptions = require('./config/corsConfig');
 const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
+const dayjs = require('dayjs')
+
+console.log(dayjs().add(50, 'minutes').format())
 
 app.set('trust proxy', 1);
 
@@ -19,7 +22,6 @@ const defaultResponse = require('./defaultResponse')
 app.get('/', async (req, res) => {
   res.send(defaultResponse)
 })
-
 
 // ____________________PUBLIC_ENDPOINTS______________________ //
 const registerNewStudent = require('./routes/publicRoutes/registerNewStudent');
