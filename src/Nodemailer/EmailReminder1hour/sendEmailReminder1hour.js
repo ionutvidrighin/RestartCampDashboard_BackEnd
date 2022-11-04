@@ -30,11 +30,11 @@ module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, course
 
   const month = dayjs(subtract1Hour).month()
   const dayOfMonth = dayjs(subtract1Hour).date()
-  const hour = dayjs(subtract1Hour).hour() + 1
+  const hour = dayjs(subtract1Hour).hour()
   const minute = dayjs(subtract1Hour).minute()
 
   console.log({
-    month,
+    month: month+1,
     dayOfMonth,
     hour,
     minute
@@ -51,7 +51,7 @@ module.exports = function sendScheduledEmailReminder1Hour(recipientEmail, course
     }
   }
 
-  var task = cron.schedule(`${minute} ${hour} ${dayOfMonth} ${month} *`, () => {
+  var task = cron.schedule(`${minute} ${hour} ${dayOfMonth} ${month+1} *`, () => {
     sendEmail()
   }, {
     scheduled: false
